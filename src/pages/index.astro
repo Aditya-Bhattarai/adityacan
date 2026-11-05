@@ -289,7 +289,7 @@ const heroSizes = '100vw';
     position: absolute;
     left: 50%;
     top: 50%;
-    width: min(900px, calc(100% - 40px));
+    width: min(1040px, calc(100% - 40px));
     transform: translate(-50%, calc(-50% - 56px));
     padding: clamp(28px, 5vw, 56px) clamp(20px, 5vw, 64px);
     background: var(--paper);
@@ -308,9 +308,10 @@ const heroSizes = '100vw';
   }
   .hero__title {
     font-weight: 600;
-    font-size: clamp(46px, 9.5vw, 148px);
-    line-height: 0.92;
+    font-size: clamp(38px, 6vw, 84px);
+    line-height: 0.98;
     letter-spacing: -0.045em;
+    text-wrap: balance;
   }
   .hero__statement {
     font-family: var(--font-serif);
