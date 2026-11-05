@@ -1,0 +1,25 @@
+# SAFETY: GitHub only receives what this file explicitly allows.
+# The first line blocks everything in this folder. The "!" lines let
+# specific items through. Anything not listed stays on this PC.
+/*
+
+# Allowed to upload
+!/.gitignore
+!/.node-version
+!/README.md
+!/package.json
+!/package-lock.json
+!/astro.config.mjs
+!/wrangler.jsonc
+!/public/
+!/src/
+
+# Never upload, even from inside an allowed folder
+node_modules/
+dist/
+.astro/
+.wrangler/
+.env*
+*.docx
+*salary*
+*Investment_Strategy*

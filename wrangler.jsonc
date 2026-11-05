@@ -1,0 +1,8 @@
+{
+  // Tells Cloudflare to publish the finished site from the "dist" folder.
+  "name": "adityacan",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist"
+  }
+}
