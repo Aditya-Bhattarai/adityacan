@@ -1,0 +1,91 @@
+---
+// WRITING. Pieces come from site-content/writing/. Groups with nothing in them stay hidden.
+import Base from '../../layouts/Base.astro';
+import { getPage, getWriting } from '../../lib/content.js';
+
+const page = await getPage('writing');
+const pieces = await getWriting();
+const featured = pieces.find((piece) => piece.featured);
+
+const metaFor = (piece) => {
+  if (piece.minutes) return `${piece.minutes} MIN READ`;
+  return `PDF${piece.pages ? ` · ${piece.pages} PAGES` : ''}`;
+};
+
+const groups = [
+  { heading: 'SCREENPLAYS', type: 'screenplay' },
+  { heading: 'SHORT FICTION', type: 'short-fiction' },
+  { heading: 'NOTES & ESSAYS', type: 'essay' },
+]
+  .map((group) => ({ ...group, items: pieces.filter((piece) => piece.type === group.type) }))
+  .filter((group) => group.items.length > 0);
+---
+
+<Base title="Writing" current="writing" description="Screenplays, short fiction and notes on making things, by Aditya Bhattarai.">
+  <section class="wrap head">
+    <div class="head__left">
+      <div class="label">WRITING</div>
+      <h1 class="h1-huge head__title">{page.title}</h1>
+    </div>
+    <p class="statement head__note">{page.note}</p>
+  </section>
+
+  {featured && (
+    <section class="wrap featured">
+      <div class="featured__left">
+        <span class="label">FEATURED — SHORT FICTION</span>
+        <h2 class="featured__title">{featured.title}</h2>
+        <span class="meta">{[featured.year, metaFor(featured)].filter(Boolean).join(' · ')}</span>
+      </div>
+      <div class="featured__right">
+        <p class="statement featured__opening">{page.featured_opening}</p>
+        {featured.description && <p class="body-text">{featured.description}</p>}
+        <a class="featured__link" href={featured.href}>Read the story →</a>
+      </div>
+    </section>
+  )}
+
+  <section class="wrap lists">
+    {groups.map((group) => (
+      <div class="list">
+        <div class="list__head label label--small"><span>{group.heading}</span><span>({group.items.length})</span></div>
+        {group.items.map((piece) => (
+          <a class="list__item" href={piece.href}>
+            <span class="list__title">{piece.title}</span>
+            <span class="list__text">{piece.description}</span>
+            <span class="list__meta">{metaFor(piece)} →</span>
+          </a>
+        ))}
+      </div>
+    ))}
+  </section>
+</Base>
+
+<style>
+  .head { padding-block: 88px 56px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 28px; border-bottom: 1px solid var(--ink); }
+  .head__left { display: flex; flex-direction: column; gap: 16px; }
+  .head__title { font-size: clamp(64px, 11vw, 170px); line-height: 0.85; }
+  .head__note { max-width: 420px; font-size: 26px; line-height: 1.25; }
+
+  .featured { padding-block: 72px; display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start; }
+  .featured__left { flex: 1 1 300px; display: flex; flex-direction: column; gap: 12px; }
+  .featured__title { font-weight: 600; font-size: clamp(44px, 5vw, 72px); line-height: 0.92; letter-spacing: -0.045em; }
+  .featured__right { flex: 2 1 min(520px, 100%); display: flex; flex-direction: column; gap: 24px; }
+  .featured__opening { font-size: clamp(28px, 3vw, 42px); line-height: 1.2; }
+  .featured__link { font-weight: 500; font-size: 16px; }
+
+  .lists { padding-bottom: 112px; }
+  .list { margin-top: 48px; }
+  .list__head { display: flex; justify-content: space-between; gap: 12px; padding-block: 12px; border-bottom: 1px solid var(--ink); }
+  .list__item { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 24px; min-height: 72px; padding-block: 18px; border-bottom: 1px solid var(--line); text-decoration: none; transition: background-color 200ms ease; }
+  .list__item:hover { color: inherit; background: var(--panel); }
+  .list__title { flex: 1 1 280px; font-weight: 600; font-size: clamp(22px, 2.4vw, 32px); letter-spacing: -0.025em; }
+  .list__text { flex: 2 1 320px; font-size: 15px; line-height: 1.5; color: var(--body); }
+  .list__meta { font: 500 12px/1 var(--font-mono); color: var(--muted); white-space: nowrap; }
+
+  @media (max-width: 700px) {
+    .head { padding-block: 32px 40px; }
+    .featured { padding-block: 48px; }
+    .lists { padding-bottom: 72px; }
+  }
+</style>

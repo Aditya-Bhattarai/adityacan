@@ -1,0 +1,119 @@
+/* DESIGN TOKENS: the site's colours, fonts and sizes in one place.
+   Change a value here and it changes everywhere. */
+
+/* Stand-in fonts, sized to match the real ones, so text doesn't jump when the real fonts arrive. */
+@font-face {
+  font-family: 'Inter Tight Fallback';
+  src: local('Arial'), local('Helvetica Neue'), local('Roboto');
+  font-weight: 400 500;
+  size-adjust: 96.6%;
+  ascent-override: 100.41%;
+  descent-override: 24.84%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Inter Tight Fallback';
+  src: local('Arial Bold'), local('Arial-BoldMT'), local('Helvetica Neue Bold'), local('Roboto Bold');
+  font-weight: 600 700;
+  size-adjust: 93.84%;
+  ascent-override: 103.37%;
+  descent-override: 25.58%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Instrument Serif Fallback';
+  src: local('Times New Roman'), local('Times'), local('Noto Serif');
+  font-style: normal;
+  size-adjust: 82.95%;
+  ascent-override: 119.34%;
+  descent-override: 37.37%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Instrument Serif Fallback';
+  src: local('Times New Roman Italic'), local('Times-Italic'), local('Noto Serif Italic');
+  font-style: italic;
+  size-adjust: 87.6%;
+  ascent-override: 113.02%;
+  descent-override: 35.39%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'JetBrains Mono Fallback';
+  src: local('Courier New'), local('Menlo'), local('Roboto Mono');
+  size-adjust: 99.98%;
+  ascent-override: 102.02%;
+  descent-override: 30%;
+  line-gap-override: 0%;
+}
+
+:root {
+  /* Colours */
+  --paper: #f1f0ec;       /* page ground */
+  --panel: #e6e5e0;       /* cards, bands */
+  --line: #cfcdc6;        /* hairlines */
+  --line-strong: #b3b0a7; /* chip outlines */
+  --muted: #5e5e5a;       /* labels, meta */
+  --body: #3e3d39;        /* running text */
+  --quiet: #2a2a28;       /* serif statements */
+  --ink: #121212;         /* text, primary buttons */
+  --night: #0f0f0e;       /* Film chapter ground */
+  --night-panel: #1a1a18;
+  --night-ink: #ecebe6;   /* text on night */
+  --night-muted: #a3a29c; /* labels on night */
+  --rec: #d9411e;         /* accent: dots only */
+
+  /* Colours that change with the page theme */
+  --bg: var(--paper);
+  --fg: var(--ink);
+  --label: var(--muted);
+  --text: var(--body);
+  --statement: var(--quiet);
+  --hairline: var(--line);
+  --chip-line: var(--line-strong);
+  --card: var(--panel);
+
+  /* Fonts */
+  --font-sans: 'Inter Tight', 'Inter Tight Fallback', 'Noto Sans Devanagari', system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', 'Instrument Serif Fallback', 'Noto Sans Devanagari', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'JetBrains Mono Fallback', 'Noto Sans Devanagari', ui-monospace, monospace;
+
+  /* Layout */
+  --max-width: 1320px;
+  --gutter: 24px;
+  --radius-card: 6px;
+  --radius-thumb: 4px;
+  --radius-pill: 999px;
+}
+
+/* The Film chapter is dark. */
+.theme-night {
+  --bg: var(--night);
+  --fg: var(--night-ink);
+  --label: var(--night-muted);
+  --text: #bdbcb6;
+  --statement: #cfcec8;
+  --hairline: #2a2a28;
+  --chip-line: #44433f;
+  --card: var(--night-panel);
+}
+
+/* Dark bands inside a light page. */
+.band-ink {
+  --bg: var(--ink);
+  --fg: var(--night-ink);
+  --label: var(--night-muted);
+  --text: #bdbcb6;
+  --statement: var(--night-ink);
+  --hairline: #2a2a28;
+  --chip-line: #44433f;
+  background: var(--ink);
+  color: var(--night-ink);
+}
+
+.band-panel {
+  --text: var(--body);
+  --chip-line: var(--line-strong);
+  --hairline: var(--line-strong);
+  background: var(--panel);
+}

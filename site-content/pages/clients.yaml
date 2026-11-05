@@ -1,0 +1,48 @@
+# CLIENTS & PROJECTS page words.
+
+title: "Who I’ve\nbuilt with."
+note: The people behind Nepal’s biggest creator brands — and everything we made together.
+
+# The map. "brands" and each "made" project are project folder names.
+people:
+  - name: Sanjog Koirala
+    title: Showrunner, Shark Tank Nepal · Founder, Ideapreneur Nepal
+    brands: [ideapreneur-nepal, satik-kura, money-mitra, nava-kundali, creators-headquarters]
+    made:
+      - label: Long-form explainers
+        project: ideapreneur-nepal
+      - label: Podcast episodes
+        project: satik-kura
+      - label: Reels
+        project: satik-kura
+      - label: Thumbnails & covers
+        project: satik-kura
+      - label: SIP animations
+        project: ideapreneur-nepal
+      - label: App promo assets
+        project: nava-kundali
+  - name: Anup Ghimire
+    title: Founder & Host · Viewfinders, The Doers
+    brands: [viewfinders, the-doers]
+    made:
+      - label: eSewa brand content
+        project: esewa
+      - label: Global IME brand content
+        project: global-ime
+      - label: Podcast edits
+        project: the-doers
+      - label: Production
+        project: viewfinders
+  - name: Manish Adhikari
+    title: Founder, Hamro Motors · Explainer Nepali
+    brands: [explainer-nepali, hamro-motors]
+    made:
+      - label: Explainer edits
+        project: explainer-nepali
+      - label: Instagram strategy — 3.8M views in 2024
+        project: explainer-nepali
+      - label: Automotive content
+        project: hamro-motors
+
+cta:
+  text: Want your brand on this map?

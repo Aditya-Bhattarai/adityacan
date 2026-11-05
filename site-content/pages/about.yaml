@@ -1,0 +1,40 @@
+# ABOUT page words. Your bio and contact details are in site-content/about/bio.md.
+
+title: Hi, I’m Aditya.
+statement: A filmmaker and content strategist from the Kathmandu Valley, Nepal.
+
+credits:
+  - role: WRITER & DIRECTOR
+    name: सपना / Sapana · Deadline
+  - role: SCREENWRITER
+    name: Wrong Number
+  - role: EDITOR & CONTENT STRATEGIST
+    name: Ideapreneur Nepal · Satik Kura · Money Mitra
+  - role: EDITOR & CONTENT STRATEGIST
+    name: Explainer Nepali · Hamro Motors
+  - role: EDITOR, STRATEGIST & PRODUCTION
+    name: Viewfinders · The Doers · eSewa · Global IME
+  - role: COURSE CREATOR
+    name: Frame — video editing course
+  - role: TREKKING GUIDE
+    name: Licensed, Nepal
+  - role: STUDENT
+    name: Film school, first year
+
+influences:
+  - name: Wes Anderson
+    why: FRAMING · SYMMETRY
+  - name: Abbas Kiarostami
+    why: STILLNESS · ROADS
+  - name: Crows Are White
+    why: THE FILM THAT MOVED ME MOST
+  - name: Searching · Missing
+    why: SCREEN-LIFE STORYTELLING
+  - name: Gawx · lifeofriza
+    why: CREATORS WHO SHOW THE CRAFT
+
+right_now:
+  - First year of film school
+  - Editing Satik Kura & Ideapreneur Nepal
+  - "[Next film in development]"
+  - "[Next trek]"

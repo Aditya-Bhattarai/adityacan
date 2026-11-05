@@ -1,0 +1,52 @@
+---
+// One project in the Work grid: picture, chapter pill, name, year, client and roles.
+import Picture from './Picture.astro';
+import TitleTile from './TitleTile.astro';
+
+const { project } = Astro.props;
+const line = project.what || project.client;
+---
+
+<a class="card" href={project.href} data-card data-chapter={project.chapter?.number} data-roles={project.shortRoles.join('|')}>
+  <div class="card__image">
+    {project.cover ? (
+      <div class="frame" style="aspect-ratio:16/10;border-radius:6px"><Picture image={project.cover.image} alt={project.title} widths={[400, 800]} sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw" /></div>
+    ) : project.logo ? (
+      <div class="frame frame--contain" style="aspect-ratio:16/10;border-radius:6px"><Picture image={project.logo.image} alt={`${project.title} logo`} widths={[320, 640]} sizes="(max-width: 700px) 70vw, 25vw" /></div>
+    ) : (
+      <TitleTile title={project.title} dark={project.chapterKey === '2-film'} />
+    )}
+    <span class="card__chapter">CH. {project.chapter?.number}</span>
+  </div>
+  <div class="card__row">
+    <span class="card__name">{project.title}</span>
+    {project.years && <span class="card__year">{project.years}</span>}
+  </div>
+  {line && line !== project.title && <div class="card__client">{line}</div>}
+  <div class="tag-row">
+    {project.shortRoles.map((role) => <span class="tag card__tag">{role}</span>)}
+  </div>
+</a>
+
+<style>
+  .card { display: flex; flex-direction: column; gap: 12px; color: var(--ink); text-decoration: none; }
+  .card:hover { color: var(--ink); }
+  .card[hidden] { display: none; }
+  .card__image { position: relative; }
+  .card__chapter {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 6px 9px;
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: var(--radius-pill);
+    font: 500 10px/1 var(--font-mono);
+    letter-spacing: 0.08em;
+  }
+  .card__row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .card__name { font-weight: 600; font-size: 22px; line-height: 1.15; letter-spacing: -0.02em; }
+  .card__year { font: 500 12px/1 var(--font-mono); color: var(--muted); white-space: nowrap; }
+  .card__client { margin-top: -6px; font-size: 14px; color: var(--muted); }
+  .card__tag { padding: 5px 9px; font-size: 10px; letter-spacing: 0.04em; }
+</style>

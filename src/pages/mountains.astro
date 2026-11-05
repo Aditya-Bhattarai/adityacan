@@ -1,0 +1,197 @@
+---
+// CHAPTER III. Words are in site-content/pages/mountains.yaml
+import Base from '../layouts/Base.astro';
+import Picture from '../components/Picture.astro';
+import VideoFacade from '../components/VideoFacade.astro';
+import { clean, getImages, getPage, getProjects } from '../lib/content.js';
+
+const page = await getPage('mountains');
+const projects = await getProjects();
+const langtang = projects.find((project) => project.slug === 'langtang-diaries');
+const homestay = projects.find((project) => project.slug === 'community-homestay-classes');
+const photography = projects.find((project) => project.slug === 'photography');
+
+const cover = getImages('03-mountains/_chapter-cover')[0];
+const stills = langtang ? getImages(`${langtang.folder}/stills`) : [];
+const reels = langtang ? getImages(`${langtang.folder}/vertical-videos`) : [];
+const classPhotos = homestay ? getImages(`${homestay.folder}/photos`) : [];
+const photos = photography ? getImages(`${photography.folder}/photos`) : [];
+
+const credentials = page.credentials.filter((item) => clean(item.value));
+const langtangText = clean(page.langtang.text);
+---
+
+<Base title="Chapter III — Mountains" current="work" description="Licensed trekking guide in Nepal. Travel films from the Himalaya, photographs from the road and content classes in community homestays." image={cover?.image}>
+  <section class="split">
+    <div class="split__text">
+      <div class="title-card__kicker">CHAPTER III</div>
+      <div class="split__middle">
+        <h1 class="split__title">Mountains</h1>
+        <p class="split__statement">{page.statement}</p>
+      </div>
+      <div class="split__foot">{page.footer_line}</div>
+    </div>
+    {cover && (
+      <div class="split__image">
+        <Picture image={cover.image} alt="Snow peaks above a village in the Langtang Valley" widths={[800, 1200, 1800]} sizes="(max-width: 800px) 100vw, 56vw" eager />
+      </div>
+    )}
+  </section>
+
+  <section class="wrap creds">
+    {credentials.map((item) => (
+      <div class="creds__item">
+        <span class="label label--small">{item.label}</span>
+        <span class="creds__value">{item.value}</span>
+      </div>
+    ))}
+  </section>
+
+  {langtang && (
+    <section class="wrap langtang">
+      <div class="section-head">
+        <div class="section-head__titles">
+          <span class="label">{page.langtang.kicker}</span>
+          <h2 class="h2"><a class="plain-link" href={langtang.href}>{page.langtang.title}</a></h2>
+        </div>
+        <div class="tag-row">{langtang.roles.map((role) => <span class="tag tag--solid">{role}</span>)}</div>
+      </div>
+      <div class="langtang__media">
+        <div class="langtang__main">
+          {langtang.video
+            ? <VideoFacade video={langtang.video} poster={stills[0]?.image} large widths={[800, 1400]} sizes="(max-width: 800px) 100vw, 66vw" />
+            : stills[0] && <div class="frame" style="aspect-ratio:16/9;border-radius:6px"><Picture image={stills[0].image} alt="Langtang Diaries" widths={[800, 1400]} sizes="(max-width: 800px) 100vw, 66vw" /></div>}
+        </div>
+        {reels[0] && (
+          <div class="langtang__reel">
+            <div class="frame" style="aspect-ratio:9/16;border-radius:6px"><Picture image={reels[0].image} alt="Langtang reel" widths={[320, 640]} sizes="(max-width: 800px) 60vw, 25vw" /></div>
+          </div>
+        )}
+      </div>
+      {stills.length > 1 && (
+        <div class="langtang__stills scroll-row">
+          {stills.slice(1).map((still) => (
+            <div class="frame langtang__still" style="aspect-ratio:16/9"><Picture image={still.image} alt={still.caption} widths={[400, 800]} sizes="(max-width: 700px) 70vw, 25vw" /></div>
+          ))}
+        </div>
+      )}
+      {langtangText && <p class="body-text">{langtangText}</p>}
+    </section>
+  )}
+
+  {homestay && (
+    <section class="band-panel">
+      <div class="wrap homestay">
+        <div class="homestay__text">
+          <span class="label">{page.homestay.kicker}</span>
+          <h2 class="homestay__title">{page.homestay.title}</h2>
+          <p class="body-text">{page.homestay.text}</p>
+        </div>
+        {classPhotos.length > 0 && (
+          <div class="homestay__photos">
+            {classPhotos.slice(0, 3).map((photo) => (
+              <div class="frame" style="aspect-ratio:4/5;border-radius:6px"><Picture image={photo.image} alt={photo.caption} widths={[320, 640]} sizes="(max-width: 700px) 50vw, 25vw" /></div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  )}
+
+  {photos.length > 0 && (
+    <section class="wrap photos">
+      <div class="section-head">
+        <div class="section-head__titles">
+          <span class="label">{page.photos.kicker}</span>
+          <h2 class="h2">{page.photos.title}</h2>
+        </div>
+      </div>
+      <div class="photos__grid">
+        {photos.map((photo) => (
+          <figure class="photos__item">
+            <div class="frame"><Picture image={photo.image} alt={photo.caption} widths={[480, 960]} sizes="(max-width: 700px) 100vw, 33vw" /></div>
+            <figcaption>{photo.caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="cta-line">
+    <div class="wrap cta-line__inner">
+      <p class="statement cta-line__text">{page.cta.text}</p>
+      <a class="btn btn--primary btn--large" href="/contact#book">{page.cta.button}</a>
+    </div>
+  </section>
+
+  <a class="next-chapter band-panel" href="/teaching">
+    <div class="wrap next-chapter__inner">
+      <span class="next-chapter__kicker">NEXT — CHAPTER IV</span>
+      <span class="next-chapter__title">Teaching →</span>
+    </div>
+  </a>
+</Base>
+
+<style>
+  .split { display: flex; flex-wrap: wrap; min-height: 760px; border-bottom: 1px solid var(--line); }
+  .split__text {
+    flex: 1 1 420px;
+    background: var(--night-panel);
+    color: var(--night-ink);
+    --label: var(--night-muted);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 48px;
+    padding: clamp(32px, 5vw, 72px) clamp(24px, 4vw, 64px);
+  }
+  .split__middle { display: flex; flex-direction: column; gap: 22px; }
+  .split__title { font-weight: 600; font-size: clamp(56px, 8vw, 120px); line-height: 0.88; letter-spacing: -0.05em; }
+  .split__statement { font-family: var(--font-serif); font-size: clamp(28px, 3vw, 42px); line-height: 1.15; }
+  .split__foot { font: 500 12px/1.6 var(--font-mono); letter-spacing: 0.06em; color: var(--night-muted); }
+  .split__image { flex: 1.3 1 520px; min-height: 520px; position: relative; overflow: hidden; background: var(--night-panel); }
+  .split__image :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+  .creds { padding-block: 72px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 24px; }
+  .creds__item { display: flex; flex-direction: column; gap: 8px; padding-top: 16px; border-top: 1px solid var(--ink); }
+  .creds__value { font-weight: 600; font-size: 24px; line-height: 1.2; letter-spacing: -0.02em; }
+
+  .section-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; }
+  .section-head__titles { display: flex; flex-direction: column; gap: 12px; }
+  .plain-link { text-decoration: none; }
+
+  .langtang { padding-block: 24px 96px; display: flex; flex-direction: column; gap: 24px; }
+  .langtang__media { display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch; }
+  .langtang__main { flex: 3 1 min(560px, 100%); min-width: 0; }
+  .langtang__reel { flex: 0 1 280px; min-width: 200px; }
+  .langtang__stills { display: flex; gap: 12px; overflow-x: auto; }
+  .langtang__still { flex: 1 0 280px; width: auto; }
+
+  .homestay { padding-block: 96px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; }
+  .homestay__text { flex: 1 1 360px; display: flex; flex-direction: column; gap: 16px; }
+  .homestay__title { max-width: 760px; font-weight: 600; font-size: clamp(34px, 4vw, 56px); line-height: 0.98; letter-spacing: -0.04em; }
+  .homestay__photos { flex: 1.2 1 420px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+
+  .photos { padding-block: 96px; }
+  .photos .section-head { margin-bottom: 28px; }
+  .photos__grid { columns: 3 280px; column-gap: 12px; }
+  .photos__item { margin-bottom: 12px; break-inside: avoid; display: flex; flex-direction: column; gap: 6px; }
+  .photos__item figcaption { font: 500 11px/1.4 var(--font-mono); color: var(--muted); }
+
+  .cta-line { border-top: 1px solid var(--line); }
+  .cta-line__inner { padding-block: 96px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 28px; }
+  .cta-line__text { max-width: 760px; font-size: clamp(30px, 3.6vw, 52px); line-height: 1.1; }
+
+  .next-chapter.band-panel { display: block; }
+
+  @media (max-width: 800px) {
+    .split { min-height: 0; }
+    .split__image { min-height: 420px; order: -1; flex-basis: 100%; }
+    .split__text { flex-basis: 100%; }
+    .langtang__reel { flex: 0 1 60%; margin-inline: auto; }
+    .creds { padding-block: 48px; }
+    .langtang, .photos { padding-bottom: 64px; }
+    .homestay, .cta-line__inner { padding-block: 64px; }
+    .photos { padding-top: 64px; }
+  }
+</style>

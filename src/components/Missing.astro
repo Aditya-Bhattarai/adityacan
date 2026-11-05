@@ -1,0 +1,19 @@
+---
+// A labelled reminder that only appears while previewing on your computer (npm run dev).
+// It never appears on the live website.
+const { label } = Astro.props;
+const showing = import.meta.env.DEV;
+---
+
+{showing && <div class="missing">[MISSING: {label}]</div>}
+
+<style>
+  .missing {
+    margin-block: 6px;
+    padding: 8px 12px;
+    border: 1px dashed var(--chip-line);
+    border-radius: var(--radius-thumb);
+    font: 500 11px/1.45 var(--font-mono);
+    color: var(--label);
+  }
+</style>

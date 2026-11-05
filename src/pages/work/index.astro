@@ -1,0 +1,94 @@
+---
+// ALL WORK, with filters by chapter and role. The list and count come from your project folders.
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getChapters, getWorkProjects, ROLE_ORDER } from '../../lib/content.js';
+
+const work = await getWorkProjects();
+const chapters = getChapters();
+const usedRoles = new Set(work.flatMap((project) => project.shortRoles));
+const roles = ROLE_ORDER.filter((role) => usedRoles.has(role));
+const count = String(work.length).padStart(2, '0');
+---
+
+<Base title="Work" current="work" description="Every project by Aditya Bhattarai. Filter by chapter, or by the role he played: editor, director, writer, strategist and more.">
+  <section class="wrap work-head">
+    <div class="slate"><span></span><i></i></div>
+    <div class="work-head__row">
+      <h1 class="h1-huge work-head__title">Work <span class="work-head__count">[<span data-count>{count}</span>]</span></h1>
+      <p class="statement work-head__note">Everything I’ve made — filter by chapter, or by the role I played.</p>
+    </div>
+    <div class="slate"><span></span><i></i></div>
+  </section>
+
+  <section class="wrap filters" data-filters>
+    <div class="filters__row" role="group" aria-label="Filter by chapter">
+      <span class="label label--small filters__label">CHAPTER</span>
+      <button class="chip chip--chapter" type="button" data-filter="chapter" data-value="All" aria-pressed="true">All</button>
+      {chapters.map((chapter) => (
+        <button class="chip chip--chapter" type="button" data-filter="chapter" data-value={chapter.number} aria-pressed="false">{chapter.number} · {chapter.title}</button>
+      ))}
+    </div>
+    <div class="filters__row" role="group" aria-label="Filter by role">
+      <span class="label label--small filters__label">ROLE</span>
+      <button class="chip chip--role" type="button" data-filter="role" data-value="All" aria-pressed="true">All</button>
+      {roles.map((role) => (
+        <button class="chip chip--role" type="button" data-filter="role" data-value={role} aria-pressed="false">{role}</button>
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap results">
+    <p class="statement results__empty" data-empty hidden>Nothing in that combination yet — try another role.</p>
+    <div class="results__grid">
+      {work.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+</Base>
+
+<script src="../../scripts/filters.js"></script>
+
+<style>
+  .work-head { padding-block: 72px 32px; border-bottom: 1px solid var(--line); }
+  .slate { display: flex; align-items: center; gap: 20px; }
+  .slate span { flex: 1; height: 1px; background: var(--ink); }
+  .slate i { width: 7px; height: 7px; border-radius: 50%; background: var(--ink); }
+  .work-head__row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; padding-block: 28px; }
+  .work-head__title { font-size: clamp(64px, 12vw, 184px); line-height: 0.85; }
+  .work-head__count {
+    font: 500 clamp(18px, 2vw, 26px)/1 var(--font-mono);
+    letter-spacing: 0;
+    vertical-align: top;
+    color: var(--muted);
+  }
+  .work-head__note { max-width: 420px; font-size: 24px; line-height: 1.25; }
+
+  .filters { padding-block: 24px 8px; display: flex; flex-direction: column; gap: 14px; }
+  .filters__row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .filters__label { width: 96px; }
+  .chip {
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background-color 200ms ease, color 200ms ease;
+  }
+  .chip[aria-pressed='true'] { background: var(--ink); color: var(--paper); }
+  .chip--chapter { font: 500 14px/1 var(--font-sans); }
+  .chip--role { padding: 0 14px; border-color: var(--line-strong); font: 500 12px/1 var(--font-mono); letter-spacing: 0.03em; }
+  .chip--role[aria-pressed='true'] { border-color: var(--ink); }
+
+  .results { padding-block: 24px 120px; }
+  .results__empty { padding-block: 48px; font-size: 26px; color: var(--muted); }
+  .results__empty[hidden] { display: none; }
+  .results__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 40px 20px; }
+
+  @media (max-width: 700px) {
+    .work-head { padding-block: 40px 24px; }
+    .filters__label { width: 100%; }
+    .results { padding-block: 16px 72px; }
+  }
+</style>

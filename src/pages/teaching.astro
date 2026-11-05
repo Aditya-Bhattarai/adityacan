@@ -1,0 +1,108 @@
+---
+// CHAPTER IV. Words are in site-content/pages/teaching.yaml
+import Base from '../layouts/Base.astro';
+import Picture from '../components/Picture.astro';
+import { clean, getImages, getPage, getProjects } from '../lib/content.js';
+
+const page = await getPage('teaching');
+const projects = await getProjects();
+const bySlug = Object.fromEntries(projects.map((project) => [project.slug, project]));
+const curriculum = clean(page.frame.curriculum_link);
+const enrol = clean(page.frame.enrol_link);
+
+const courses = page.courses.map((course) => {
+  const project = bySlug[course.project];
+  const photos = project ? ['stills', 'photos'].flatMap((name) => getImages(`${project.folder}/${name}`)) : [];
+  return { ...course, href: project?.href, photos: photos.slice(0, 3) };
+});
+---
+
+<Base title="Chapter IV — Teaching" current="work" description="Editing courses for creators, from CapCut to colour grading, and digital-literacy classes for older adults.">
+  <section class="title-card-section">
+    <div class="title-card">
+      <div class="title-card__kicker">CHAPTER IV</div>
+      <h1 class="title-card__title teaching-word">Teaching</h1>
+      <p class="title-card__statement">{page.statement}</p>
+    </div>
+  </section>
+
+  <section class="wrap teaching">
+    <div class="course course--frame">
+      <div class="course__text">
+        <span class="label">{page.frame.kicker}</span>
+        <h2 class="frame-title">{page.frame.title}</h2>
+        <p class="body-text">{page.frame.text}</p>
+        {(curriculum || enrol) && (
+          <div class="btn-row">
+            {curriculum && <a class="btn btn--primary" href={curriculum}>View curriculum</a>}
+            {enrol && <a class="btn btn--ghost" href={enrol}>Join the waitlist</a>}
+          </div>
+        )}
+      </div>
+      <div class="levels">
+        {page.frame.levels.map((level) => (
+          <div class="levels__item">
+            <span class="label label--small">LEVEL {level.number}</span>
+            <span class="levels__title">{level.title}</span>
+            <span class="levels__text">{level.text}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {courses.map((course) => (
+      <div class="course">
+        <div class="course__text">
+          <span class="label">{course.kicker}</span>
+          <h2 class="h2 h2--small">{course.title}</h2>
+        </div>
+        <div class="course__detail">
+          <p class="body-text">{course.text}</p>
+          <div class="tag-row">{course.tags.map((tag) => <span class="tag">{tag}</span>)}</div>
+          {course.photos.length > 0 && (
+            <div class="course__photos">
+              {course.photos.map((photo) => (
+                <div class="frame" style="aspect-ratio:4/5;border-radius:6px"><Picture image={photo.image} alt={photo.caption} widths={[240, 480]} sizes="(max-width: 700px) 33vw, 16vw" /></div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <section class="band-ink">
+    <div class="wrap workshops">
+      <div class="workshops__text">
+        <span class="label">{page.workshops.kicker}</span>
+        <p class="statement workshops__line">{page.workshops.text}</p>
+      </div>
+      <a class="btn btn--primary btn--large" href="/contact#book">{page.workshops.button}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .teaching-word { font-size: clamp(60px, 10vw, 150px); line-height: 0.88; }
+  .teaching { padding-bottom: 72px; }
+  .course { display: flex; flex-wrap: wrap; gap: 40px; padding-block: 48px; border-top: 1px solid var(--line); }
+  .course--frame { border-top-color: var(--ink); }
+  .course__text { flex: 1 1 360px; display: flex; flex-direction: column; gap: 16px; }
+  .course__detail { flex: 1.4 1 min(480px, 100%); display: flex; flex-direction: column; gap: 16px; }
+  .course__photos { margin-top: 8px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .frame-title { font-weight: 600; font-size: clamp(48px, 6vw, 88px); line-height: 0.9; letter-spacing: -0.045em; }
+  .levels { flex: 1.4 1 min(480px, 100%); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 12px; }
+  .levels__item { min-height: 240px; padding: 24px; background: var(--panel); border-radius: var(--radius-card); display: flex; flex-direction: column; gap: 12px; }
+  .levels__title { font-weight: 600; font-size: 26px; line-height: 1.1; letter-spacing: -0.02em; }
+  .levels__text { font-size: 15px; line-height: 1.5; color: var(--body); }
+
+  .workshops { padding-block: 96px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 28px; }
+  .workshops__text { display: flex; flex-direction: column; gap: 12px; max-width: 760px; }
+  .workshops__line { font-size: clamp(30px, 3.6vw, 52px); line-height: 1.1; }
+
+  @media (max-width: 700px) {
+    .title-card-section { padding-block: 32px 48px; }
+    .levels__item { min-height: 0; }
+    .workshops { padding-block: 64px; }
+  }
+</style>

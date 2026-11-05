@@ -1,0 +1,166 @@
+---
+// CHAPTER I. Words are in site-content/pages/strategy.yaml. Media fills in from each project's folders.
+import Base from '../layouts/Base.astro';
+import Picture from '../components/Picture.astro';
+import { getImages, getPage, getProjects } from '../lib/content.js';
+
+const page = await getPage('strategy');
+const projects = await getProjects();
+const bySlug = Object.fromEntries(projects.map((project) => [project.slug, project]));
+
+// A short strip for each brand: a mix of formats, in folder order.
+function stripFor(project) {
+  const pools = ['horizontal-videos', 'vertical-videos', 'covers', 'thumbnails', 'motion-graphics', 'assets']
+    .map((name) => ({ name, items: getImages(`${project.folder}/${name}`) }))
+    .filter((pool) => pool.items.length);
+  const picked = [];
+  for (let round = 0; picked.length < 6 && pools.some((pool) => pool.items[round]); round += 1) {
+    for (const pool of pools) {
+      if (pool.items[round] && picked.length < 6) picked.push({ ...pool.items[round], kind: pool.name });
+    }
+  }
+  return picked;
+}
+
+const groups = page.groups
+  .map((group) => ({
+    ...group,
+    brands: group.brands.map((slug) => bySlug[slug]).filter(Boolean).map((project) => ({ ...project, strip: stripFor(project) })),
+  }))
+  .filter((group) => group.brands.length > 0);
+
+// The wall: every thumbnail and cover from this chapter, shuffled evenly between shapes.
+const wall = projects
+  .filter((project) => project.chapterKey === '1-strategy-content')
+  .flatMap((project) => ['thumbnails', 'covers'].flatMap((name) => getImages(`${project.folder}/${name}`).map((item) => ({ ...item, href: project.href, project: project.title }))))
+  .sort((a, b) => a.path.split('/').pop().localeCompare(b.path.split('/').pop()));
+---
+
+<Base title="Chapter I — Strategy & Content" current="work" description="YouTube, podcasts, reels and brand content for Nepal’s leading creators, planned for the algorithm and cut for the audience.">
+  <section class="title-card-section">
+    <div class="title-card">
+      <div class="title-card__kicker">CHAPTER I</div>
+      <h1 class="title-card__title">Strategy &amp; Content</h1>
+      <p class="title-card__statement">{page.statement}</p>
+      <div class="title-card__rule"></div>
+      <p class="title-card__intro">{page.intro}</p>
+    </div>
+  </section>
+
+  <section class="wrap numbers">
+    {page.stats.map((stat) => (
+      <div class="numbers__item">
+        <span class="stat-number numbers__value">{stat.number}</span>
+        <span class="label label--small">{stat.label}</span>
+      </div>
+    ))}
+  </section>
+
+  <nav class="wrap jump" aria-label="Chapter sections">
+    <span class="label label--small jump__label">JUMP TO</span>
+    {groups.map((group) => <a class="jump__link" href={`#${group.id}`}>{group.number} {group.short}</a>)}
+    <a class="jump__link" href="#wall">The wall</a>
+  </nav>
+
+  {groups.map((group) => (
+    <section id={group.id} class="wrap group">
+      <div class="group__head">
+        <div class="group__titles">
+          <span class="label">{group.number} — {group.kicker}</span>
+          <h2 class="h2">{group.title}</h2>
+        </div>
+        <div class="tag-row">{group.roles.map((role) => <span class="tag tag--solid">{role}</span>)}</div>
+      </div>
+      {group.brands.map((brand) => (
+        <article class="brand">
+          <div class="brand__text">
+            <h3 class="brand__name">{brand.title}</h3>
+            {brand.oneLiner && <p class="brand__desc">{brand.oneLiner}</p>}
+            {brand.formats.length > 0 && <div class="tag-row">{brand.formats.map((format) => <span class="tag">{format}</span>)}</div>}
+            <a class="brand__link" href={brand.href}>Open project →</a>
+          </div>
+          {brand.strip.length > 0 && (
+            <div class="brand__strip scroll-row">
+              {brand.strip.map((item) => (
+                <div class:list={['brand__tile', { 'brand__tile--logo': item.kind === 'assets' }]} style={`aspect-ratio:${item.image.width}/${item.image.height}`}>
+                  <Picture image={item.image} alt={item.caption} widths={[240, 480]} sizes="220px" />
+                </div>
+              ))}
+            </div>
+          )}
+        </article>
+      ))}
+    </section>
+  ))}
+
+  <section id="wall" class="wrap wall">
+    <div class="wall__head">
+      <div class="group__titles">
+        <span class="label">{page.wall.kicker}</span>
+        <h2 class="h2">{page.wall.title}</h2>
+      </div>
+      <p class="wall__note">{page.wall.note}</p>
+    </div>
+    <div class="wall__grid">
+      {wall.map((item) => (
+        <a class="wall__tile" href={item.href} aria-label={`${item.caption}, ${item.project}`}>
+          <Picture image={item.image} alt="" widths={[300, 600]} sizes="(max-width: 700px) 50vw, 25vw" />
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <a class="next-chapter theme-night next-chapter--dark" href="/film">
+    <div class="wrap next-chapter__inner">
+      <span class="next-chapter__kicker">NEXT — CHAPTER II</span>
+      <span class="next-chapter__title">Film →</span>
+    </div>
+  </a>
+</Base>
+
+<style>
+  .numbers { padding-bottom: 64px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
+  .numbers__item { display: flex; flex-direction: column; gap: 8px; padding-top: 16px; border-top: 1px solid var(--ink); }
+  .numbers__value { font-size: clamp(38px, 4vw, 58px); }
+
+  .jump { padding-block: 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border-top: 1px solid var(--line); }
+  .jump__label { margin-right: 8px; }
+  .jump__link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 1px solid var(--ink); border-radius: var(--radius-pill); text-decoration: none; font-weight: 500; font-size: 14px; transition: background-color 200ms ease, color 200ms ease; }
+  .jump__link:hover { background: var(--ink); color: var(--paper); }
+
+  .group { padding-block: 72px 24px; }
+  .group__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 20px; padding-bottom: 24px; border-bottom: 1px solid var(--ink); }
+  .group__titles { display: flex; flex-direction: column; gap: 12px; }
+
+  .brand { display: flex; flex-wrap: wrap; gap: 28px; padding-block: 36px; border-bottom: 1px solid var(--line); }
+  .brand__text { flex: 1 1 300px; max-width: 400px; display: flex; flex-direction: column; gap: 12px; }
+  .brand__name { font-weight: 600; font-size: 30px; line-height: 1.1; letter-spacing: -0.025em; }
+  .brand__desc { font-size: 16px; line-height: 1.55; color: var(--body); }
+  .brand__link { margin-top: 4px; font-weight: 500; font-size: 15px; }
+  .brand__strip { flex: 2 1 520px; min-width: 0; display: flex; align-items: flex-end; gap: 10px; overflow-x: auto; }
+  .brand__tile { flex: none; height: 220px; overflow: hidden; border-radius: var(--radius-thumb); background: var(--panel); }
+  .brand__tile :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .brand__tile--logo { background: var(--paper); border: 1px solid var(--line); }
+  .brand__tile--logo :global(img) { object-fit: contain; padding: 10%; }
+
+  .wall { padding-block: 96px; }
+  .wall__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 28px; }
+  .wall__note { max-width: 400px; font-size: 15px; line-height: 1.55; color: var(--body); }
+  .wall__grid { columns: 4 220px; column-gap: 12px; }
+  .wall__tile { display: block; margin-bottom: 12px; break-inside: avoid; overflow: hidden; border-radius: var(--radius-thumb); background: var(--panel); transition: opacity 200ms ease; }
+  .wall__tile:hover { opacity: 0.85; }
+  .wall__tile :global(img) { width: 100%; height: auto; }
+
+  .next-chapter--dark { background: var(--night); color: var(--night-ink); }
+
+  @media (max-width: 700px) {
+    .title-card-section { padding-block: 32px 48px; }
+    .numbers { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-bottom: 40px; }
+    .group { padding-top: 56px; }
+    .brand__strip { flex-basis: 100%; }
+    .brand__tile { height: 180px; }
+    .wall { padding-block: 64px; }
+    .wall__grid { columns: 2; column-gap: 8px; }
+    .wall__tile { margin-bottom: 8px; }
+  }
+</style>

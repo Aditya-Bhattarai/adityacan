@@ -1,0 +1,78 @@
+---
+// ONE PIECE OF WRITING. Full text shows on the page; screenplays open as a PDF.
+import Base from '../../layouts/Base.astro';
+import Picture from '../../components/Picture.astro';
+import { getProject, getWriting } from '../../lib/content.js';
+
+export async function getStaticPaths() {
+  const pieces = await getWriting();
+  return pieces.map((piece) => ({ params: { slug: piece.slug }, props: { slug: piece.slug } }));
+}
+
+const { slug } = Astro.props;
+const pieces = await getWriting();
+const piece = pieces.find((item) => item.slug === slug);
+const project = piece.project ? await getProject(piece.project) : null;
+const typeName = { screenplay: 'SCREENPLAY', 'short-fiction': 'SHORT FICTION', essay: 'ESSAY' }[piece.type] ?? 'WRITING';
+const meta = [typeName, piece.year, piece.minutes ? `${piece.minutes} MIN READ` : piece.pages ? `${piece.pages} PAGES` : ''].filter(Boolean).join(' · ');
+const next = pieces[(pieces.indexOf(piece) + 1) % pieces.length];
+---
+
+<Base title={piece.title} current="writing" description={piece.description || `${piece.title}, by Aditya Bhattarai.`}>
+  <article class="wrap piece">
+    <a class="meta piece__back" href="/writing">← WRITING</a>
+    <header class="piece__head">
+      <h1 class="h1-huge piece__title">{piece.title}</h1>
+      <div class="meta">{meta}</div>
+      {piece.description && <p class="statement piece__description">{piece.description}</p>}
+      {piece.contentNote && <p class="piece__note">{piece.contentNote}</p>}
+    </header>
+
+    {piece.paragraphs.length > 0 && (
+      <div class="piece__text">
+        {piece.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    )}
+
+    {piece.pdf && (
+      <div class="piece__pdf">
+        {piece.pdf.preview && (
+          <a class="piece__preview" href={piece.pdf.url} aria-label={`Open ${piece.title} as a PDF`}>
+            <Picture image={piece.pdf.preview} alt="" widths={[360, 720]} sizes="(max-width: 700px) 70vw, 360px" eager />
+          </a>
+        )}
+        <div class="btn-row">
+          <a class="btn btn--primary" href={piece.pdf.url}>Read the screenplay (PDF)</a>
+          {project && <a class="btn btn--ghost" href={project.href}>See the project</a>}
+        </div>
+      </div>
+    )}
+  </article>
+
+  <a class="wrap next" href={next.href}>
+    <span class="label">NEXT</span>
+    <span class="next__title">{next.title} →</span>
+  </a>
+</Base>
+
+<style>
+  .piece { padding-block: 48px 96px; }
+  .piece__back { display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; }
+  .piece__head { padding-block: 24px 40px; display: flex; flex-direction: column; gap: 16px; border-bottom: 1px solid var(--ink); }
+  .piece__title { font-size: clamp(52px, 9vw, 136px); line-height: 0.92; }
+  .piece__description { max-width: 780px; font-size: clamp(22px, 2.4vw, 32px); line-height: 1.25; }
+  .piece__note { font: 500 12px/1.6 var(--font-mono); letter-spacing: 0.04em; color: var(--muted); }
+  .piece__text { max-width: 680px; margin-inline: auto; padding-top: 56px; display: flex; flex-direction: column; gap: 24px; font-family: var(--font-serif); font-size: clamp(21px, 2vw, 24px); line-height: 1.45; color: var(--quiet); }
+  .piece__pdf { padding-top: 40px; display: flex; flex-direction: column; align-items: flex-start; gap: 28px; }
+  .piece__preview { display: block; width: min(360px, 70vw); border: 1px solid var(--line); border-radius: var(--radius-thumb); overflow: hidden; transition: opacity 200ms ease; }
+  .piece__preview:hover { opacity: 0.85; }
+  .next { display: flex; flex-direction: column; gap: 12px; padding-block: 72px; border-top: 1px solid var(--line); text-decoration: none; }
+  .next:hover { color: inherit; }
+  .next__title { font-weight: 600; font-size: clamp(36px, 6vw, 88px); line-height: 0.95; letter-spacing: -0.045em; }
+
+  @media (max-width: 700px) {
+    .piece { padding-block: 16px 64px; }
+    .piece__text { padding-top: 40px; }
+    .next { padding-block: 56px; }
+  }
+</style>

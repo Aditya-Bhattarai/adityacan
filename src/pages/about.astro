@@ -1,0 +1,114 @@
+---
+// ABOUT. Bio is in site-content/about/bio.md, other words in site-content/pages/about.yaml
+import Base from '../layouts/Base.astro';
+import Missing from '../components/Missing.astro';
+import Picture from '../components/Picture.astro';
+import { clean, getImages, getPage, getSettings } from '../lib/content.js';
+
+const page = await getPage('about');
+const settings = getSettings();
+
+// Uses your portrait as soon as one is in about/portrait/. Until then, one of your photographs.
+const portrait = getImages('about/portrait')[0];
+const fallback = getImages('03-mountains/photography/photos').find((item) => item.path.includes('kathmandu-wires'));
+const lead = portrait ?? fallback;
+
+const cvFiles = import.meta.glob('/site-content/about/cv/*.pdf', { eager: true, query: '?url', import: 'default' });
+const cv = Object.values(cvFiles)[0];
+const tools = getImages('about/toolkit-icons');
+const rightNow = page.right_now.filter((line) => clean(line));
+
+const credits = page.credits.map((credit) => (
+  credit.role === 'STUDENT' && settings.filmSchool ? { ...credit, name: `${settings.filmSchool}, first year` } : credit
+));
+---
+
+<Base title="About" current="about" description="Aditya Bhattarai is a filmmaker and content strategist from the Kathmandu Valley, Nepal, and a licensed trekking guide." image={lead?.image}>
+  <section class="wrap intro">
+    {lead && (
+      <div class="intro__image">
+        <div class="frame" style="aspect-ratio:4/5;border-radius:6px"><Picture image={lead.image} alt={portrait ? settings.name : 'Tangled wires in Kathmandu, photographed by Aditya'} widths={[520, 1040]} sizes="(max-width: 800px) 100vw, 520px" eager style="filter:grayscale(1)" /></div>
+      </div>
+    )}
+    <div class="intro__text">
+      <div class="label">ABOUT</div>
+      <h1 class="intro__title">{page.title}</h1>
+      {!portrait && <Missing label="portrait, in about/portrait/" />}
+      <p class="statement intro__statement">{page.statement}</p>
+      {settings.bio.map((paragraph) => <p class="intro__paragraph">{paragraph}</p>)}
+      <div class="btn-row">
+        <a class="btn btn--primary" href="/contact#book">Book a call</a>
+        {cv && <a class="btn btn--ghost" href={cv}>Download CV</a>}
+      </div>
+    </div>
+  </section>
+
+  <section class="band-ink">
+    <div class="end-credits">
+      <div class="label end-credits__title">CREDITS</div>
+      {credits.map((credit) => (
+        <div class="end-credits__row">
+          <span class="end-credits__role">{credit.role}</span>
+          <span class="end-credits__name">{credit.name}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap details">
+    <div class="details__column">
+      <span class="label">TOOLKIT</span>
+      <div class="tools">
+        {tools.map((tool) => (
+          <span class="tool"><img src={tool.image.src} alt="" width="24" height="24" loading="lazy" decoding="async" />{tool.caption}</span>
+        ))}
+      </div>
+    </div>
+    <div class="details__column">
+      <span class="label">INFLUENCES</span>
+      {page.influences.map((item) => (
+        <div class="influence"><span class="influence__name">{item.name}</span><span class="influence__why">{item.why}</span></div>
+      ))}
+    </div>
+    <div class="details__column">
+      <span class="label">RIGHT NOW</span>
+      {rightNow.map((line) => (
+        <div class="now"><span class="rec-dot"></span><span>{line}</span></div>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro { padding-block: 72px 96px; display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start; }
+  .intro__image { flex: 1 1 360px; max-width: 520px; }
+  .intro__text { flex: 1.2 1 min(420px, 100%); display: flex; flex-direction: column; gap: 24px; }
+  .intro__title { font-weight: 600; font-size: clamp(48px, 6.4vw, 96px); line-height: 0.92; letter-spacing: -0.05em; }
+  .intro__statement { font-size: clamp(24px, 2.4vw, 34px); }
+  .intro__paragraph { font-size: 17px; line-height: 1.7; color: var(--body); max-width: 68ch; }
+
+  .end-credits { max-width: 980px; margin-inline: auto; padding: 112px var(--gutter); display: flex; flex-direction: column; align-items: center; gap: 40px; }
+  .end-credits__title { letter-spacing: 0.24em; }
+  .end-credits__row { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: baseline; }
+  .end-credits__role { text-align: right; font: 500 12px/1.4 var(--font-mono); letter-spacing: 0.12em; color: var(--night-muted); }
+  .end-credits__name { font-weight: 600; font-size: clamp(18px, 2vw, 24px); line-height: 1.25; letter-spacing: -0.01em; }
+
+  .details { padding-block: 96px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 48px; }
+  .details__column { display: flex; flex-direction: column; gap: 18px; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tool { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px 8px 8px; background: var(--panel); border-radius: var(--radius-pill); font-size: 14px; font-weight: 500; }
+  .tool img { width: 24px; height: 24px; object-fit: contain; border-radius: 6px; }
+  .influence { display: flex; justify-content: space-between; gap: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .influence__name { font-family: var(--font-serif); font-size: 24px; line-height: 1.2; }
+  .influence__why { font: 500 11px/1.6 var(--font-mono); color: var(--muted); text-align: right; }
+  .now { display: flex; align-items: baseline; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line); font-size: 17px; line-height: 1.45; }
+  .now .rec-dot { transform: translateY(-2px); }
+
+  @media (max-width: 800px) {
+    .intro { padding-block: 24px 64px; }
+    .intro__image { max-width: none; flex-basis: 100%; }
+    .end-credits { padding-block: 80px; gap: 28px; }
+    .end-credits__row { gap: 16px; }
+    .details { padding-block: 64px; }
+  }
+</style>

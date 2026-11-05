@@ -1,0 +1,42 @@
+# CHAPTER IV: TEACHING page words.
+
+statement: What I learned the hard way, taught the easy way.
+
+frame:
+  kicker: IV.1 — FLAGSHIP COURSE
+  title: Frame
+  text: A three-level, 18-module video editing course — from CapCut to Premiere Pro, After Effects and colour grading.
+  curriculum_link: "[View curriculum link]"
+  enrol_link: "[Enrol / waitlist link]"
+  levels:
+    - number: "01"
+      title: Foundations
+      text: CapCut and the grammar of the cut — pacing, hooks, captions.
+    - number: "02"
+      title: Professional
+      text: Premiere Pro workflows, sound design and storytelling edits.
+    - number: "03"
+      title: Advanced
+      text: After Effects motion graphics and colour grading.
+
+courses:
+  - kicker: IV.2 — LIVE COURSE
+    title: Premiere Pro for creators
+    text: Eight days, two hours a day, built for reels and online content. Daily Q&A, demo footage, SFX packs, project files, custom presets — and two new shortcuts every day.
+    tags: [8 days, Premiere Pro, Reels]
+    project: premiere-pro-course
+  - kicker: IV.3 — CLASSROOM
+    title: Editing for social media
+    text: A seven-module classroom course focused on short-form social content.
+    tags: [7 modules, Short-form]
+    project: social-media-editing-course
+  - kicker: IV.4 — COMMUNITY
+    title: Social media for older adults
+    text: A digital-literacy programme teaching older adults what social media is, why it matters and how to use it.
+    tags: [Digital literacy, Community]
+    project: senior-digital-literacy
+
+workshops:
+  kicker: WORKSHOPS
+  text: Want your team editing faster and thinking like strategists?
+  button: Ask about a workshop

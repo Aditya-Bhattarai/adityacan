@@ -1,0 +1,34 @@
+# CHAPTER III: MOUNTAINS page words.
+
+statement: Roads, ridgelines and the people who live along them.
+footer_line: LICENSED TREKKING GUIDE · NEPAL
+
+credentials:
+  - label: LICENCE
+    value: Licensed trekking guide, Nepal
+  - label: ISSUED BY
+    value: "[Licensing body]"
+  - label: REGIONS
+    value: "[Langtang · Gorkha · …]"
+  - label: FILMED IN
+    value: Langtang Valley
+  - label: BASED IN
+    value: Kathmandu Valley
+
+langtang:
+  kicker: III.1 — TRAVEL FILM
+  title: Langtang Diaries
+  text: "[Two lines on the trip — route, days, what you wanted to capture.]"
+
+homestay:
+  kicker: III.2 — COMMUNITY
+  title: Content classes at a community homestay
+  text: I taught content creation to older adults at a community homestay.
+
+photos:
+  kicker: III.3 — PHOTOGRAPHS
+  title: Notes from the road
+
+cta:
+  text: Planning a shoot or a trek in Nepal? I know the trails and the camera.
+  button: Talk to me

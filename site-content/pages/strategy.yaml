@@ -1,0 +1,50 @@
+# CHAPTER I: STRATEGY & CONTENT page words.
+
+statement: Planned like a campaign. Cut like a film.
+intro: I’ve edited and shaped strategy for some of Nepal’s most-watched creators — financial explainers, podcasts and brand films — restructuring videos around platform data instead of guesswork.
+
+stats:
+  - number: 320M+
+    label: IMPRESSIONS FOR CLIENT CHANNELS
+  - number: 3.8M
+    label: VIEWS FOR EXPLAINER NEPALI IN 2024
+  - number: 150+
+    label: CUSTOM ASSETS DESIGNED
+  - number: 32%
+    label: OF CONTENT REPURPOSED FROM CORE VIDEOS
+
+# Groups are people. "brands" are project folder names, shown in this order.
+groups:
+  - id: sanjog
+    number: I.1
+    short: Sanjog Koirala
+    kicker: SANJOG KOIRALA & IDEAPRENEUR NEPAL
+    title: Ideapreneur Nepal & family
+    roles: [EDITOR, STRATEGIST, THUMBNAILS, MOTION]
+    brands: [ideapreneur-nepal, satik-kura, money-mitra, creators-headquarters, nava-kundali]
+  - id: manish
+    number: I.2
+    short: Manish Adhikari
+    kicker: MANISH ADHIKARI
+    title: Explainer Nepali & Hamro Motors
+    roles: [EDITOR, STRATEGIST]
+    brands: [explainer-nepali, hamro-motors]
+  - id: anup
+    number: I.3
+    short: Anup Ghimire
+    kicker: ANUP GHIMIRE
+    title: Viewfinders & The Doers
+    roles: [EDITOR, STRATEGIST, PRODUCTION]
+    brands: [viewfinders, esewa, global-ime, the-doers]
+  - id: other
+    number: I.4
+    short: More
+    kicker: MORE CLIENT WORK
+    title: LinkedIn & brand edits
+    roles: [EDITOR]
+    brands: [other-clients]
+
+wall:
+  kicker: THE WALL
+  title: Every thumbnail & cover.
+  note: Filled automatically from every project’s thumbnails and covers folders. Tap any tile to open its project.

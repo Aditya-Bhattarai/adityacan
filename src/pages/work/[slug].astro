@@ -1,0 +1,280 @@
+---
+// PROJECT PAGE TEMPLATE. One page is made for every project folder with permission: "yes".
+import Base from '../../layouts/Base.astro';
+import Missing from '../../components/Missing.astro';
+import Picture from '../../components/Picture.astro';
+import TitleTile from '../../components/TitleTile.astro';
+import VideoFacade from '../../components/VideoFacade.astro';
+import { getProjects, getWorkProjects, getWriting } from '../../lib/content.js';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project) => ({ params: { slug: project.slug }, props: { slug: project.slug } }));
+}
+
+const { slug } = Astro.props;
+const all = await getProjects();
+const project = all.find((item) => item.slug === slug);
+const work = await getWorkProjects();
+const index = work.findIndex((item) => item.slug === slug);
+const next = index >= 0 ? work[(index + 1) % work.length] : work[0];
+const previous = index >= 0 ? work[(index - 1 + work.length) % work.length] : work.at(-1);
+const writing = await getWriting();
+const screenplay = writing.find((piece) => piece.slug === project.screenplay);
+
+const hasFeature = project.video || project.wideImage;
+const dark = project.chapterKey === '2-film';
+
+// Results that start with a number become big stats; anything else stays a sentence.
+const results = project.results.map((line) => {
+  const match = line.match(/^([\d.,]+\s?[MKk%+]*\+?)\s+(.+)$/);
+  return match ? { number: match[1], label: match[2] } : { text: line };
+});
+
+const people = project.people.length ? `Host: ${project.people.join(', ')}` : '';
+const meta = [
+  project.client && { label: 'CLIENT', lines: [project.client, project.client !== project.people[0] ? people : ''].filter(Boolean) },
+  project.format && { label: 'FORMAT', lines: [project.format] },
+  project.years && { label: 'YEAR', lines: [project.years] },
+].filter(Boolean);
+
+const documents = [
+  ...(screenplay?.pdf ? [{ url: screenplay.href, caption: 'Screenplay', preview: screenplay.pdf.preview, internal: true }] : []),
+  ...project.documents,
+];
+const tabs = project.tabs;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: project.title,
+  description: project.oneLiner || undefined,
+  url: new URL(project.href, Astro.site).href,
+  creator: { '@type': 'Person', name: 'Aditya Bhattarai' },
+  dateCreated: /^\d{4}/.test(project.years) ? project.years.slice(0, 4) : undefined,
+};
+---
+
+<Base title={project.title} current="work" description={project.oneLiner || `${project.title}, a project by Aditya Bhattarai.`} image={project.wideImage?.image ?? project.cover?.image} jsonLd={jsonLd}>
+  <section class="wrap head">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/work">WORK</a><span>/</span>
+      <a href={project.chapter?.href}>CHAPTER {project.chapter?.number} — {project.chapter?.title.toUpperCase()}</a><span>/</span>
+      <span class="crumbs__current">{project.title.toUpperCase()}</span>
+    </nav>
+    <div class="head__row">
+      <div class="head__titles">
+        <h1 class="h1-huge head__title">{project.title}</h1>
+        {(project.titleNepali || project.tagline) && (
+          <div class="head__sub">
+            {project.titleNepali && <span class="head__nepali">{project.titleNepali}</span>}
+            {project.tagline && <span class="statement statement--italic head__tagline">{project.tagline}</span>}
+          </div>
+        )}
+      </div>
+      <div class="tag-row">{project.roles.map((role) => <span class="tag tag--solid">{role}</span>)}</div>
+    </div>
+    {meta.length > 0 && (
+      <dl class="head__meta">
+        {meta.map((item) => (
+          <div>
+            <dt class="label label--small">{item.label}</dt>
+            <dd>{item.lines.map((line) => <span>{line}</span>)}</dd>
+          </div>
+        ))}
+      </dl>
+    )}
+    {project.oneLiner && <p class="statement head__oneliner">{project.oneLiner}</p>}
+  </section>
+
+  {hasFeature ? (
+    <section class="wrap feature">
+      {project.video
+        ? <VideoFacade video={project.video} poster={project.wideImage?.image} large widths={[800, 1600]} sizes="(max-width: 1320px) 100vw, 1272px" eager />
+        : <div class="frame" style="aspect-ratio:16/9;border-radius:6px"><Picture image={project.wideImage.image} alt={project.title} widths={[800, 1600]} sizes="(max-width: 1320px) 100vw, 1272px" eager /></div>}
+    </section>
+  ) : project.cover ? (
+    <section class="wrap feature feature--poster">
+      <div class="frame" style={`aspect-ratio:${project.cover.image.width}/${project.cover.image.height};border-radius:6px`}><Picture image={project.cover.image} alt={project.title} widths={[400, 800]} sizes="400px" eager /></div>
+    </section>
+  ) : (
+    <section class="wrap feature">
+      <TitleTile kicker={`CHAPTER ${project.chapter?.number}`} title={project.title} ratio="21/9" dark={dark} />
+    </section>
+  )}
+
+  <div class="wrap">
+    {!project.years && <Missing label="years, in project.md" />}
+    {!project.video && <Missing label="video link, in links.md or project.md" />}
+    {!project.brief && <Missing label="The brief, in project.md" />}
+    {results.length === 0 && <Missing label="Results, in project.md" />}
+    {project.credits.length === 0 && <Missing label="Credits, in project.md" />}
+  </div>
+
+  {(project.brief || project.did.length > 0 || results.length > 0) && (
+    <section class="wrap story">
+      {project.brief && (
+        <div class="story__part">
+          <div class="label label--small">THE BRIEF</div>
+          <p>{project.brief}</p>
+        </div>
+      )}
+      {project.did.length > 0 && (
+        <div class="story__part">
+          <div class="label label--small">WHAT I DID</div>
+          <ul>{project.did.map((line) => <li>{line}</li>)}</ul>
+        </div>
+      )}
+      {results.length > 0 && (
+        <div class="story__part">
+          <div class="label label--small">RESULTS</div>
+          <div class="story__results">
+            {results.map((result) => result.number
+              ? <div><div class="stat-number story__number">{result.number}</div><div class="story__result-label">{result.label}</div></div>
+              : <p>{result.text}</p>)}
+          </div>
+        </div>
+      )}
+    </section>
+  )}
+
+  {tabs.length > 0 && (
+    <section class="wrap media" data-tabs>
+      <div class="media__tabs scroll-row" role="tablist" aria-label="Project media">
+        {tabs.map((tab, position) => (
+          <button class="media__tab" type="button" role="tab" id={`tab-${tab.key}`} aria-controls={`panel-${tab.key}`} aria-selected={position === 0 ? 'true' : 'false'} tabindex={position === 0 ? 0 : -1}>
+            {tab.label} <span>({tab.items.length + tab.links.length})</span>
+          </button>
+        ))}
+      </div>
+      {tabs.map((tab, position) => (
+        <div class="media__panel" role="tabpanel" id={`panel-${tab.key}`} aria-labelledby={`tab-${tab.key}`} hidden={position !== 0} style={`--min:${tab.min}`}>
+          {tab.links.map((video) => (
+            <div class="media__item">
+              <VideoFacade video={video} sizes={tab.sizes} />
+              <span class="media__caption">{video.title}</span>
+            </div>
+          ))}
+          {tab.items.map((item) => (
+            <figure class="media__item">
+              <div class:list={['frame', { 'frame--contain': tab.contain }]} style={`aspect-ratio:${tab.ratio}`}>
+                <Picture image={item.image} alt={item.caption} widths={[320, 640]} sizes={tab.sizes} />
+              </div>
+              <figcaption class="media__caption">{item.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
+      ))}
+    </section>
+  )}
+
+  {documents.length > 0 && (
+    <section class="wrap documents">
+      <div class="label">DOCUMENTS</div>
+      <div class="documents__grid">
+        {documents.map((doc) => (
+          <a class="documents__item" href={doc.url}>
+            {doc.preview && <div class="frame" style="aspect-ratio:3/4"><Picture image={doc.preview} alt="" widths={[240, 480]} sizes="(max-width: 700px) 50vw, 20vw" /></div>}
+            <span>{doc.caption} {doc.internal ? '→' : '(PDF)'}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {project.credits.length > 0 && (
+    <section class="credits">
+      <div class="credits__inner">
+        <div class="label credits__title">CREDITS</div>
+        {project.credits.map((credit) => (
+          <div class="credits__row">
+            <span class="label label--small">{credit.role.toUpperCase()}</span>
+            <span class="credits__name">{credit.name}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <a class="next wrap" href={next.href}>
+    <span class="next__left">
+      <span class="label">NEXT PROJECT</span>
+      <span class="next__title">{next.title} →</span>
+    </span>
+    <span class="next__previous">← PREVIOUS: {previous.title.toUpperCase()}</span>
+  </a>
+</Base>
+
+<script src="../../scripts/tabs.js"></script>
+<noscript><style>[role='tabpanel'][hidden] { display: grid !important; }</style></noscript>
+
+<style>
+  .head { padding-top: 48px; }
+  .crumbs { display: flex; flex-wrap: wrap; gap: 8px; font: 500 12px/1.6 var(--font-mono); letter-spacing: 0.05em; color: var(--label); }
+  .crumbs a { color: var(--label); }
+  .crumbs__current { color: var(--fg); }
+  .head__row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; padding-block: 40px 32px; border-bottom: 1px solid var(--fg); }
+  .head__titles { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .head__title { font-size: clamp(52px, 10vw, 160px); overflow-wrap: anywhere; }
+  .head__sub { display: flex; flex-wrap: wrap; align-items: baseline; gap: 18px; }
+  .head__nepali { font-weight: 600; font-size: clamp(26px, 3vw, 40px); line-height: 1.3; letter-spacing: -0.01em; }
+  .head__tagline { font-size: clamp(22px, 2.4vw, 32px); }
+  .head__meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; padding-block: 28px; }
+  .head__meta dt { margin-bottom: 10px; }
+  .head__meta dd { display: flex; flex-direction: column; font-size: 17px; line-height: 1.4; }
+  .head__oneliner { max-width: 880px; padding-bottom: 40px; font-size: clamp(24px, 2.6vw, 36px); line-height: 1.2; }
+
+  .feature--poster { max-width: 460px; }
+
+  .story { padding-block: 80px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 40px; }
+  .story__part { display: flex; flex-direction: column; gap: 14px; font-size: 18px; line-height: 1.55; }
+  .story__part ul { padding-left: 18px; line-height: 1.7; }
+  .story__results { display: flex; flex-direction: column; gap: 18px; }
+  .story__number { font-size: 44px; }
+  .story__result-label { font-size: 14px; color: var(--label); }
+
+  .media { padding-bottom: 96px; }
+  .media__tabs { display: flex; gap: 4px; overflow-x: auto; margin-bottom: 28px; border-bottom: 1px solid var(--hairline); }
+  .media__tab {
+    flex: none;
+    min-height: 48px;
+    padding: 0 18px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--label);
+    font: 500 15px/1 var(--font-sans);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .media__tab span { font: 500 11px/1 var(--font-mono); }
+  .media__tab[aria-selected='true'] { color: var(--fg); border-bottom-color: var(--fg); }
+  .media__panel { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(var(--min), 100%), 1fr)); gap: 16px; }
+  .media__panel[hidden] { display: none; }
+  .media__item { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .media__caption { font-size: 14px; line-height: 1.35; }
+
+  .documents { padding-bottom: 96px; }
+  .documents__grid { margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr)); gap: 12px; }
+  .documents__item { display: flex; flex-direction: column; gap: 8px; font-size: 14px; text-decoration: none; }
+
+  .credits { border-block: 1px solid var(--hairline); }
+  .credits__inner { max-width: 880px; margin-inline: auto; padding: 80px var(--gutter); display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center; }
+  .credits__title { letter-spacing: 0.24em; }
+  .credits__row { display: flex; flex-direction: column; gap: 4px; }
+  .credits__name { font-weight: 600; font-size: 22px; letter-spacing: -0.01em; }
+
+  .next { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; padding-block: 72px; text-decoration: none; }
+  .next:hover { color: inherit; }
+  .next__left { display: flex; flex-direction: column; gap: 12px; }
+  .next__title { font-weight: 600; font-size: clamp(44px, 7vw, 104px); line-height: 0.9; letter-spacing: -0.05em; }
+  .next__previous { font: 500 12px/1.4 var(--font-mono); color: var(--label); }
+
+  @media (max-width: 700px) {
+    .head { padding-top: 16px; }
+    .crumbs { font-size: 10px; }
+    .head__row { padding-block: 20px 24px; }
+    .story { padding-block: 56px; }
+    .media__panel { grid-template-columns: repeat(auto-fill, minmax(min(var(--min), 46%), 1fr)); gap: 10px; }
+  }
+</style>

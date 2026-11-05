@@ -1,0 +1,113 @@
+---
+// The "end credits" footer with the big wordmark.
+import { getChapters, getSettings } from '../lib/content.js';
+
+const settings = getSettings();
+const chapters = getChapters();
+const year = new Date().getFullYear();
+
+const columns = [
+  {
+    heading: 'CHAPTERS',
+    items: chapters.map((chapter) => ({ text: `${chapter.number} — ${chapter.title}`, href: chapter.href })),
+  },
+  {
+    heading: 'PAGES',
+    items: [
+      { text: 'All work', href: '/work' },
+      { text: 'Clients & projects', href: '/clients' },
+      { text: 'Services & process', href: '/services' },
+      { text: 'Writing', href: '/writing' },
+      { text: 'About', href: '/about' },
+    ],
+  },
+  {
+    heading: 'ELSEWHERE',
+    items: [
+      settings.instagram && { text: 'Instagram — @anorigix', href: settings.instagram },
+      settings.linkedin && { text: 'LinkedIn', href: settings.linkedin },
+      settings.youtube && { text: 'YouTube', href: settings.youtube },
+      settings.vimeo && { text: 'Vimeo', href: settings.vimeo },
+    ].filter(Boolean),
+  },
+  {
+    heading: 'CONTACT',
+    items: [
+      { text: 'Book a call (Calendly)', href: '/contact#book' },
+      settings.email && { text: settings.email, href: `mailto:${settings.email}` },
+      settings.whatsapp && { text: `WhatsApp — ${settings.whatsapp}`, href: `https://wa.me/${settings.whatsapp.replace(/\D/g, '')}` },
+    ].filter(Boolean),
+  },
+];
+---
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__title">— END CREDITS —</div>
+    <div class="site-footer__columns">
+      {columns.map((column) => (
+        <div class="site-footer__column">
+          <div class="label label--small">{column.heading}</div>
+          {column.items.map((item) => (
+            <a href={item.href} rel={item.href.startsWith('http') ? 'noopener' : undefined}>{item.text}</a>
+          ))}
+        </div>
+      ))}
+    </div>
+    <div class="site-footer__wordmark" aria-hidden="true">{settings.name}</div>
+    <div class="site-footer__end">
+      <span>© {year} {settings.name} · {settings.location}</span>
+      <span>Directed, written &amp; edited by the same person</span>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--bg); color: var(--fg); border-top: 1px solid var(--hairline); }
+  .site-footer__inner { padding-block: 72px 32px; display: flex; flex-direction: column; gap: 56px; }
+  .site-footer__title {
+    text-align: center;
+    font: 500 12px/1 var(--font-mono);
+    letter-spacing: 0.24em;
+    color: var(--label);
+  }
+  .site-footer__columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
+  .site-footer__column { display: flex; flex-direction: column; gap: 14px; }
+  .site-footer__column a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    font-size: 16px;
+    line-height: 1.3;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .site-footer__column a:hover { text-decoration: underline; color: inherit; }
+  .site-footer__wordmark {
+    font-weight: 700;
+    font-size: clamp(44px, 12.4vw, 190px);
+    line-height: 0.95;
+    padding-bottom: 0.08em;
+    letter-spacing: -0.055em;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .site-footer__end {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    font: 500 12px/1.5 var(--font-mono);
+    letter-spacing: 0.04em;
+    color: var(--label);
+  }
+  .site-footer__end a { color: var(--fg); min-height: 28px; }
+
+  @media (max-width: 700px) {
+    .site-footer__columns { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; }
+    .site-footer__column a { min-height: 44px; }
+    .site-footer__end a { display: inline-flex; align-items: center; min-height: 44px; }
+    .site-footer__wordmark { font-size: 14.2vw; }
+  }
+</style>

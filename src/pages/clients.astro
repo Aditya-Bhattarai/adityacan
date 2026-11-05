@@ -1,0 +1,139 @@
+---
+// CLIENTS & PROJECTS. Map words are in site-content/pages/clients.yaml. The index table builds itself.
+import Base from '../layouts/Base.astro';
+import { getPage, getProjects } from '../lib/content.js';
+
+const page = await getPage('clients');
+const projects = await getProjects();
+const bySlug = Object.fromEntries(projects.map((project) => [project.slug, project]));
+
+const initials = (name) => name.split(' ').map((word) => word[0]).join('').slice(0, 2);
+const people = page.people.map((person) => ({
+  ...person,
+  initials: initials(person.name),
+  brands: person.brands.map((slug) => bySlug[slug]).filter(Boolean),
+  made: person.made.filter((item) => bySlug[item.project]).map((item) => ({ ...item, href: bySlug[item.project].href })),
+}));
+
+const rows = projects.filter((project) => project.what);
+const titleLines = page.title.split('\n');
+---
+
+<Base title="Clients & projects" current="clients" description="The people behind Nepal’s biggest creator brands, and everything Aditya Bhattarai has made with them.">
+  <section class="wrap head">
+    <div class="head__left">
+      <div class="label">CLIENTS &amp; PROJECTS</div>
+      <h1 class="h1-huge head__title">{titleLines.map((line, index) => <>{index > 0 && <br />}{line}</>)}</h1>
+    </div>
+    <p class="statement head__note">{page.note}</p>
+  </section>
+
+  <section class="wrap map">
+    <div class="map__head label label--small"><span>THE MAP</span><span>PERSON → BRANDS → WHAT WE MADE</span></div>
+    {people.map((person) => (
+      <div class="map__row">
+        <div class="map__person">
+          <div class="map__initials" aria-hidden="true">{person.initials}</div>
+          <div class="map__who">
+            <span class="map__name">{person.name}</span>
+            <span class="map__title">{person.title}</span>
+          </div>
+        </div>
+        <div class="map__cell">
+          <span class="map__arrow" aria-hidden="true">→</span>
+          <div class="map__chips">
+            {person.brands.map((brand) => <a class="map__brand" href={brand.href}>{brand.title}</a>)}
+          </div>
+        </div>
+        <div class="map__cell map__cell--made">
+          <span class="map__arrow" aria-hidden="true">→</span>
+          <div class="map__chips">
+            {person.made.map((item) => <a class="map__made" href={item.href}>{item.label}</a>)}
+          </div>
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <section class="wrap index">
+    <div class="index__head">
+      <h2 class="h2 h2--small">Client index</h2>
+      <span class="meta">[{rows.length}] CLIENTS</span>
+    </div>
+    <div class="index__scroll">
+      <div class="index__table">
+        <div class="index__row index__row--head label label--small"><span>CLIENT</span><span>WHAT THEY DO</span><span>MY ROLE</span><span>YEARS</span><span>WORK</span></div>
+        {rows.map((row) => (
+          <a class="index__row" href={row.href}>
+            <span class="index__client">{row.title}</span>
+            <span class="index__what">{row.what}</span>
+            <span class="index__role">{row.shortRoles.join(' · ')}</span>
+            <span class="index__mono">{row.years}</span>
+            <span class="index__mono index__count">{row.mediaCount > 0 ? row.mediaCount : ''} →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band-panel">
+    <div class="wrap closing">
+      <p class="statement closing__line">{page.cta.text}</p>
+      <div class="btn-row">
+        <a class="btn btn--primary btn--large" href="/contact#book">Book a call</a>
+        <a class="btn btn--ghost btn--large" href="/services">See how I work</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head { padding-block: 80px 56px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 28px; }
+  .head__left { display: flex; flex-direction: column; gap: 16px; }
+  .head__title { font-size: clamp(56px, 9vw, 136px); line-height: 0.88; letter-spacing: -0.05em; }
+  .head__note { max-width: 440px; font-size: 26px; line-height: 1.25; }
+
+  .map { padding-bottom: 96px; }
+  .map__head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-block: 14px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line); }
+  .map__row { display: flex; flex-wrap: wrap; align-items: stretch; border-bottom: 1px solid var(--line); }
+  .map__person { flex: 1 1 300px; display: flex; align-items: center; gap: 16px; padding: 28px 24px 28px 0; }
+  .map__initials { flex: none; width: 72px; height: 72px; border-radius: 50%; border: 1px solid var(--ink); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 22px; letter-spacing: -0.02em; }
+  .map__who { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .map__name { font-weight: 600; font-size: 24px; line-height: 1.15; letter-spacing: -0.02em; }
+  .map__title { font-size: 14px; line-height: 1.4; color: var(--muted); }
+  .map__cell { flex: 1 1 300px; display: flex; align-items: center; gap: 14px; padding: 28px 24px; border-left: 1px solid var(--line); }
+  .map__cell--made { flex: 1.4 1 360px; padding-right: 0; }
+  .map__arrow { font: 500 14px/1 var(--font-mono); color: var(--muted); }
+  .map__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .map__brand { display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; background: var(--ink); color: var(--paper); border-radius: var(--radius-pill); font-weight: 500; font-size: 14px; text-decoration: none; }
+  .map__brand:hover { background: var(--muted); color: var(--paper); }
+  .map__made { display: inline-flex; align-items: center; min-height: 36px; padding: 6px 12px; border: 1px solid var(--line-strong); border-radius: var(--radius-pill); font: 500 12px/1.2 var(--font-mono); letter-spacing: 0.02em; text-decoration: none; }
+  .map__made:hover { border-color: var(--ink); color: var(--ink); }
+
+  .index { padding-bottom: 96px; }
+  .index__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+  .index__scroll { overflow-x: auto; }
+  .index__table { min-width: 820px; }
+  .index__row { display: grid; grid-template-columns: 1.3fr 1.6fr 1.6fr 0.8fr 0.6fr; gap: 16px; align-items: center; min-height: 64px; padding-block: 8px; border-bottom: 1px solid var(--line); text-decoration: none; }
+  .index__row:hover { color: inherit; background: var(--panel); }
+  .index__row--head { min-height: 0; padding-block: 12px; border-top: 1px solid var(--ink); border-bottom-color: var(--ink); }
+  .index__row--head:hover { background: none; }
+  .index__client { font-weight: 600; font-size: 18px; letter-spacing: -0.01em; }
+  .index__what { font-size: 15px; color: var(--body); }
+  .index__role { font-size: 15px; }
+  .index__mono { font: 500 12px/1 var(--font-mono); color: var(--muted); }
+  .index__count { color: var(--ink); }
+
+  .closing { padding-block: 96px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 40px; align-items: center; }
+  .closing__line { font-size: clamp(30px, 3.4vw, 48px); line-height: 1.1; }
+
+  @media (max-width: 700px) {
+    .head { padding-block: 32px 40px; }
+    .map__person { padding: 20px 0 12px; flex-basis: 100%; }
+    .map__initials { width: 56px; height: 56px; font-size: 18px; }
+    .map__cell { flex-basis: 100%; padding: 8px 0; border-left: 0; }
+    .map__cell--made { padding-bottom: 20px; }
+    .map, .index { padding-bottom: 64px; }
+    .closing { padding-block: 64px; }
+  }
+</style>

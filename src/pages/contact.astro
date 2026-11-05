@@ -1,0 +1,81 @@
+---
+// CONTACT. Words are in site-content/pages/contact.yaml. Email and links are in site-content/about/bio.md
+import Base from '../layouts/Base.astro';
+import { getPage, getSettings } from '../lib/content.js';
+
+const page = await getPage('contact');
+const settings = getSettings();
+const short = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+
+const channels = [
+  settings.email && { label: 'EMAIL', value: settings.email, href: `mailto:${settings.email}` },
+  settings.whatsapp && { label: 'WHATSAPP', value: settings.whatsapp, href: `https://wa.me/${settings.whatsapp.replace(/\D/g, '')}` },
+  settings.linkedin && { label: 'LINKEDIN', value: short(settings.linkedin), href: settings.linkedin },
+  settings.instagram && { label: 'INSTAGRAM', value: '@anorigix', href: settings.instagram },
+  settings.calendly && { label: 'CALENDLY', value: 'Book 30 minutes', href: settings.calendly },
+].filter(Boolean);
+
+const calendarUrl = `${settings.calendly}?hide_gdpr_banner=1&background_color=f1f0ec&text_color=121212&primary_color=121212`;
+---
+
+<Base title="Contact" current="contact" description="Book a 30-minute call with Aditya Bhattarai, or email him. Based in Kathmandu, working with clients worldwide.">
+  <section class="wrap contact">
+    <div class="contact__left">
+      <div class="label">CONTACT</div>
+      <h1 class="h1-huge contact__title">{page.title}</h1>
+      <p class="statement contact__statement">{page.statement}</p>
+      <ol class="steps">
+        {page.steps.map((step, index) => (
+          <li><span class="meta">{String(index + 1).padStart(2, '0')}</span><span>{step}</span></li>
+        ))}
+      </ol>
+      <div class="channels">
+        {channels.map((channel) => (
+          <a href={channel.href} rel={channel.href.startsWith('http') ? 'noopener' : undefined}>
+            <span class="label label--small">{channel.label}</span>
+            <span class="channels__value">{channel.value} ↗</span>
+          </a>
+        ))}
+      </div>
+      <div class="contact__location"><span class="rec-dot"></span>{page.location_line}</div>
+    </div>
+
+    <div class="contact__right" id="book">
+      <div class="calendar" data-calendly={calendarUrl}>
+        <div class="calendar__fallback">
+          <span class="calendar__title">Calendly booking calendar</span>
+          <span class="meta">30 MINUTES · GOOGLE MEET</span>
+          <a class="btn btn--primary" href={settings.calendly} rel="noopener">Open the calendar</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script src="../scripts/calendly.js"></script>
+
+<style>
+  .contact { padding-block: 80px 96px; display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start; }
+  .contact__left { flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 28px; }
+  .contact__title { font-size: clamp(56px, 8vw, 120px); line-height: 0.88; letter-spacing: -0.05em; }
+  .contact__statement { font-size: clamp(22px, 2.2vw, 30px); line-height: 1.25; }
+  .steps { padding: 0; list-style: none; display: flex; flex-direction: column; }
+  .steps li { display: flex; gap: 16px; padding-block: 14px; border-top: 1px solid var(--line); font-size: 16px; line-height: 1.5; }
+  .steps li:last-child { border-bottom: 1px solid var(--line); }
+  .channels { display: flex; flex-direction: column; gap: 2px; }
+  .channels a { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 52px; border-bottom: 1px solid var(--line); text-decoration: none; }
+  .channels__value { font-weight: 500; font-size: 17px; overflow-wrap: anywhere; text-align: right; }
+  .contact__location { display: inline-flex; align-items: center; gap: 10px; font: 500 12px/1.5 var(--font-mono); color: var(--muted); }
+
+  .contact__right { flex: 1.3 1 min(480px, 100%); min-width: 0; scroll-margin-top: 88px; }
+  .calendar { min-height: 720px; border: 1px solid var(--line); border-radius: var(--radius-card); overflow: hidden; background: var(--paper); }
+  .calendar__fallback { min-height: 720px; padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; }
+  .calendar__title { font-weight: 600; font-size: 22px; letter-spacing: -0.01em; }
+  .calendar :global(.calendly-inline-widget) { min-width: 300px; height: 720px; }
+
+  @media (max-width: 700px) {
+    .contact { padding-block: 24px 64px; }
+    .calendar, .calendar__fallback { min-height: 960px; }
+    .calendar :global(.calendly-inline-widget) { height: 960px; }
+  }
+</style>

@@ -1,8 +1,7 @@
 # adityacan.com
 
-Personal website of Aditya Bhattarai, built with Astro and hosted on Cloudflare.
+Personal website of Aditya Bhattarai, filmmaker and content strategist from Kathmandu, Nepal.
 
-- `src/pages/` holds the pages of the site.
-- `public/` holds files served exactly as they are.
-- `npm run dev` previews the site on your computer.
-- `npm run build` creates the finished site in `dist/`.
+Built with [Astro](https://astro.build) and hosted on Cloudflare.
+
+**New here? Read [START-HERE.md](START-HERE.md).** It explains where everything is and how to change it.

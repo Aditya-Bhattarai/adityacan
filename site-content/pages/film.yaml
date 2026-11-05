@@ -1,0 +1,23 @@
+# CHAPTER II: FILM page words.
+
+statement: Still frames. Natural light. Real sound.
+intro: Films I’ve written and directed at film school, and the screenplays behind them.
+
+featured:
+  project: sapana
+  meta_right: WRITER · DIRECTOR · 2026
+  nepali: सपना
+  english: Sapana
+  meta: SHORT FILM · ~2 MIN · NEPALI · FILM SCHOOL FIRST-YEAR FINAL
+  logline: A daughter walks to her mother’s grave — scolded the whole way by a mother who isn’t there.
+  note: "Director’s note: shot entirely in static frames with natural light, live sound and no score."
+
+filmography:
+  title: Filmography
+  note: "ROLE TAGS: DIRECTOR · WRITER · EDITOR · AD"
+
+grade:
+  project: colour-grading
+  kicker: CRAFT — COLOUR
+  title: Log to grade.
+  text: Drag the line to compare the flat camera file with the final grade.

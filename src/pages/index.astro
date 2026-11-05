@@ -1,52 +1,497 @@
 ---
-// Temporary holding page. The full homepage replaces this file.
+// HOMEPAGE. The words are in site-content/pages/home.yaml
+import { getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Picture from '../components/Picture.astro';
+import TitleTile from '../components/TitleTile.astro';
+import { getChapters, getChapterThumbs, getImages, getPage, getProject, getSettings, getTestimonials, getWorkProjects } from '../lib/content.js';
+
+const home = await getPage('home');
+const settings = getSettings();
+const chapters = getChapters();
+const work = await getWorkProjects();
+const testimonials = getTestimonials();
+const stats = home.stats.filter((stat) => stat.show);
+const selected = (home.selected_work ?? []).map((slug) => work.find((project) => project.slug === slug)).filter(Boolean);
+
+const strip = await Promise.all(home.strip.map(async (item) => ({ ...item, data: await getProject(item.project) })));
+const chapterCards = await Promise.all(chapters.map(async (chapter) => ({
+  ...chapter,
+  count: work.filter((project) => project.chapterKey === chapter.key).length,
+  thumbs: await getChapterThumbs(chapter.key),
+})));
+
+// Hero files live in site-content/00-home/hero-reel/
+const heroFiles = import.meta.glob('/site-content/00-home/hero-reel/*.{mp4,webm}', { eager: true, query: '?url', import: 'default' });
+const heroUrl = (name) => heroFiles[`/site-content/00-home/hero-reel/${name}`];
+const posters = getImages('00-home/hero-reel');
+const posterWide = posters.find((item) => item.path.includes('poster-wide')).image;
+const posterTall = posters.find((item) => item.path.includes('poster-tall')).image;
+const wide = await getImage({ src: posterWide, format: 'webp', widths: [1280, 1920] });
+const tall = await getImage({ src: posterTall, format: 'webp', widths: [540, 1080] });
+const heroSizes = '100vw';
 ---
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex" />
-    <title>Aditya Bhattarai</title>
-    <meta name="description" content="Filmmaker and content strategist from Kathmandu, Nepal." />
-    <style>
-      body {
-        margin: 0;
-        min-height: 100svh;
-        display: grid;
-        place-content: center;
-        padding: 24px;
-        background: #f1f0ec;
-        color: #121212;
-        font-family: system-ui, sans-serif;
-      }
-      h1 {
-        margin: 0 0 8px;
-        font-size: clamp(36px, 8vw, 72px);
-        letter-spacing: -0.045em;
-        font-weight: 600;
-      }
-      p {
-        margin: 0 0 24px;
-        color: #5e5e5a;
-      }
-      a {
-        display: inline-flex;
-        align-items: center;
-        min-height: 44px;
-        padding: 0 24px;
-        border-radius: 999px;
-        background: #121212;
-        color: #f1f0ec;
-        text-decoration: none;
-      }
-    </style>
-  </head>
-  <body>
-    <main>
-      <h1>Aditya Bhattarai</h1>
-      <p>Filmmaker and content strategist. Kathmandu, Nepal. New site coming soon.</p>
-      <a href="https://calendly.com/adityabhattarai/30-minutes-discovery-meeting">Book a call</a>
-    </main>
-  </body>
-</html>
+
+<Base current="home">
+  <Fragment slot="head">
+    <link rel="preload" as="image" type="image/webp" imagesrcset={tall.srcSet.attribute} imagesizes={heroSizes} media="(max-width: 700px)" fetchpriority="high" />
+    <link rel="preload" as="image" type="image/webp" imagesrcset={wide.srcSet.attribute} imagesizes={heroSizes} media="(min-width: 701px)" fetchpriority="high" />
+  </Fragment>
+
+  <!-- Statement ticker -->
+  <div class="ticker" aria-label="About Aditya">
+    <div class="ticker__track">
+      {home.ticker.map((line) => <span>{line}</span>)}
+      {home.ticker.map((line) => <span aria-hidden="true">{line}</span>)}
+    </div>
+  </div>
+
+  <!-- Hero: opening titles -->
+  <section class="hero">
+    <div class="hero__screen">
+      <picture>
+        <source media="(max-width: 700px)" type="image/webp" srcset={tall.srcSet.attribute} sizes={heroSizes} />
+        <source media="(min-width: 701px)" type="image/webp" srcset={wide.srcSet.attribute} sizes={heroSizes} />
+        <img class="hero__poster" src={wide.src} alt="Snow peaks above the Langtang Valley" fetchpriority="high" decoding="async" width="1920" height="1080" />
+      </picture>
+      <video
+        class="hero__video"
+        data-hero-video
+        data-wide-mp4={heroUrl('hero-wide.mp4')}
+        data-wide-webm={heroUrl('hero-wide.webm')}
+        data-tall-mp4={heroUrl('hero-tall.mp4')}
+        data-tall-webm={heroUrl('hero-tall.webm')}
+        muted
+        loop
+        playsinline
+        preload="none"
+        aria-hidden="true"
+        tabindex="-1"
+      ></video>
+
+      <div class="hero__reel-label"><span class="rec-dot"></span>{home.hero.reel_label}</div>
+
+      <div class="hero__card">
+        <div class="hero__presents">{home.hero.presents}</div>
+        <h1 class="hero__title">{home.hero.title}</h1>
+        <p class="hero__statement">{home.hero.statement}</p>
+        <div class="hero__roles">{home.hero.roles}</div>
+        <div class="btn-row hero__buttons">
+          <a class="btn btn--primary" href="/work">See the work</a>
+          <a class="btn btn--ghost" href="/contact#book">Book a call</a>
+        </div>
+      </div>
+
+      <button class="hero__sound" type="button" data-hero-sound aria-pressed="false">UNMUTE</button>
+    </div>
+
+    <div class="hero__strip scroll-row">
+      {strip.map((item) => (
+        <a class="strip-card" href={item.data?.href ?? '/work'}>
+          <div class="strip-card__image">
+            {item.data?.cover
+              ? <Picture image={item.data.cover.image} alt="" widths={[224, 336]} sizes="112px" />
+              : <span class="strip-card__blank">{item.title.split(' ')[0]}</span>}
+          </div>
+          <div class="strip-card__text">
+            <span class="strip-card__title">{item.title}</span>
+            <span class="strip-card__role">{item.role}</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Big numbers -->
+  <section class="wrap stats">
+    {stats.map((stat) => (
+      <div class="stats__item">
+        <div class="stat-number stats__number">{stat.number}</div>
+        <div class="stats__label">{stat.label}</div>
+      </div>
+    ))}
+  </section>
+
+  <!-- Four chapters -->
+  <section class="wrap chapters">
+    <div class="chapters__heading">
+      <div class="chapters__heading-left">
+        <div class="label">{home.chapters_heading.kicker}</div>
+        <h2 class="chapters__title">{home.chapters_heading.title}</h2>
+      </div>
+      <p class="statement chapters__note">{home.chapters_heading.note}</p>
+    </div>
+    <div class="chapters__grid">
+      {chapterCards.map((chapter) => (
+        <a class:list={['chapter-card', `chapter-card--${chapter.theme}`]} href={chapter.href}>
+          <div class="chapter-card__top"><span>CHAPTER {chapter.number}</span><span>[{String(chapter.count).padStart(2, '0')}]</span></div>
+          <div class="chapter-card__title">{chapter.title}</div>
+          <div class="chapter-card__text">{chapter.description}</div>
+          <div class="tag-row">{chapter.tags.map((tag) => <span class="chapter-card__tag">{tag}</span>)}</div>
+          {chapter.thumbs.length > 0 && (
+            <div class="chapter-card__thumbs">
+              {chapter.thumbs.map((thumb) => (
+                <div class="frame" style="aspect-ratio:3/4"><Picture image={thumb.image} alt="" widths={[160, 320]} sizes="(max-width: 700px) 18vw, 9vw" /></div>
+              ))}
+            </div>
+          )}
+          <div class="chapter-card__enter">Enter chapter →</div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Selected work -->
+  <section class="selected">
+    <div class="wrap selected__heading">
+      <h2 class="h2 h2--small">Selected work</h2>
+      <a class="selected__all" href="/work">ALL WORK →</a>
+    </div>
+    <div class="selected__row scroll-row">
+      {selected.map((project) => (
+        <a class="work-card" href={project.href}>
+          <div class="work-card__image">
+            {project.cover ? (
+              <div class="frame" style="aspect-ratio:16/10;border-radius:6px"><Picture image={project.cover.image} alt={project.title} widths={[560, 1120]} sizes="(max-width: 700px) 86vw, 560px" /></div>
+            ) : (
+              <TitleTile kicker={`CHAPTER ${project.chapter?.number}`} title={project.title} dark={project.chapterKey === '2-film'} />
+            )}
+            <span class="work-card__name">{project.title}</span>
+            <span class="work-card__roles">{project.shortRoles.slice(0, 2).map((role) => <span>{role}</span>)}</span>
+          </div>
+          <div class="work-card__meta"><span>{project.client}{project.format && project.client !== project.format ? ` · ${project.format.split(' — ')[0].split(',')[0]}` : ''}</span><span class="work-card__year">{project.years}</span></div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Clients -->
+  <section class="wrap clients">
+    <div class="clients__heading">
+      <div class="label">CLIENTS &amp; COLLABORATORS</div>
+      <a class="selected__all" href="/clients">WHO I’VE WORKED WITH →</a>
+    </div>
+    <div class="clients__grid">
+      {home.clients.map((client) => (
+        <div class="clients__item">
+          <span class="clients__name">{client.name}</span>
+          <span class="clients__note">{client.note}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Why me -->
+  <section class="band-ink">
+    <div class="wrap why">
+      <div class="label">{home.why.kicker}</div>
+      <div class="why__right">
+        <p class="statement why__text">{home.why.text}</p>
+        <a class="why__link" href="/services">{home.why.link}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials: only appears once there are real quotes -->
+  {testimonials.length > 0 && (
+    <section class="wrap quotes">
+      <div class="label">WHAT CLIENTS SAY</div>
+      <div class="quotes__grid">
+        {testimonials.map((item) => (
+          <figure class="quotes__item">
+            <blockquote class="statement">“{item.quote}”</blockquote>
+            <figcaption><strong>{item.name}</strong><span>{item.title}</span></figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- Closing call to action -->
+  <section class="cta">
+    <div class="wrap cta__inner">
+      <div class="label cta__kicker">{home.cta.kicker}</div>
+      <h2 class="cta__title">{home.cta.title}</h2>
+      <div class="btn-row cta__buttons">
+        <a class="btn btn--primary btn--large" href="/contact#book">{home.cta.button}</a>
+        {settings.email && <a class="btn btn--ghost btn--large" href={`mailto:${settings.email}`}>{settings.email}</a>}
+      </div>
+      <div class="cta__note">{home.cta.note}</div>
+    </div>
+  </section>
+</Base>
+
+<script src="../scripts/hero.js"></script>
+
+<style>
+  /* Ticker */
+  .ticker {
+    border-block: 1px solid var(--line);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker__track {
+    display: inline-flex;
+    gap: 56px;
+    padding: 11px 0;
+    font: 500 12px/1 var(--font-mono);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--muted);
+    animation: ticker 40s linear infinite;
+  }
+  @keyframes ticker { to { transform: translateX(calc(-50% - 28px)); } }
+
+  /* Hero */
+  .hero { position: relative; }
+  .hero__screen { position: relative; height: 820px; overflow: hidden; background: var(--panel); }
+  .hero__poster, .hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .hero__video { opacity: 0; transition: opacity 300ms ease; }
+  .hero__video.is-playing { opacity: 1; }
+  .hero__reel-label {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: var(--radius-pill);
+    background: var(--paper);
+    color: var(--ink);
+    font: 500 11px/1 var(--font-mono);
+    letter-spacing: 0.08em;
+  }
+  .hero__card {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(900px, calc(100% - 40px));
+    transform: translate(-50%, calc(-50% - 56px));
+    padding: clamp(28px, 5vw, 56px) clamp(20px, 5vw, 64px);
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .hero__presents {
+    font: 500 12px/1.3 var(--font-mono);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .hero__title {
+    font-weight: 600;
+    font-size: clamp(46px, 9.5vw, 148px);
+    line-height: 0.92;
+    letter-spacing: -0.045em;
+  }
+  .hero__statement {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(19px, 2.6vw, 34px);
+    line-height: 1.2;
+    color: var(--quiet);
+  }
+  .hero__roles {
+    font: 500 12px/1.5 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .hero__buttons { justify-content: center; margin-top: 8px; }
+  .hero__sound {
+    position: absolute;
+    right: 24px;
+    bottom: 24px;
+    min-height: 44px;
+    padding: 0 16px;
+    border: 1px solid var(--ink);
+    border-radius: var(--radius-pill);
+    background: var(--paper);
+    color: var(--ink);
+    font: 500 11px/1 var(--font-mono);
+    letter-spacing: 0.08em;
+    cursor: pointer;
+  }
+  .hero__strip {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    gap: 1px;
+    overflow-x: auto;
+    background: var(--line);
+    border-top: 1px solid var(--line);
+  }
+  .strip-card {
+    flex: 1 0 300px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    background: var(--paper);
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .strip-card:hover { background: var(--panel); color: var(--ink); }
+  .strip-card__image { flex: none; width: 112px; height: 63px; overflow: hidden; background: var(--panel); border-radius: var(--radius-thumb); }
+  .strip-card__image :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .strip-card__blank {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--night);
+    color: var(--night-ink);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: -0.02em;
+  }
+  .strip-card__text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .strip-card__title { font: 600 12px/1.25 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
+  .strip-card__role { font-size: 13px; color: var(--muted); }
+
+  /* Stats */
+  .stats {
+    padding-block: 72px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+    border-bottom: 1px solid var(--line);
+  }
+  .stats__item { display: flex; flex-direction: column; gap: 10px; }
+  .stats__number { font-size: clamp(44px, 5vw, 72px); }
+  .stats__label { font: 500 12px/1.5 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+
+  /* Chapters */
+  .chapters { padding-block: 96px 48px; }
+  .chapters__heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 40px; }
+  .chapters__heading-left { display: flex; flex-direction: column; gap: 14px; }
+  .chapters__title { font-weight: 600; font-size: clamp(36px, 4.6vw, 64px); line-height: 1; letter-spacing: -0.035em; }
+  .chapters__note { max-width: 420px; font-size: 22px; line-height: 1.3; }
+  .chapters__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 16px; }
+  .chapter-card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-height: 420px;
+    padding: 28px;
+    border-radius: var(--radius-card);
+    text-decoration: none;
+    transition: opacity 200ms ease;
+  }
+  .chapter-card:hover { opacity: 0.92; color: inherit; }
+  .chapter-card--panel { background: var(--panel); color: var(--ink); }
+  .chapter-card--ink { background: var(--ink); color: var(--night-ink); }
+  .chapter-card--ink .frame { background: #2a2a28; }
+  .chapter-card__top { display: flex; justify-content: space-between; font: 500 12px/1 var(--font-mono); letter-spacing: 0.14em; }
+  .chapter-card__title { font-weight: 600; font-size: clamp(34px, 3.4vw, 48px); line-height: 1; letter-spacing: -0.035em; }
+  .chapter-card__text { max-width: 460px; font-size: 17px; line-height: 1.45; opacity: 0.85; }
+  .chapter-card__tag { padding: 6px 10px; border: 1px solid currentColor; border-radius: var(--radius-pill); font: 500 11px/1 var(--font-mono); letter-spacing: 0.04em; opacity: 0.8; }
+  .chapter-card__thumbs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: auto; }
+  .chapter-card__enter { font-weight: 500; font-size: 15px; margin-top: auto; }
+  .chapter-card__thumbs + .chapter-card__enter { margin-top: 0; }
+
+  /* Selected work */
+  .selected { padding-block: 72px 24px; }
+  .selected__heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; padding-bottom: 28px; }
+  .selected__all { display: inline-flex; align-items: center; min-height: 44px; font: 500 13px/1 var(--font-mono); letter-spacing: 0.06em; }
+  .selected__row { display: flex; gap: 16px; overflow-x: auto; padding: 0 max(var(--gutter), calc((100vw - var(--max-width)) / 2 + var(--gutter))) 8px; }
+  .work-card { flex: 0 0 min(560px, 86vw); display: flex; flex-direction: column; gap: 12px; color: var(--ink); text-decoration: none; }
+  .work-card:hover { color: var(--ink); }
+  .work-card__image { position: relative; }
+  .work-card__name { position: absolute; top: 12px; left: 12px; padding: 7px 12px; background: var(--ink); color: var(--paper); border-radius: var(--radius-pill); font-weight: 500; font-size: 12px; line-height: 1; }
+  .work-card__roles { position: absolute; top: 12px; right: 12px; display: flex; gap: 4px; }
+  .work-card__roles span { padding: 6px 9px; background: var(--paper); border-radius: var(--radius-pill); font: 500 10px/1 var(--font-mono); letter-spacing: 0.04em; color: var(--ink); }
+  .work-card__meta { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--muted); }
+  .work-card__year { font-family: var(--font-mono); font-size: 12px; white-space: nowrap; }
+
+  /* Clients */
+  .clients { padding-block: 96px; display: flex; flex-direction: column; gap: 32px; }
+  .clients__heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .clients__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+  .clients__item {
+    height: 120px;
+    padding: 0 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-align: center;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .clients__name { font-weight: 600; font-size: 18px; letter-spacing: -0.02em; }
+  .clients__note { font: 500 10px/1.3 var(--font-mono); color: var(--muted); letter-spacing: 0.04em; }
+
+  /* Why me */
+  .why { padding-block: 120px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; align-items: start; }
+  .why__right { grid-column: span 2; display: flex; flex-direction: column; gap: 32px; min-width: 0; }
+  .why__text { font-size: clamp(32px, 4vw, 58px); line-height: 1.08; letter-spacing: -0.01em; }
+  .why__link { color: var(--night-ink); font-weight: 500; font-size: 16px; }
+  .why__link:hover { color: var(--night-muted); }
+
+  /* Testimonials */
+  .quotes { padding-block: 96px; }
+  .quotes__grid { margin-top: 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+  .quotes__item { padding: 28px; background: var(--panel); border-radius: var(--radius-card); display: flex; flex-direction: column; gap: 24px; min-height: 260px; }
+  .quotes__item blockquote { font-size: 24px; line-height: 1.3; }
+  .quotes__item figcaption { margin-top: auto; display: flex; flex-direction: column; gap: 3px; }
+  .quotes__item figcaption span { font-size: 13px; color: var(--muted); }
+
+  /* CTA */
+  .cta { border-top: 1px solid var(--line); }
+  .cta__inner { padding-block: 120px; display: flex; flex-direction: column; align-items: center; gap: 28px; text-align: center; }
+  .cta__kicker { letter-spacing: 0.24em; }
+  .cta__title { max-width: 1100px; font-weight: 600; font-size: clamp(44px, 7vw, 112px); line-height: 0.95; letter-spacing: -0.045em; }
+  .cta__buttons { justify-content: center; }
+  .cta__note { font: 500 12px/1.6 var(--font-mono); color: var(--muted); letter-spacing: 0.04em; }
+
+  @media (max-width: 900px) {
+    .why { grid-template-columns: 1fr; padding-block: 88px; }
+    .why__right { grid-column: auto; }
+  }
+
+  /* Phone layout */
+  @media (max-width: 700px) {
+    .ticker__track { font-size: 11px; }
+    .hero__screen { height: 430px; }
+    .hero__card {
+      left: 16px;
+      right: 16px;
+      top: auto;
+      bottom: 16px;
+      width: auto;
+      transform: none;
+      padding: 22px 18px;
+      gap: 10px;
+    }
+    .hero__presents { font-size: 9px; letter-spacing: 0.2em; }
+    .hero__roles { display: none; }
+    .hero__buttons { flex-wrap: nowrap; gap: 8px; margin-top: 4px; }
+    .hero__buttons .btn { min-height: 44px; padding: 0 18px; font-size: 14px; }
+    .hero__reel-label { top: 12px; right: 12px; font-size: 10px; padding: 7px 10px; }
+    .hero__sound { top: 12px; left: 12px; right: auto; bottom: auto; }
+    .hero__strip { position: static; }
+    .strip-card { flex: 0 0 270px; padding: 12px 14px; }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 12px; padding-block: 28px; }
+    .stats__number { font-size: 38px; }
+    .stats__label { font-size: 10px; letter-spacing: 0.04em; }
+    .chapters { padding-block: 56px 32px; }
+    .chapter-card { min-height: 0; padding: 20px; }
+    .selected { padding-block: 40px 16px; }
+    .clients { padding-block: 64px; }
+    .clients__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .clients__item { height: 96px; }
+    .clients__name { font-size: 16px; }
+    .cta__inner { padding-block: 88px; }
+    .cta__buttons .btn { width: 100%; }
+    .cta__buttons { width: 100%; }
+  }
+</style>

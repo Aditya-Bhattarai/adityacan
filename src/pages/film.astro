@@ -1,0 +1,163 @@
+---
+// CHAPTER II (dark). Words are in site-content/pages/film.yaml
+import Base from '../layouts/Base.astro';
+import GradeSlider from '../components/GradeSlider.astro';
+import Picture from '../components/Picture.astro';
+import TitleTile from '../components/TitleTile.astro';
+import VideoFacade from '../components/VideoFacade.astro';
+import { getImages, getPage, getProjects, getWorkProjects, getWriting } from '../lib/content.js';
+
+const page = await getPage('film');
+const projects = await getProjects();
+const work = await getWorkProjects();
+const writing = await getWriting();
+
+const sapana = projects.find((project) => project.slug === page.featured.project);
+const sapanaStill = sapana ? getImages(`${sapana.folder}/stills`)[0] : null;
+const sapanaScript = writing.find((piece) => piece.slug === sapana?.screenplay);
+const docs = [
+  ...(sapanaScript?.pdf ? [{ url: sapanaScript.pdf.url, caption: 'Screenplay V4', preview: sapanaScript.pdf.preview }] : []),
+  ...(sapana?.documents ?? []),
+];
+const films = work.filter((project) => project.chapterKey === '2-film');
+
+const grade = projects.find((project) => project.slug === page.grade.project);
+const before = grade ? getImages(`${grade.folder}/before`)[0] : null;
+const after = grade ? getImages(`${grade.folder}/after`)[0] : null;
+---
+
+<Base title="Chapter II — Film" current="work" theme="dark" description="Short films written and directed by Aditya Bhattarai. Still frames, natural light, real sound.">
+  <section class="title-card-section film-title">
+    <div class="title-card">
+      <div class="title-card__kicker">CHAPTER II</div>
+      <h1 class="title-card__title film-title__word">Film</h1>
+      <p class="title-card__statement">{page.statement}</p>
+      <div class="title-card__rule"></div>
+      <p class="title-card__intro">{page.intro}</p>
+    </div>
+  </section>
+
+  {sapana && (
+    <section class="wrap featured">
+      <div class="featured__labels"><span>FEATURED</span><span>{page.featured.meta_right}</span></div>
+      <div class="featured__band">
+        {sapana.video ? (
+          <VideoFacade video={sapana.video} poster={sapanaStill?.image} ratio="2.39/1" large widths={[800, 1600]} sizes="(max-width: 1320px) 100vw, 1272px" />
+        ) : sapanaStill ? (
+          <div class="frame" style="aspect-ratio:2.39/1;border-radius:0"><Picture image={sapanaStill.image} alt="A still from Sapana" widths={[800, 1600]} sizes="(max-width: 1320px) 100vw, 1272px" /></div>
+        ) : (
+          <div class="scope">
+            <span class="scope__word">{page.featured.nepali}</span>
+            <span class="scope__credit">A FILM BY ADITYA BHATTARAI · 2026</span>
+          </div>
+        )}
+      </div>
+      <div class="featured__text">
+        <div class="featured__titles">
+          <h2 class="featured__title">{page.featured.nepali}<br /><span>{page.featured.english}</span></h2>
+          <div class="meta">{page.featured.meta}</div>
+        </div>
+        <div class="featured__story">
+          <p class="statement featured__logline">{page.featured.logline}</p>
+          <p class="body-text">{page.featured.note}</p>
+          <div class="btn-row">
+            {sapana.video && <a class="btn btn--primary" href={sapana.video.url} target="_blank" rel="noopener">Watch the film</a>}
+            {sapanaScript && <a class:list={['btn', sapana.video ? 'btn--ghost' : 'btn--primary']} href={sapanaScript.href}>Read the screenplay</a>}
+            <a class="btn btn--ghost" href={sapana.href}>Credits</a>
+          </div>
+        </div>
+      </div>
+      {docs.length > 0 && (
+        <div class="docs">
+          {docs.map((doc) => (
+            <a class="docs__item" href={doc.url}>
+              {doc.preview && <div class="frame" style="aspect-ratio:3/4"><Picture image={doc.preview} alt="" widths={[240, 480]} sizes="(max-width: 700px) 50vw, 25vw" /></div>}
+              <span>{doc.caption}</span>
+            </a>
+          ))}
+        </div>
+      )}
+    </section>
+  )}
+
+  <section class="wrap filmography">
+    <div class="filmography__head">
+      <h2 class="h2 h2--small">{page.filmography.title}</h2>
+      <span class="meta">{page.filmography.note}</span>
+    </div>
+    <div class="filmography__grid">
+      {films.map((film) => (
+        <a class="film" href={film.href}>
+          {film.cover
+            ? <div class="frame" style="aspect-ratio:2/3"><Picture image={film.cover.image} alt={film.title} widths={[320, 640]} sizes="(max-width: 700px) 50vw, 25vw" /></div>
+            : <TitleTile title={film.title} ratio="2/3" dark />}
+          <div class="film__row"><span class="film__title">{film.title}</span>{film.years && <span class="meta">{film.years}</span>}</div>
+          <span class="meta">{film.shortRoles.join(' · ').toUpperCase()}</span>
+          {film.oneLiner && <span class="film__log">{film.oneLiner}</span>}
+        </a>
+      ))}
+    </div>
+  </section>
+
+  {before && after && (
+    <section class="wrap craft">
+      <div class="craft__text">
+        <span class="label">{page.grade.kicker}</span>
+        <h2 class="h2 h2--small">{page.grade.title}</h2>
+        <p class="body-text">{page.grade.text}</p>
+      </div>
+      <GradeSlider before={before.image} after={after.image} />
+    </section>
+  )}
+
+  <a class="next-chapter next-chapter--light" href="/mountains">
+    <div class="wrap next-chapter__inner">
+      <span class="next-chapter__kicker">NEXT — CHAPTER III</span>
+      <span class="next-chapter__title">Mountains →</span>
+    </div>
+  </a>
+</Base>
+
+<style>
+  .film-title { padding-block: 96px 72px; }
+  .film-title__word { font-size: clamp(72px, 12vw, 180px); line-height: 0.85; letter-spacing: -0.055em; }
+
+  .featured { padding-bottom: 96px; display: flex; flex-direction: column; gap: 28px; }
+  .featured__labels { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font: 500 12px/1 var(--font-mono); letter-spacing: 0.14em; color: var(--label); }
+  .featured__band { background: #000; padding-block: clamp(16px, 3vw, 40px); }
+  .scope { aspect-ratio: 2.39 / 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(8px, 2vw, 20px); border-block: 1px solid #2a2a28; }
+  .scope__word { font-weight: 600; font-size: clamp(56px, 15vw, 200px); line-height: 1; letter-spacing: -0.01em; }
+  .scope__credit { font: 500 clamp(9px, 1.1vw, 13px)/1 var(--font-mono); letter-spacing: 0.3em; color: var(--night-muted); text-align: center; }
+  .featured__text { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 40px; }
+  .featured__titles { display: flex; flex-direction: column; gap: 14px; }
+  .featured__title { font-weight: 600; font-size: clamp(48px, 6vw, 88px); line-height: 0.95; letter-spacing: -0.02em; }
+  .featured__title span { font-family: var(--font-serif); font-weight: 400; font-style: italic; letter-spacing: 0; }
+  .featured__story { display: flex; flex-direction: column; gap: 18px; }
+  .featured__logline { font-size: 28px; line-height: 1.25; color: var(--night-ink); }
+  .docs { margin-top: 8px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 46%), 1fr)); gap: 12px; }
+  .docs__item { display: flex; flex-direction: column; gap: 8px; font-size: 14px; text-decoration: none; }
+  .docs__item .frame { background: #fff; }
+  .docs__item :global(img) { object-fit: contain; transition: opacity 200ms ease; }
+  .docs__item:hover :global(img) { opacity: 0.8; }
+
+  .filmography { padding-bottom: 96px; }
+  .filmography__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+  .filmography__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 46%), 1fr)); gap: 32px 16px; }
+  .film { display: flex; flex-direction: column; gap: 10px; color: var(--fg); text-decoration: none; }
+  .film:hover { color: var(--fg); }
+  .film__row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .film__title { font-weight: 600; font-size: 20px; line-height: 1.15; letter-spacing: -0.02em; }
+  .film__log { font-size: 14px; line-height: 1.45; color: var(--text); }
+
+  .craft { padding-bottom: 112px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 40px; align-items: center; }
+  .craft__text { display: flex; flex-direction: column; gap: 16px; }
+
+  .next-chapter--light { background: var(--paper); color: var(--ink); --label: var(--muted); }
+  .next-chapter--light:hover { color: var(--ink); }
+
+  @media (max-width: 700px) {
+    .film-title { padding-block: 32px 48px; }
+    .featured, .filmography { padding-bottom: 64px; }
+    .craft { padding-bottom: 72px; }
+  }
+</style>

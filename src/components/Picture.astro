@@ -1,0 +1,32 @@
+---
+// Shows one image in modern formats (AVIF and WebP), sized for each device, loaded only when needed.
+// Use: <Picture image={item.image} alt="..." widths={[320, 640]} sizes="50vw" />
+import { Picture as AstroPicture } from 'astro:assets';
+
+const {
+  image,
+  alt = '',
+  widths = [480, 960],
+  sizes = '(max-width: 700px) 100vw, 33vw',
+  eager = false,
+  class: className,
+  style,
+} = Astro.props;
+
+// Never ask for a size bigger than the original file.
+const finalWidths = [...new Set(widths.map((width) => Math.min(width, image.width)))];
+---
+
+<AstroPicture
+  src={image}
+  alt={alt}
+  formats={['avif', 'webp']}
+  fallbackFormat="jpg"
+  widths={finalWidths}
+  sizes={sizes}
+  loading={eager ? 'eager' : 'lazy'}
+  fetchpriority={eager ? 'high' : undefined}
+  decoding="async"
+  class={className}
+  style={style}
+/>
