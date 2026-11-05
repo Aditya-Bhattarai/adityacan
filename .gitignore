@@ -7,12 +7,19 @@
 !/.gitignore
 !/.node-version
 !/README.md
+!/START-HERE.md
 !/package.json
 !/package-lock.json
 !/astro.config.mjs
 !/wrangler.jsonc
 !/public/
 !/src/
+!/scripts/
+!/site-content/
+
+# Personal notes and unapproved work: never upload
+/site-content/_UNSORTED.md
+/site-content/02-film/cryptid-documentary/
 
 # Never upload, even from inside an allowed folder
 node_modules/
@@ -20,6 +27,22 @@ dist/
 .astro/
 .wrangler/
 .env*
+*.doc
 *.docx
+*.xls
+*.xlsx
+*.ai
+*.psd
 *salary*
+*payslip*
+*certificate*
+*loan*
+*cover[-_ ]letter*
+*coverletter*
 *Investment_Strategy*
+*proposal*
+*workbook*
+*passport*
+*citizenship*
+*contract*
+*invoice*
