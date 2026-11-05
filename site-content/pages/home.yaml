@@ -14,21 +14,6 @@ hero:
   roles: Strategy · Direction · Edit · For creators and brands anywhere
   reel_label: REEL 2026
 
-# The four projects along the bottom of the hero. "project" is the project's folder name.
-strip:
-  - project: satik-kura
-    title: Ideapreneur × Satik Kura
-    role: Podcast · Edit & strategy
-  - project: sapana
-    title: सपना / Sapana
-    role: Short film · Writer & director
-  - project: viewfinders
-    title: Viewfinders × eSewa
-    role: Brand content · Production & edit
-  - project: langtang-diaries
-    title: Langtang Diaries
-    role: Travel film · Filmmaker
-
 # The big numbers. Set show to false to hide one, or true to show it.
 # "number: auto" counts the clients listed further down this file.
 stats:

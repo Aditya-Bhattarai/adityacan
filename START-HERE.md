@@ -62,7 +62,9 @@ Open `site-content/testimonials.md`. Replace `[quote]` with the real words and c
 The testimonials section appears on the homepage once at least one is real.
 
 ### Replace the hero video
-Replace the files in `site-content/00-home/hero-reel/` using the same file names. Keep each video under about 12 MB. They load after the page has appeared, so they don't slow the first view.
+Replace `hero-tall.mp4`, `hero-tall.webm` and `poster-tall.jpg` in `site-content/00-home/hero-reel/` using the same file names. The video must be tall (9:16) and under about 12 MB. It loads after the page has appeared, so it doesn't slow the first view.
+
+Every screen uses the tall video. `hero-wide.mp4` and `hero-wide.webm` are no longer used and don't go on the site. `poster-wide.jpg` is still the picture shown when someone shares a link to the site.
 
 ### Change the order of the chapters
 Open `site-content/pages/chapters.yaml` and move a whole block up or down. Chapter numbers, menus and "next chapter" links update by themselves. Folder names like `02-film` don't affect the order.

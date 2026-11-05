@@ -10,20 +10,20 @@
   tags: [Director, Writer, Assistant director]
   theme: ink
 
-- key: teaching
-  title: Teaching
-  short: Teaching
-  href: /teaching
-  description: Editing courses for creators, and classes that show older people how social media works.
-  tags: [Courses, Workshops, Curriculum]
-  theme: panel
-
 - key: strategy-content
   title: Strategy & Content
   short: Strategy
   href: /strategy-content
   description: YouTube, podcasts, reels and brand content for some of Nepal’s biggest creators.
   tags: [Editor, Strategist, Thumbnails, Motion]
+  theme: panel
+
+- key: teaching
+  title: Teaching
+  short: Teaching
+  href: /teaching
+  description: Editing courses for creators, and classes that show older people how social media works.
+  tags: [Courses, Workshops, Curriculum]
   theme: panel
 
 - key: trekking-guide

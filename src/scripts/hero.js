@@ -6,14 +6,12 @@ if (video) {
   const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   // Slow connections and data saver keep the still picture instead of the video.
   const saving = navigator.connection?.saveData || /2g|3g/.test(navigator.connection?.effectiveType ?? '');
-  const phoneShape = window.matchMedia('(max-width: 700px)').matches;
 
   function addSources() {
     if (video.querySelector('source')) return;
-    const shape = phoneShape ? 'tall' : 'wide';
-    for (const [format, type] of [['Webm', 'video/webm'], ['Mp4', 'video/mp4']]) {
+    for (const [format, type] of [['webm', 'video/webm'], ['mp4', 'video/mp4']]) {
       const source = document.createElement('source');
-      source.src = video.dataset[`${shape}${format}`];
+      source.src = video.dataset[format];
       source.type = type;
       video.append(source);
     }

@@ -20,7 +20,6 @@ const clients = await Promise.all(home.clients.map(async (client) => ({ ...clien
 const initials = (name) => name.split(' ').map((word) => word[0]).join('').slice(0, 2);
 const selected = (home.selected_work ?? []).map((slug) => work.find((project) => project.slug === slug)).filter(Boolean);
 
-const strip = await Promise.all(home.strip.map(async (item) => ({ ...item, data: await getProject(item.project) })));
 const chapterCards = await Promise.all(chapters.map(async (chapter) => ({
   ...chapter,
   count: work.filter((project) => project.chapterKey === chapter.key).length,
@@ -28,20 +27,17 @@ const chapterCards = await Promise.all(chapters.map(async (chapter) => ({
 })));
 
 // Hero files live in site-content/00-home/hero-reel/
-const heroFiles = import.meta.glob('/site-content/00-home/hero-reel/*.{mp4,webm}', { eager: true, query: '?url', import: 'default' });
+// The video is tall, so every screen uses the tall files. It stays sharp because it is never stretched.
+const heroFiles = import.meta.glob('/site-content/00-home/hero-reel/hero-tall.{mp4,webm}', { eager: true, query: '?url', import: 'default' });
 const heroUrl = (name) => heroFiles[`/site-content/00-home/hero-reel/${name}`];
-const posters = getImages('00-home/hero-reel');
-const posterWide = posters.find((item) => item.path.includes('poster-wide')).image;
-const posterTall = posters.find((item) => item.path.includes('poster-tall')).image;
-const wide = await getImage({ src: posterWide, format: 'webp', widths: [1280, 1600, 1920], quality: 72 });
+const posterTall = getImages('00-home/hero-reel').find((item) => item.path.includes('poster-tall')).image;
 const tall = await getImage({ src: posterTall, format: 'webp', widths: [540, 720, 1080], quality: 72 });
-const heroSizes = '100vw';
+const heroSizes = '(max-width: 700px) 100vw, 460px';
 ---
 
 <Base current="home">
   <Fragment slot="head">
-    <link rel="preload" as="image" type="image/webp" imagesrcset={tall.srcSet.attribute} imagesizes={heroSizes} media="(max-width: 700px)" fetchpriority="high" />
-    <link rel="preload" as="image" type="image/webp" imagesrcset={wide.srcSet.attribute} imagesizes={heroSizes} media="(min-width: 701px)" fetchpriority="high" />
+    <link rel="preload" as="image" type="image/webp" imagesrcset={tall.srcSet.attribute} imagesizes={heroSizes} fetchpriority="high" />
   </Fragment>
 
   <!-- Statement ticker -->
@@ -54,19 +50,27 @@ const heroSizes = '100vw';
 
   <!-- Hero: opening titles -->
   <section class="hero">
-    <div class="hero__screen">
+    <div class="hero__card">
+      <div class="hero__name">{home.hero.name}</div>
+      <h1 class="hero__title">{home.hero.title}</h1>
+      <p class="hero__statement">{home.hero.statement}</p>
+      <div class="hero__roles">{home.hero.roles}</div>
+      <div class="btn-row hero__buttons">
+        <a class="btn btn--primary" href="/work">See the work</a>
+        <a class="btn btn--ghost" href="/contact#book">Book a call</a>
+      </div>
+    </div>
+
+    <div class="hero__reel">
       <picture>
-        <source media="(max-width: 700px)" type="image/webp" srcset={tall.srcSet.attribute} sizes={heroSizes} />
-        <source media="(min-width: 701px)" type="image/webp" srcset={wide.srcSet.attribute} sizes={heroSizes} />
-        <img class="hero__poster" src={wide.src} alt="Snow peaks above the Langtang Valley" fetchpriority="high" decoding="async" width="1920" height="1080" />
+        <source type="image/webp" srcset={tall.srcSet.attribute} sizes={heroSizes} />
+        <img class="hero__poster" src={tall.src} alt="Snow peaks above the Langtang Valley" fetchpriority="high" decoding="async" width="1080" height="1920" />
       </picture>
       <video
         class="hero__video"
         data-hero-video
-        data-wide-mp4={heroUrl('hero-wide.mp4')}
-        data-wide-webm={heroUrl('hero-wide.webm')}
-        data-tall-mp4={heroUrl('hero-tall.mp4')}
-        data-tall-webm={heroUrl('hero-tall.webm')}
+        data-mp4={heroUrl('hero-tall.mp4')}
+        data-webm={heroUrl('hero-tall.webm')}
         muted
         loop
         playsinline
@@ -74,39 +78,8 @@ const heroSizes = '100vw';
         aria-hidden="true"
         tabindex="-1"
       ></video>
-
       <div class="hero__reel-label"><span class="rec-dot"></span>{home.hero.reel_label}</div>
-
-      <div class="hero__card">
-        <div class="hero__name">{home.hero.name}</div>
-        <h1 class="hero__title">{home.hero.title}</h1>
-        <p class="hero__statement">{home.hero.statement}</p>
-        <div class="hero__roles">{home.hero.roles}</div>
-        <div class="btn-row hero__buttons">
-          <a class="btn btn--primary" href="/work">See the work</a>
-          <a class="btn btn--ghost" href="/contact#book">Book a call</a>
-        </div>
-      </div>
-
       <button class="hero__sound" type="button" data-hero-sound aria-pressed="false">UNMUTE</button>
-    </div>
-
-    <div class="hero__strip scroll-row">
-      {strip.map((item) => (
-        <a class="strip-card" href={item.data?.href ?? '/work'}>
-          <div class="strip-card__image">
-            {item.data?.cover
-              ? <Picture image={item.data.cover.image} alt="" widths={[224, 336]} sizes="112px" />
-              : item.data?.logo
-                ? <Picture class="strip-card__logo" image={item.data.logo.image} alt="" widths={[224, 336]} sizes="112px" />
-                : <span class="strip-card__blank">{item.title.split(' ')[0]}</span>}
-          </div>
-          <div class="strip-card__text">
-            <span class="strip-card__title">{item.title}</span>
-            <span class="strip-card__role">{item.role}</span>
-          </div>
-        </a>
-      ))}
     </div>
   </section>
 
@@ -265,9 +238,18 @@ const heroSizes = '100vw';
   }
   @keyframes ticker { to { transform: translateX(calc(-50% - 28px)); } }
 
-  /* Hero */
-  .hero { position: relative; }
-  .hero__screen { position: relative; height: 820px; overflow: hidden; background: var(--panel); }
+  /* Hero: the title card on the left, the tall video in its own frame on the right.
+     --reel-width sets the size of the video frame. The frame is as tall as the screen allows. */
+  .hero {
+    --reel-width: clamp(250px, min(calc((100vh - 150px) * 9 / 16), 38vw), 460px);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--reel-width);
+    gap: 16px;
+    max-width: var(--max-width);
+    margin-inline: auto;
+    padding: 24px var(--gutter);
+  }
+  .hero__reel { position: relative; aspect-ratio: 9 / 16; overflow: hidden; background: var(--panel); }
   .hero__poster, .hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .hero__video { opacity: 0; transition: opacity 300ms ease; }
   .hero__video.is-playing { opacity: 1; }
@@ -286,18 +268,14 @@ const heroSizes = '100vw';
     letter-spacing: 0.08em;
   }
   .hero__card {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: min(1040px, calc(100% - 40px));
-    transform: translate(-50%, calc(-50% - 56px));
-    padding: clamp(28px, 5vw, 56px) clamp(20px, 5vw, 64px);
+    padding: clamp(28px, 4vw, 56px) clamp(20px, 4vw, 64px);
     background: var(--paper);
     border: 1px solid var(--ink);
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 18px;
   }
   .hero__name {
@@ -308,7 +286,7 @@ const heroSizes = '100vw';
   }
   .hero__title {
     font-weight: 600;
-    font-size: clamp(38px, 6vw, 84px);
+    font-size: clamp(38px, 5vw, 76px);
     line-height: 0.98;
     letter-spacing: -0.045em;
     text-wrap: balance;
@@ -341,45 +319,6 @@ const heroSizes = '100vw';
     letter-spacing: 0.08em;
     cursor: pointer;
   }
-  .hero__strip {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    gap: 1px;
-    overflow-x: auto;
-    background: var(--line);
-    border-top: 1px solid var(--line);
-  }
-  .strip-card {
-    flex: 1 0 300px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 20px;
-    background: var(--paper);
-    color: var(--ink);
-    text-decoration: none;
-  }
-  .strip-card:hover { background: var(--panel); color: var(--ink); }
-  .strip-card__image { flex: none; width: 112px; height: 63px; overflow: hidden; background: var(--panel); border-radius: var(--radius-thumb); }
-  .strip-card__image :global(img) { width: 100%; height: 100%; object-fit: cover; }
-  .strip-card__image :global(.strip-card__logo) { object-fit: contain; padding: 8px; }
-  .strip-card__blank {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--night);
-    color: var(--night-ink);
-    font-weight: 600;
-    font-size: 15px;
-    letter-spacing: -0.02em;
-  }
-  .strip-card__text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-  .strip-card__title { font: 600 12px/1.25 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
-  .strip-card__role { font-size: 13px; color: var(--muted); }
 
   /* Stats */
   .stats {
@@ -500,14 +439,16 @@ const heroSizes = '100vw';
   /* Phone layout */
   @media (max-width: 700px) {
     .ticker__track { font-size: 11px; }
-    .hero__screen { height: 430px; }
+    /* On a phone the video fills the screen width and the title card sits in the middle of it. */
+    .hero { position: relative; display: block; height: 430px; padding: 0; overflow: hidden; }
+    .hero__reel { position: absolute; inset: 0; aspect-ratio: auto; }
     .hero__card {
+      position: absolute;
+      z-index: 1;
       left: 16px;
       right: 16px;
-      top: auto;
-      bottom: 16px;
-      width: auto;
-      transform: none;
+      top: 50%;
+      transform: translateY(-50%);
       padding: 22px 18px;
       gap: 10px;
     }
@@ -517,8 +458,6 @@ const heroSizes = '100vw';
     .hero__buttons .btn { min-height: 44px; padding: 0 18px; font-size: 14px; }
     .hero__reel-label { top: 12px; right: 12px; font-size: 10px; padding: 7px 10px; }
     .hero__sound { top: 12px; left: 12px; right: auto; bottom: auto; }
-    .hero__strip { position: static; }
-    .strip-card { flex: 0 0 270px; padding: 12px 14px; }
     .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 12px; padding-block: 28px; }
     .stats__number { font-size: 38px; }
     .stats__label { font-size: 10px; letter-spacing: 0.04em; }
