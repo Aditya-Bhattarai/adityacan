@@ -33,8 +33,8 @@ const heroUrl = (name) => heroFiles[`/site-content/00-home/hero-reel/${name}`];
 const posters = getImages('00-home/hero-reel');
 const posterWide = posters.find((item) => item.path.includes('poster-wide')).image;
 const posterTall = posters.find((item) => item.path.includes('poster-tall')).image;
-const wide = await getImage({ src: posterWide, format: 'webp', widths: [1280, 1920] });
-const tall = await getImage({ src: posterTall, format: 'webp', widths: [540, 1080] });
+const wide = await getImage({ src: posterWide, format: 'webp', widths: [1280, 1600, 1920], quality: 72 });
+const tall = await getImage({ src: posterTall, format: 'webp', widths: [540, 720, 1080], quality: 72 });
 const heroSizes = '100vw';
 ---
 
@@ -164,7 +164,7 @@ const heroSizes = '100vw';
         <a class="work-card" href={project.href}>
           <div class="work-card__image">
             {project.cover ? (
-              <div class="frame" style="aspect-ratio:16/10;border-radius:6px"><Picture image={project.cover.image} alt={project.title} widths={[560, 1120]} sizes="(max-width: 700px) 86vw, 560px" /></div>
+              <div class="frame" style="aspect-ratio:16/10;border-radius:6px"><Picture image={project.cover.image} alt={project.title} widths={[420, 720, 1120]} sizes="(max-width: 700px) 86vw, 560px" /></div>
             ) : (
               <TitleTile kicker={`CHAPTER ${project.chapter?.number}`} title={project.title} dark={project.chapterKey === 'film'} />
             )}

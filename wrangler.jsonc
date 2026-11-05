@@ -2,8 +2,12 @@
   // Tells Cloudflare to publish the finished site from the "dist" folder.
   "name": "adityacan",
   "compatibility_date": "2026-11-01",
+  // A tiny script that lets iPhones play the homepage video. Only the video files go through it.
+  "main": "./src/worker.js",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "404-page"
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/_astro/hero-*"]
   }
 }
