@@ -23,7 +23,7 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-Sanjog Koirala's newly founded creator company.
+Sanjog Koirala's new creator company.
 
 ## The brief
 [What the client needed / why the project existed.]

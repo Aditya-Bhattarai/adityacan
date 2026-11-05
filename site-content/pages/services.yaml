@@ -1,56 +1,56 @@
 # SERVICES & PROCESS page words. No prices anywhere.
 
 title: Strategy and story from the same person.
-statement: I plan your content like a strategist, make it like a filmmaker, then read the data and make the next one better.
+statement: I plan what you should make, make it, see how it did, and use that to make the next one better.
 
 comparison:
-  - them: Agencies edit what you send them.
-    me: I shape the story for each platform before anything gets cut.
-  - them: Consultants talk about going viral.
-    me: I set up a way of working your team can repeat every month.
-  - them: Freelancers fix the video in front of them.
-    me: I look at your audience, structure and workflow, then shoot and cut it myself.
+  - them: You send footage and get an edit back.
+    me: We talk about what the video is for before anyone cuts anything.
+  - them: You get a deck full of advice, then you’re on your own.
+    me: You get a plan your team can actually keep up with every month.
+  - them: One video gets better and the channel stays the same.
+    me: I look at the whole channel first, then shoot and cut it myself.
 
 services:
   - title: Content strategy & audits
-    text: I audit your channels against platform data, find out why strong ideas underperform, and write a playbook your team can repeat.
-    outputs: [Audit, Playbook, Content calendar]
+    text: I go through your channels and numbers, work out why good ideas aren’t landing, and write it all down so your team can use it.
+    outputs: [Audit, Written plan, Content calendar]
   - title: Long form editing
-    text: YouTube explainers, interviews and podcasts, structured to hold attention and paced like a film.
+    text: YouTube explainers, interviews and podcasts, cut so people keep watching.
     outputs: [YouTube, Podcasts, Interviews]
-  - title: Short form systems
-    text: Reels and shorts cut from every long video, with hooks written for each platform.
+  - title: Reels and shorts
+    text: I cut reels and shorts out of every long video, and write a hook for each one.
     outputs: [Reels, Shorts, Repurposing]
   - title: Thumbnails & covers
-    text: Titles, thumbnails and vertical covers designed together, so people click.
+    text: I do the title and thumbnail together, because that’s what decides if anyone clicks.
     outputs: [YouTube thumbnails, Vertical covers]
   - title: Motion graphics
-    text: Data animations and explainer graphics that make numbers easy to follow.
+    text: Animated charts and graphics, so a video full of numbers is still easy to follow.
     outputs: [Charts, Lower thirds, Titles]
   - title: Direction & production
-    text: Concept, script, shot list, call sheet and shoot for brand films and campaigns.
+    text: Brand films and campaigns, from the first idea and the script through to the shoot.
     outputs: [Brand films, Scripts, On set]
   - title: Film & documentary editing
-    text: Narrative and documentary edits with sound design and colour.
+    text: Short films and documentaries, including the sound and the colour.
     outputs: [Documentary, Short film, Colour]
 
 # The before and after colour slider. Pictures come from site-content/02-film/colour-grading.
 grade:
   project: colour-grading
-  kicker: CRAFT · COLOUR
+  kicker: COLOUR GRADING
   title: Log to grade.
-  text: Drag the line to compare the flat camera file with the final grade.
+  text: Drag the line. Left is how it came out of the camera, right is after I graded it.
 
 process:
   - when: WEEK 1
     title: Audit
-    text: Your channels, data and audience. What works, what doesn’t and why.
+    text: I go through your channels and numbers and tell you honestly what’s working.
   - when: WEEK 1
     title: Strategy
-    text: Positioning, formats and a calendar built for your platforms.
+    text: We decide what you want to be known for, which formats to make and when they go out.
   - when: WEEK 2
     title: Preproduction
-    text: Scripts, hooks and shot lists, planned like a film.
+    text: Scripts, hooks and shot lists, all sorted before the shoot.
   - when: ONGOING
     title: Shoot & edit
     text: The long version first, then every short you can cut from it.
@@ -59,23 +59,23 @@ process:
     text: Titles, thumbnails, covers and captions, ready to post.
   - when: MONTHLY
     title: Review
-    text: We read the numbers together and improve the next batch.
+    text: We look at the numbers together and change what the next batch needs.
 
 ways:
   - kicker: ONE PROJECT
     title: A single project
-    text: One film, one campaign or one channel audit, scoped from start to finish.
+    text: One film, one campaign or one channel audit, with a clear start and end.
   - kicker: ONGOING
     title: Monthly content partner
-    text: Strategy, editing and packaging every month, the way an in house team would do it.
+    text: Strategy, editing and thumbnails every month, like having someone in house.
   - kicker: FILM
     title: Film & production
-    text: Direction, production and editing for brand films, documentaries and short films.
+    text: Brand films, documentaries and short films. I can direct, produce, edit or do all three.
 
 # Questions with [brackets] in the answer stay hidden until you fill them in.
 faq:
   - question: Do you work with clients outside Nepal?
-    answer: Yes. I’m in Kathmandu (GMT+5:45) and work remotely with clients worldwide.
+    answer: Yes. I’m in Kathmandu and we’d work together online.
   - question: How do we get started?
     answer: Book a free 30 minute call. I’d love to hear about your brand, your work and what you’re looking for. We can just talk it through, and we don’t have to get into money for now.
   - question: What languages do you work in?

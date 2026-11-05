@@ -22,13 +22,13 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-A three level, 18 module video editing course, from CapCut to Premiere Pro, After Effects and colour grading.
+My video editing course. 18 modules over three levels, starting in CapCut and ending in After Effects and colour grading.
 
 ## The brief
 [What the client needed / why the project existed.]
 
 ## What I did
-- Designed the curriculum
+- Planned the course
 - Taught the course
 
 ## Results

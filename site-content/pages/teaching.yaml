@@ -3,40 +3,40 @@
 statement: I teach what took me years to figure out.
 
 frame:
-  kicker: FLAGSHIP COURSE
+  kicker: MY MAIN COURSE
   title: Frame
-  text: A three level, 18 module video editing course, from CapCut to Premiere Pro, After Effects and colour grading.
+  text: My video editing course. 18 modules over three levels, starting in CapCut and ending in After Effects and colour grading.
   curriculum_link: "[View curriculum link]"
   enrol_link: "[Enrol / waitlist link]"
   levels:
     - number: "01"
       title: Foundations
-      text: "CapCut and the grammar of the cut: pacing, hooks, captions."
+      text: "Cutting in CapCut, with pacing, hooks and captions."
     - number: "02"
       title: Professional
-      text: Premiere Pro workflows, sound design and storytelling edits.
+      text: Moving to Premiere Pro, working with sound and cutting a story.
     - number: "03"
       title: Advanced
-      text: After Effects motion graphics and colour grading.
+      text: Motion graphics in After Effects, and colour grading.
 
 courses:
   - kicker: LIVE COURSE
     title: Premiere Pro for creators
-    text: Eight days, two hours a day, built for reels and online content. Daily Q&A, demo footage, SFX packs, project files, custom presets and two new shortcuts every day.
+    text: Eight days, two hours a day, for people making reels and online videos. We did a Q&A every day, and I gave out practice footage, SFX packs, project files, presets and two new shortcuts a day.
     tags: [8 days, Premiere Pro, Reels]
     project: premiere-pro-course
   - kicker: CLASSROOM
     title: Editing for social media
-    text: A seven module classroom course focused on short form social content.
+    text: A classroom course in seven modules, all about editing short videos for social media.
     tags: [7 modules, Short form]
     project: social-media-editing-course
   - kicker: COMMUNITY
     title: Social media for older adults
-    text: A digital literacy programme teaching older adults what social media is, why it matters and how to use it.
-    tags: [Digital literacy, Community]
+    text: Classes for older people who never grew up with social media. We start with what it is and why people use it, then how to use it.
+    tags: [Older adults, Community]
     project: senior-digital-literacy
 
 workshops:
   kicker: WORKSHOPS
-  text: Want your team editing faster and thinking like strategists?
+  text: Need your team to edit faster? I can run a workshop.
   button: Ask about a workshop

@@ -3,7 +3,7 @@ title: "Ideapreneur Nepal"
 order: 10
 chapter: "strategy-content"
 client: "Ideapreneur Nepal"
-what: "Financial & economic education on YouTube"
+what: "Finance explainers on YouTube"
 people: ["Sanjog Koirala"]
 roles: ["Editor", "Content Strategist", "Motion Graphics", "Thumbnails"]
 years: "[YEAR]"
@@ -23,19 +23,19 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-Financial and economic education for Nepali audiences: NEPSE, budgets, remittance, SIPs.
+Finance and economics explained for Nepali viewers: NEPSE, budgets, remittance, SIPs.
 
 ## The brief
-Grow watch time and subscriber conversion for a finance education channel.
+A finance channel that wanted people to watch for longer and subscribe more.
 
 ## What I did
-- Restructured videos around YouTube analytics
+- Changed how the videos were structured, based on what YouTube analytics showed
 - Edited long form explainers and course modules
 - Designed thumbnails and covers
 - Built SIP data animations
 
 ## Results
-- Within 28 days of the new video structure: longer average watch time, more subscribers per view and higher average views
+- Within 28 days of changing the video structure, people watched for longer, more viewers subscribed and average views went up
 
 ## Credits
 - Host — Sanjog Koirala

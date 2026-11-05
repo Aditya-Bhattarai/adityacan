@@ -22,7 +22,7 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-A seven module classroom course focused on short form social content.
+A classroom course in seven modules, all about editing short videos for social media.
 
 ## The brief
 [What the client needed / why the project existed.]

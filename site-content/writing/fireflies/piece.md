@@ -4,7 +4,7 @@ type: "short-fiction"
 year: "[YEAR]"
 order: 10
 featured: true
-description: "A girl, a glass bottle of fireflies, and the four seconds she spends three decades trying to understand."
+description: "Maya is seven the summer she catches her first firefly. This is about the night that came after."
 content_note: "This story includes war violence and suicide."
 publish_full_text: true
 permission: "yes"

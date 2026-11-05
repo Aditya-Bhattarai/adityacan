@@ -1,7 +1,7 @@
 # FILM chapter words. The chapter number comes from chapters.yaml.
 
 statement: Small stories I couldn’t leave alone.
-intro: Films I’ve written and directed at film school, the screenplays behind them, and the sets I’ve worked on.
+intro: The films I’ve made at film school, their scripts, and a festival film I was assistant director on.
 
 featured:
   project: sapana
@@ -10,7 +10,7 @@ featured:
   english: Sapana
   meta: SHORT FILM · ABOUT 2 MIN · NEPALI · FILM SCHOOL FIRST YEAR FINAL
   logline: A daughter walks through the pines with a white lily in her hand. Her mother has something to say about everything.
-  note: Shot entirely in static frames with natural light, live sound and no score.
+  note: The brief for our first year final was no camera moves, natural light, live sound and no music.
 
 # The festival selection band. Pictures come from the project's stills folder.
 selection:
@@ -24,4 +24,4 @@ selection:
 
 filmography:
   title: Filmography
-  note: "ROLE TAGS: DIRECTOR · WRITER · EDITOR · ASSISTANT DIRECTOR"
+  note: "FILMS AND SCRIPTS"

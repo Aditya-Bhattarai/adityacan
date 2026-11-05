@@ -22,7 +22,7 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-An eight day Premiere Pro course for reels and online creators.
+An eight day Premiere Pro course for people making reels and online videos.
 
 ## The brief
 [What the client needed / why the project existed.]

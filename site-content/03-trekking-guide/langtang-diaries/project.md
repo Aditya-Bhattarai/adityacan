@@ -22,7 +22,7 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-A travel film from the Langtang Valley, in snow and prayer flags.
+A travel film I shot in the Langtang Valley.
 
 ## The brief
 [What the client needed / why the project existed.]

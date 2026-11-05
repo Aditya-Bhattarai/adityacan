@@ -118,7 +118,6 @@ const langtangText = clean(page.langtang.text);
         {photos.slice(0, PHOTOS_SHOWN).map((photo) => (
           <figure class="photos__item">
             <div class="frame" style={`aspect-ratio:${photo.image.width}/${photo.image.height}`}><Picture image={photo.image} alt={photo.caption} widths={[320, 640, 960]} sizes="(max-width: 700px) 50vw, 33vw" /></div>
-            <figcaption>{photo.caption}</figcaption>
           </figure>
         ))}
       </div>
@@ -181,7 +180,6 @@ const langtangText = clean(page.langtang.text);
   .photos__more { font-size: 15px; line-height: 1.5; }
   .photos__grid { columns: 3 280px; column-gap: 12px; }
   .photos__item { margin-bottom: 12px; break-inside: avoid; display: flex; flex-direction: column; gap: 6px; }
-  .photos__item figcaption { font: 500 11px/1.4 var(--font-mono); color: var(--muted); }
 
   .cta-line { border-top: 1px solid var(--line); }
   .cta-line__inner { padding-block: 96px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 28px; }

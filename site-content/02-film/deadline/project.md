@@ -23,7 +23,7 @@ screenplay: "deadline"
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-Nine minutes to submit an essay. The internet has other plans.
+Nine minutes to submit an essay, and the internet stops working.
 
 ## The brief
 [What the client needed / why the project existed.]

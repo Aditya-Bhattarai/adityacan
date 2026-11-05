@@ -2,7 +2,7 @@
 title: "Colour grading: log to grade"
 order: 150
 chapter: "film"
-client: "Craft showcase"
+client: "Personal"
 people: []
 roles: ["Colourist"]
 years: "[YEAR]"

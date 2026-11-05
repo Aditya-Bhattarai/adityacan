@@ -23,14 +23,14 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-Production house. Editing, content strategy and production for brand clients including eSewa and Global IME.
+Anup Ghimire's production house. I worked on brand content for clients like eSewa and Global IME, from planning to the edit.
 
 ## The brief
 [What the client needed / why the project existed.]
 
 ## What I did
 - Edited brand content
-- Shaped content strategy
+- Helped plan what to make
 - Worked on production
 
 ## Results

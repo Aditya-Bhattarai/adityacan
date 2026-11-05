@@ -30,7 +30,6 @@ First year final: static shots, natural light, live sound, no music, about two m
 
 ## What I did
 - Wrote and directed the film
-- Shot entirely in static frames with natural light, live sound and no score
 
 ## Results
 - [Real numbers or outcomes — or delete this section]

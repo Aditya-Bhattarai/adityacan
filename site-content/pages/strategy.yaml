@@ -1,14 +1,14 @@
 # STRATEGY & CONTENT chapter words. The chapter number comes from chapters.yaml.
 
-statement: I plan it like a campaign and cut it like a film.
-intro: I’ve edited and shaped strategy for some of Nepal’s most watched creators, from financial explainers to podcasts and brand films. I restructure videos around what the platform data shows.
+statement: I edit the videos and help decide what gets made next.
+intro: I’ve worked with some of Nepal’s most watched creators on finance explainers, podcasts and brand films. When people stop watching, I go into the numbers, find where they left, and change how the next video is made.
 
 # "number: auto" counts the clients listed in home.yaml.
 stats:
   - number: 320M+
     label: IMPRESSIONS FOR CLIENT CHANNELS
   - number: 28 days
-    label: FOR IDEAPRENEUR NEPAL’S NEW VIDEO STRUCTURE TO LIFT WATCH TIME AND SUBSCRIBERS
+    label: HOW LONG A NEW VIDEO STRUCTURE TOOK TO LIFT WATCH TIME AND SUBSCRIBERS ON IDEAPRENEUR NEPAL
   - number: auto
     label: BRANDS AND CREATORS, INCLUDING ESEWA AND GLOBAL IME
 
@@ -42,4 +42,4 @@ groups:
 wall:
   kicker: THE WALL
   title: Every thumbnail & cover.
-  note: Every thumbnail and cover from these projects. Tap any tile to open its project.
+  note: All of them in one place. Tap one to see the project it came from.

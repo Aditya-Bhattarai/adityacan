@@ -26,7 +26,7 @@ export function clean(value) {
   return isBlank(value) ? '' : String(value).trim();
 }
 
-const UPPERCASE_WORDS = { boudhanath: 'Boudhanath', durbar: 'Durbar', langtang: 'Langtang', kathmandu: 'Kathmandu', sip: 'SIP', nepse: 'NEPSE', emi: 'EMI', upi: 'UPI', tms: 'TMS', swf: 'SWF', vat: 'VAT', pan: 'PAN', evs: 'EVs', sebon: 'SEBON', nav: 'NAV', xirr: 'XIRR', rs: 'Rs', it: 'IT', nas: 'NAS', ii: 'II' };
+const UPPERCASE_WORDS = { nepal: 'Nepal', india: 'India', chaudhary: 'Chaudhary', himalayan: 'Himalayan', javas: 'Java’s', sipvsnepse: 'SIP vs NEPSE', boudhanath: 'Boudhanath', durbar: 'Durbar', langtang: 'Langtang', kathmandu: 'Kathmandu', sip: 'SIP', nepse: 'NEPSE', emi: 'EMI', upi: 'UPI', tms: 'TMS', swf: 'SWF', vat: 'VAT', pan: 'PAN', evs: 'EVs', sebon: 'SEBON', nav: 'NAV', xirr: 'XIRR', rs: 'Rs', it: 'IT', nas: 'NAS', ii: 'II' };
 
 /** Turns "01_truth-behind-pokhara-crash.jpg" into "Truth behind Pokhara crash". */
 export function captionFromFile(path) {
@@ -177,12 +177,13 @@ export const ROLE_ORDER = ['Editor', 'Director', 'Writer', 'Strategist', 'Produc
 const TABS = [
   { key: 'episodes', label: 'Episodes & trailers', folder: 'horizontal-videos', ratio: '16/9', min: '300px', sizes: '(max-width: 700px) 100vw, 33vw' },
   { key: 'reels', label: 'Reels', folder: 'vertical-videos', ratio: '9/16', min: '170px', sizes: '(max-width: 700px) 50vw, 20vw' },
-  { key: 'motion', label: 'Motion graphics', folder: 'motion-graphics', ratio: '16/9', min: '300px', sizes: '(max-width: 700px) 100vw, 33vw' },
-  { key: 'thumbs', label: 'Thumbnails', folder: 'thumbnails', ratio: '16/9', min: '300px', sizes: '(max-width: 700px) 100vw, 33vw' },
-  { key: 'covers', label: 'Vertical covers', folder: 'covers', ratio: '9/16', min: '170px', sizes: '(max-width: 700px) 50vw, 20vw' },
+  // noCaption: the picture speaks for itself. Its file name is only used for screen readers.
+  { key: 'motion', label: 'Motion graphics', folder: 'motion-graphics', noCaption: true, ratio: '16/9', min: '300px', sizes: '(max-width: 700px) 100vw, 33vw' },
+  { key: 'thumbs', label: 'Thumbnails', folder: 'thumbnails', noCaption: true, ratio: '16/9', min: '300px', sizes: '(max-width: 700px) 100vw, 33vw' },
+  { key: 'covers', label: 'Vertical covers', folder: 'covers', noCaption: true, ratio: '9/16', min: '170px', sizes: '(max-width: 700px) 50vw, 20vw' },
   // natural: true keeps each picture's own shape, so tall photos aren't cropped.
-  { key: 'stills', label: 'Stills', folder: 'stills', natural: true, min: '300px', sizes: '(max-width: 700px) 50vw, 33vw' },
-  { key: 'photos', label: 'Photos', folder: 'photos', natural: true, min: '280px', sizes: '(max-width: 700px) 50vw, 33vw' },
+  { key: 'stills', label: 'Stills', folder: 'stills', noCaption: true, natural: true, min: '300px', sizes: '(max-width: 700px) 50vw, 33vw' },
+  { key: 'photos', label: 'Photos', folder: 'photos', noCaption: true, natural: true, min: '280px', sizes: '(max-width: 700px) 50vw, 33vw' },
   { key: 'assets', label: 'Brand assets', folder: 'assets', ratio: '4/3', min: '240px', sizes: '(max-width: 700px) 100vw, 25vw', contain: true },
 ];
 
@@ -200,7 +201,8 @@ function buildProject(entry) {
   const featuredVideo = videos[0] ?? tableVideos[0] ?? null;
 
   const tabs = TABS.map((tab) => {
-    const items = imagesIn(`${folder}/${tab.folder}`);
+    // A logo on its own is not worth a tab. It still shows in the page banner when there's no other picture.
+    const items = imagesIn(`${folder}/${tab.folder}`).filter((item) => !(tab.key === 'assets' && /logo/.test(item.path)));
     return { ...tab, items, links: tab.key === 'episodes' ? tableVideos : [] };
   }).filter((tab) => tab.items.length + tab.links.length > 0);
 

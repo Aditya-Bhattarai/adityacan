@@ -30,7 +30,7 @@ Podcast hosted by Anup Ghimire.
 
 ## What I did
 - Edited the podcast
-- Shaped its content strategy
+- Helped plan what to make next
 
 ## Results
 - [Real numbers or outcomes — or delete this section]

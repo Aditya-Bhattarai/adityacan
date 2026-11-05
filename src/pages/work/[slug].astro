@@ -166,7 +166,7 @@ const jsonLd = {
               <div class:list={['frame', { 'frame--contain': tab.contain }]} style={`aspect-ratio:${tab.natural ? `${item.image.width}/${item.image.height}` : tab.ratio}`}>
                 <Picture image={item.image} alt={item.caption} widths={tab.natural ? [240, 400, 640] : [320, 640]} sizes={tab.sizes} />
               </div>
-              <figcaption class="media__caption">{item.caption}</figcaption>
+              {!tab.noCaption && <figcaption class="media__caption">{item.caption}</figcaption>}
             </figure>
           ))}
         </div>

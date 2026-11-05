@@ -6,7 +6,7 @@ client: "[Organiser / place]"
 people: []
 roles: ["Teacher"]
 years: "[YEAR]"
-format: "Digital literacy programme"
+format: "Classes for older adults"
 formats: ["Digital literacy", "Community"]
 featured: false
 permission: "yes"
@@ -22,7 +22,7 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-A digital literacy programme teaching older adults what social media is, why it matters and how to use it.
+Classes for older people who never grew up with social media. We start with what it is and why people use it, then how to use it.
 
 ## The brief
 [What the client needed / why the project existed.]

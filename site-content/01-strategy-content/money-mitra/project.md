@@ -23,13 +23,13 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-A personal finance brand, using the same video system as Ideapreneur Nepal.
+A personal finance brand. We took what worked on Ideapreneur Nepal to Instagram and TikTok.
 
 ## The brief
 [What the client needed / why the project existed.]
 
 ## What I did
-- Applied the Ideapreneur video system to Instagram and TikTok
+- Took what worked on Ideapreneur Nepal to Instagram and TikTok
 
 ## Results
 - [Real numbers or outcomes — or delete this section]

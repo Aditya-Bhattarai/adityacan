@@ -132,7 +132,7 @@ const heroSizes = '100vw';
     <div class="chapters__grid">
       {chapterCards.map((chapter) => (
         <a class:list={['chapter-card', `chapter-card--${chapter.theme}`]} href={chapter.href}>
-          <div class="chapter-card__top"><span>CHAPTER {chapter.number}</span><span>[{String(chapter.count).padStart(2, '0')}]</span></div>
+          <div class="chapter-card__top"><span>CHAPTER {chapter.number}</span><span>{chapter.count} {chapter.count === 1 ? 'PROJECT' : 'PROJECTS'}</span></div>
           <div class="chapter-card__title">{chapter.title}</div>
           <div class="chapter-card__text">{chapter.description}</div>
           <div class="tag-row">{chapter.tags.map((tag) => <span class="chapter-card__tag">{tag}</span>)}</div>
@@ -143,7 +143,7 @@ const heroSizes = '100vw';
               ))}
             </div>
           )}
-          <div class="chapter-card__enter">Enter chapter →</div>
+          <div class="chapter-card__enter">See the work →</div>
         </a>
       ))}
     </div>

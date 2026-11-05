@@ -2,7 +2,7 @@
 
 ticker:
   - Filmmaker & content strategist
-  - 320M+ impressions for Nepal’s leading creators
+  - 320M+ impressions across the channels I’ve worked on
   - Assistant director on Path to Prosperity, selected for the European Union Film Festival Nepal
   - Directing · Editing · Strategy · Production
   - Licensed trekking guide
@@ -11,7 +11,7 @@ hero:
   name: Aditya Bhattarai
   title: Made to perform.
   statement: Content, directed like films.
-  roles: Strategy · Direction · Edit · For creators and brands worldwide
+  roles: Strategy · Direction · Edit · For creators and brands anywhere
   reel_label: REEL 2026
 
 # The four projects along the bottom of the hero. "project" is the project's folder name.
@@ -39,10 +39,10 @@ stats:
     label: Views from strategic growth, without going viral
     show: false # Hidden until you confirm this number is real, not expected.
   - number: 28 days
-    label: For Ideapreneur Nepal’s new video structure to lift watch time and subscribers
+    label: How long a new video structure took to lift watch time and subscribers on Ideapreneur Nepal
     show: true
   - number: EUFF
-    label: European Union Film Festival Nepal 2026 selection, as assistant director on Path to Prosperity
+    label: Path to Prosperity, which I was assistant director on, got into the European Union Film Festival Nepal
     show: true
   - number: auto
     label: Brands and creators, including eSewa and Global IME
@@ -58,9 +58,9 @@ selected_work:
   - ideapreneur-nepal
 
 chapters_heading:
-  kicker: INDEX · FOUR CHAPTERS
+  kicker: FOUR CHAPTERS
   title: The work, in four chapters.
-  note: Each project sits in the chapter it belongs to and is tagged with the role I played.
+  note: I do four quite different things, so I split them up. Go to whichever one you came for.
 
 # "project" is the project's folder name. The logo comes from site-content/clients/logos/.
 clients:
@@ -104,7 +104,7 @@ why:
   link: How I work, step by step →
 
 cta:
-  kicker: THE NEXT CHAPTER
-  title: Let’s make something that performs.
+  kicker: GET IN TOUCH
+  title: Send me what you’re working on.
   button: Book a free 30 minute call
-  note: Get instant replies on email, Instagram or any other channel
+  note: Email or Instagram, whichever you like. I usually reply right away.

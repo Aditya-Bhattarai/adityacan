@@ -23,14 +23,14 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-Nepali astrology app: promo concepts, video prompts, mascot and print assets.
+A Nepali astrology app. I came up with promo ideas and video prompts, and made the mascot and print pieces.
 
 ## The brief
 [What the client needed / why the project existed.]
 
 ## What I did
-- Developed promo concepts and video prompts
-- Created mascot and print assets
+- Came up with promo ideas and video prompts
+- Made the mascot and print pieces
 
 ## Results
 - [Real numbers or outcomes — or delete this section]

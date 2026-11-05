@@ -22,7 +22,7 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-Photographs from Kathmandu and the road beyond it.
+Photos I’ve taken around Kathmandu and on the road.
 
 ## The brief
 [What the client needed / why the project existed.]
