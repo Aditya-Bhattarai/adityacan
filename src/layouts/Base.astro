@@ -29,7 +29,9 @@ const {
 
 const settings = getSettings();
 const pageTitle = title ? `${title} — ${settings.name}` : `${settings.name} — Filmmaker & content strategist, Kathmandu`;
-const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', Astro.site);
+// The clean address of this page, like /about (never /about.html).
+const cleanPath = Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '').replace(/\/$/, '') || '/';
+const canonical = new URL(cleanPath, Astro.site);
 
 // Sharing image: the project's cover if given, otherwise the homepage poster.
 const shareSource = image ?? getImages('00-home/hero-reel').find((item) => item.path.includes('poster-wide'))?.image;
