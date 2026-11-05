@@ -91,7 +91,7 @@ const jsonLd = {
     <section class="wrap feature">
       {project.video
         ? <VideoFacade video={project.video} poster={project.wideImage?.image} large widths={[800, 1600]} sizes="(max-width: 1320px) 100vw, 1272px" eager />
-        : <div class="frame" style="aspect-ratio:16/9;border-radius:6px"><Picture image={project.wideImage.image} alt={project.title} widths={[800, 1600]} sizes="(max-width: 1320px) 100vw, 1272px" eager /></div>}
+        : <div class="frame" style={`aspect-ratio:${Math.max(project.wideImage.image.width / project.wideImage.image.height, 16 / 9)};border-radius:6px`}><Picture image={project.wideImage.image} alt={project.title} widths={[800, 1600]} sizes="(max-width: 1320px) 100vw, 1272px" eager /></div>}
     </section>
   ) : project.cover ? (
     <section class="wrap feature feature--poster">
@@ -148,7 +148,7 @@ const jsonLd = {
         ))}
       </div>
       {tabs.map((tab, position) => (
-        <div class="media__panel" role="tabpanel" id={`panel-${tab.key}`} aria-labelledby={`tab-${tab.key}`} hidden={position !== 0} style={`--min:${tab.min}`}>
+        <div class:list={['media__panel', { 'media__panel--natural': tab.natural }]} role="tabpanel" id={`panel-${tab.key}`} aria-labelledby={`tab-${tab.key}`} hidden={position !== 0} style={`--min:${tab.min}`}>
           {tab.links.map((video) => (
             <div class="media__item">
               <VideoFacade video={video} sizes={tab.sizes} />
@@ -157,7 +157,7 @@ const jsonLd = {
           ))}
           {tab.items.map((item) => (
             <figure class="media__item">
-              <div class:list={['frame', { 'frame--contain': tab.contain }]} style={`aspect-ratio:${tab.ratio}`}>
+              <div class:list={['frame', { 'frame--contain': tab.contain }]} style={`aspect-ratio:${tab.natural ? `${item.image.width}/${item.image.height}` : tab.ratio}`}>
                 <Picture image={item.image} alt={item.caption} widths={[320, 640]} sizes={tab.sizes} />
               </div>
               <figcaption class="media__caption">{item.caption}</figcaption>
@@ -252,6 +252,9 @@ const jsonLd = {
   .media__panel { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(var(--min), 100%), 1fr)); gap: 16px; }
   .media__panel[hidden] { display: none; }
   .media__item { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  /* Stills and photos keep their own shape, stacked in columns. */
+  .media__panel--natural:not([hidden]) { display: block; columns: 3 280px; column-gap: 16px; }
+  .media__panel--natural .media__item { break-inside: avoid; margin-bottom: 16px; }
   .media__caption { font-size: 14px; line-height: 1.35; }
 
   .documents { padding-bottom: 96px; }
@@ -276,5 +279,7 @@ const jsonLd = {
     .head__row { padding-block: 20px 24px; }
     .story { padding-block: 56px; }
     .media__panel { grid-template-columns: repeat(auto-fill, minmax(min(var(--min), 46%), 1fr)); gap: 10px; }
+    .media__panel--natural:not([hidden]) { columns: 2; column-gap: 10px; }
+    .media__panel--natural .media__item { margin-bottom: 10px; }
   }
 </style>

@@ -1,9 +1,12 @@
 ---
 // SERVICES & PROCESS. Words are in site-content/pages/services.yaml. No prices anywhere.
 import Base from '../layouts/Base.astro';
-import { clean, getPage } from '../lib/content.js';
+import Picture from '../components/Picture.astro';
+import { clean, getImages, getPage } from '../lib/content.js';
 
 const page = await getPage('services');
+// Photos under the process steps. Add or swap files in site-content/services/process-photos.
+const processPhotos = getImages('services/process-photos').slice(0, 4);
 const faq = page.faq.filter((item) => clean(item.answer));
 const number = (index) => String(index + 1).padStart(2, '0');
 ---
@@ -63,6 +66,16 @@ const number = (index) => String(index + 1).padStart(2, '0');
         </li>
       ))}
     </ol>
+    {processPhotos.length > 0 && (
+      <div class="process__photos">
+        {processPhotos.map((photo) => (
+          <figure class="process__photo">
+            <div class="frame" style="aspect-ratio:4/5;border-radius:4px"><Picture image={photo.image} alt={photo.caption} widths={[320, 640]} sizes="(max-width: 700px) 50vw, 25vw" /></div>
+            <figcaption class="meta">{photo.caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+    )}
   </section>
 
   <section class="wrap ways">
@@ -136,6 +149,8 @@ const number = (index) => String(index + 1).padStart(2, '0');
   .steps__when { font: 500 12px/1 var(--font-mono); letter-spacing: 0.08em; }
   .steps__title { font-weight: 600; font-size: 22px; line-height: 1.15; letter-spacing: -0.02em; }
   .steps__text { font-size: 15px; line-height: 1.55; color: var(--body); }
+  .process__photos { margin-top: 56px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .process__photo { display: flex; flex-direction: column; gap: 8px; }
 
   .ways { padding-bottom: 96px; }
   .ways__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 28px; }
@@ -167,6 +182,7 @@ const number = (index) => String(index + 1).padStart(2, '0');
     .venn__circle span { max-width: 84px; }
     .what, .process { padding-block: 64px; }
     .steps { grid-template-columns: 1fr 1fr; }
+    .process__photos { grid-template-columns: 1fr 1fr; margin-top: 32px; }
     .ways, .gap-section { padding-bottom: 64px; }
     .way { min-height: 0; }
     .faq { padding-block: 64px; }

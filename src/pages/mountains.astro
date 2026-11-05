@@ -17,6 +17,10 @@ const reels = langtang ? getImages(`${langtang.folder}/vertical-videos`) : [];
 const classPhotos = homestay ? getImages(`${homestay.folder}/photos`) : [];
 const photos = photography ? getImages(`${photography.folder}/photos`) : [];
 
+// How many pictures this page shows. The rest stay on the project pages, which keeps this page fast.
+const LANGTANG_ROW = 8;
+const PHOTOS_SHOWN = 18;
+
 const credentials = page.credentials.filter((item) => clean(item.value));
 const langtangText = clean(page.langtang.text);
 ---
@@ -70,8 +74,8 @@ const langtangText = clean(page.langtang.text);
       </div>
       {stills.length > 1 && (
         <div class="langtang__stills scroll-row">
-          {stills.slice(1).map((still) => (
-            <div class="frame langtang__still" style="aspect-ratio:16/9"><Picture image={still.image} alt={still.caption} widths={[400, 800]} sizes="(max-width: 700px) 70vw, 25vw" /></div>
+          {stills.slice(1, LANGTANG_ROW + 1).map((still) => (
+            <div class="frame langtang__still" style={`aspect-ratio:${still.image.width}/${still.image.height}`}><Picture image={still.image} alt={still.caption} widths={[320, 640]} sizes="(max-width: 700px) 60vw, 25vw" /></div>
           ))}
         </div>
       )}
@@ -105,11 +109,12 @@ const langtangText = clean(page.langtang.text);
           <span class="label">{page.photos.kicker}</span>
           <h2 class="h2">{page.photos.title}</h2>
         </div>
+        {photos.length > PHOTOS_SHOWN && <a class="btn btn--ghost" href={photography.href}>All {photos.length} photographs</a>}
       </div>
       <div class="photos__grid">
-        {photos.map((photo) => (
+        {photos.slice(0, PHOTOS_SHOWN).map((photo) => (
           <figure class="photos__item">
-            <div class="frame"><Picture image={photo.image} alt={photo.caption} widths={[480, 960]} sizes="(max-width: 700px) 100vw, 33vw" /></div>
+            <div class="frame" style={`aspect-ratio:${photo.image.width}/${photo.image.height}`}><Picture image={photo.image} alt={photo.caption} widths={[320, 640, 960]} sizes="(max-width: 700px) 50vw, 33vw" /></div>
             <figcaption>{photo.caption}</figcaption>
           </figure>
         ))}
@@ -165,7 +170,7 @@ const langtangText = clean(page.langtang.text);
   .langtang__main { flex: 3 1 min(560px, 100%); min-width: 0; }
   .langtang__reel { flex: 0 1 280px; min-width: 200px; }
   .langtang__stills { display: flex; gap: 12px; overflow-x: auto; }
-  .langtang__still { flex: 1 0 280px; width: auto; }
+  .langtang__still { flex: 0 0 auto; height: clamp(220px, 24vw, 320px); width: auto; }
 
   .homestay { padding-block: 96px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; }
   .homestay__text { flex: 1 1 360px; display: flex; flex-direction: column; gap: 16px; }
@@ -193,5 +198,9 @@ const langtangText = clean(page.langtang.text);
     .langtang, .photos { padding-bottom: 64px; }
     .homestay, .cta-line__inner { padding-block: 64px; }
     .photos { padding-top: 64px; }
+  }
+  @media (max-width: 700px) {
+    .photos__grid { columns: 2; column-gap: 8px; }
+    .photos__item { margin-bottom: 8px; }
   }
 </style>

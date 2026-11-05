@@ -165,8 +165,9 @@ const TABS = [
   { key: 'motion', label: 'Motion graphics', folder: 'motion-graphics', ratio: '16/9', min: '300px', sizes: '(max-width: 700px) 100vw, 33vw' },
   { key: 'thumbs', label: 'Thumbnails', folder: 'thumbnails', ratio: '16/9', min: '300px', sizes: '(max-width: 700px) 100vw, 33vw' },
   { key: 'covers', label: 'Vertical covers', folder: 'covers', ratio: '9/16', min: '170px', sizes: '(max-width: 700px) 50vw, 20vw' },
-  { key: 'stills', label: 'Stills', folder: 'stills', ratio: '16/9', min: '300px', sizes: '(max-width: 700px) 100vw, 33vw' },
-  { key: 'photos', label: 'Photos', folder: 'photos', ratio: '4/3', min: '280px', sizes: '(max-width: 700px) 100vw, 33vw' },
+  // natural: true keeps each picture's own shape, so tall photos aren't cropped.
+  { key: 'stills', label: 'Stills', folder: 'stills', natural: true, min: '300px', sizes: '(max-width: 700px) 50vw, 33vw' },
+  { key: 'photos', label: 'Photos', folder: 'photos', natural: true, min: '280px', sizes: '(max-width: 700px) 50vw, 33vw' },
   { key: 'assets', label: 'Brand assets', folder: 'assets', ratio: '4/3', min: '240px', sizes: '(max-width: 700px) 100vw, 25vw', contain: true },
 ];
 
