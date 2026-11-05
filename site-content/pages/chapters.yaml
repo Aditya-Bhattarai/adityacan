@@ -1,37 +1,35 @@
-# THE FOUR CHAPTERS. Used on the homepage, menus and project pages.
+# THE FOUR CHAPTERS, in the order they appear on the site.
+# To change the order, move a whole block up or down and save.
+# The chapter numbers (I, II, III, IV), the "next chapter" links and the menus all update by themselves.
 
-- key: 1-strategy-content
-  number: I
-  title: Strategy & Content
-  short: Strategy
-  href: /strategy-content
-  description: YouTube, podcasts, reels and brand content for Nepal’s leading creators — planned for the algorithm, cut for the audience.
-  tags: [Editor, Strategist, Thumbnails, Motion]
-  theme: panel
-
-- key: 2-film
-  number: II
+- key: film
   title: Film
   short: Film
   href: /film
-  description: Short films I wrote and directed, documentary editing, assistant direction and short-film edits.
-  tags: [Director, Writer, Editor, AD]
+  description: Short films I wrote and directed, plus assistant direction on Path to Prosperity, selected for the European Union Film Festival Nepal.
+  tags: [Director, Writer, Assistant director]
   theme: ink
 
-- key: 3-mountains
-  number: III
-  title: Mountains
-  short: Mountains
-  href: /mountains
-  description: Licensed trekking guide. Travel films from the Himalaya and content classes in community homestays.
-  tags: [Guide, Filmmaker, Photographer]
-  theme: panel
-
-- key: 4-teaching
-  number: IV
+- key: teaching
   title: Teaching
   short: Teaching
   href: /teaching
-  description: Editing courses for creators — from CapCut to colour grading — and digital-literacy classes for older adults.
+  description: Editing courses for creators, from CapCut to colour grading, and digital literacy classes for older adults.
   tags: [Courses, Workshops, Curriculum]
+  theme: panel
+
+- key: strategy-content
+  title: Strategy & Content
+  short: Strategy
+  href: /strategy-content
+  description: YouTube, podcasts, reels and brand content for some of Nepal’s biggest creators.
+  tags: [Editor, Strategist, Thumbnails, Motion]
+  theme: panel
+
+- key: trekking-guide
+  title: Trekking Guide
+  short: Trekking guide
+  href: /trekking-guide
+  description: Licensed trekking guide in Nepal. Travel films from the Himalaya, photographs from the road and content classes in community homestays.
+  tags: [Licensed guide, Filmmaker, Photographer]
   theme: panel

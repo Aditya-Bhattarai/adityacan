@@ -1,17 +1,19 @@
 ---
-title: "Langtang Diaries"
-order: 200
-chapter: "3-mountains"
-client: "Personal"
+title: "Licensed trekking guide"
+order: 210
+chapter: "trekking-guide"
+client: "Nepal"
 people: []
-roles: ["Filmmaker", "Editor"]
+roles: ["Guide"]
 years: "[YEAR]"
-format: "Travel film + reels"
-formats: ["Travel film", "Reels"]
-featured: true
+format: ""
+formats: []
+featured: false
 permission: "yes"
 links: {"featured_video": "", "more": []}
 stats: []
+licensing_body: "[name]"
+regions: ["[region]"]
 ---
 
 <!-- HOW TO EDIT
@@ -22,13 +24,13 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-A travel film from the Langtang Valley, in snow and prayer flags.
+Licensed trekking guide in Nepal.
 
 ## The brief
 [What the client needed / why the project existed.]
 
 ## What I did
-- Shot and edited the film and its reels
+- [Your role, in plain words]
 
 ## Results
 - [Real numbers or outcomes — or delete this section]

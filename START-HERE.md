@@ -62,7 +62,16 @@ Open `site-content/testimonials.md`. Replace `[quote]` with the real words and c
 The testimonials section appears on the homepage once at least one is real.
 
 ### Replace the hero video
-Replace the files in `site-content/00-home/hero-reel/` using the same file names. Keep each video under 3 MB.
+Replace the files in `site-content/00-home/hero-reel/` using the same file names. Keep each video under about 12 MB. They load after the page has appeared, so they don't slow the first view.
+
+### Change the order of the chapters
+Open `site-content/pages/chapters.yaml` and move a whole block up or down. Chapter numbers, menus and "next chapter" links update by themselves. Folder names like `02-film` don't affect the order.
+
+### Add or change a client logo on the homepage
+Put the logo in `site-content/clients/logos/`, named after the project folder, for example `viewfinders.png`. No file means the client's initials show instead.
+
+### Change the photos on the Services page
+Replace the files in `site-content/services/process-photos/`. The first four show.
 
 ### Change a colour or font
 Open `src/styles/tokens.css`. Every colour is named there. Change it once and it changes everywhere.

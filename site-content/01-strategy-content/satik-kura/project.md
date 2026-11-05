@@ -1,13 +1,13 @@
 ---
 title: "Satik Kura"
 order: 20
-chapter: "1-strategy-content"
+chapter: "strategy-content"
 client: "Ideapreneur Nepal"
 what: "Video podcast: “Less noise, more value”"
 people: ["Sanjog Koirala"]
 roles: ["Editor", "Content Strategist", "Thumbnails & Covers"]
 years: "[2025–present]"
-format: "Video podcast — episodes, trailers, reels"
+format: "Video podcast: episodes, trailers, reels"
 formats: ["Episodes", "Trailers", "Reels", "Covers"]
 featured: true
 permission: "yes"

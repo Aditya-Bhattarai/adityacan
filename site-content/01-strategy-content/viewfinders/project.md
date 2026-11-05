@@ -1,13 +1,13 @@
 ---
 title: "Viewfinders"
 order: 80
-chapter: "1-strategy-content"
+chapter: "strategy-content"
 client: "Viewfinders"
 what: "Production house by Anup Ghimire"
 people: ["Anup Ghimire"]
 roles: ["Editor", "Content Strategist", "Production"]
 years: "[YEAR]"
-format: "Production house — brand content"
+format: "Production house: brand content"
 formats: ["Brand films", "Production"]
 featured: false
 permission: "yes"

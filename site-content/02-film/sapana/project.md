@@ -1,8 +1,8 @@
 ---
 title: "सपना / Sapana"
 order: 100
-chapter: "2-film"
-client: "Film school (first-year final)"
+chapter: "film"
+client: "Film school (first year final)"
 people: []
 roles: ["Writer", "Director"]
 years: "2026"
@@ -23,10 +23,10 @@ screenplay: "sapana"
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-A daughter walks to her mother's grave — scolded the whole way by a mother who isn't there.
+A daughter walks to her mother's grave, scolded the whole way by a mother who isn't there.
 
 ## The brief
-First-year final: static shots, natural light, live sound, no music, 1:45–2:15.
+First year final: static shots, natural light, live sound, no music, about two minutes long.
 
 ## What I did
 - Wrote and directed the film

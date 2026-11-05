@@ -1,10 +1,10 @@
 ---
-title: "Licensed trekking guide"
-order: 210
-chapter: "3-mountains"
-client: "Nepal"
+title: "Content classes at a community homestay"
+order: 220
+chapter: "trekking-guide"
+client: "[Homestay name / place]"
 people: []
-roles: ["Guide"]
+roles: ["Teacher"]
 years: "[YEAR]"
 format: ""
 formats: []
@@ -12,8 +12,6 @@ featured: false
 permission: "yes"
 links: {"featured_video": "", "more": []}
 stats: []
-licensing_body: "[name]"
-regions: ["[region]"]
 ---
 
 <!-- HOW TO EDIT
@@ -24,7 +22,7 @@ regions: ["[region]"]
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-Licensed trekking guide in Nepal.
+Content creation classes for older adults at a community homestay.
 
 ## The brief
 [What the client needed / why the project existed.]

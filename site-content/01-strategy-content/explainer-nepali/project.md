@@ -1,7 +1,7 @@
 ---
 title: "Explainer Nepali"
 order: 60
-chapter: "1-strategy-content"
+chapter: "strategy-content"
 client: "Explainer Nepali"
 what: "Explainer content by Manish Adhikari"
 people: ["Manish Adhikari"]
@@ -32,7 +32,7 @@ stats: ["3.8M views in 2024"]
 - Restructured content around platform algorithms
 - Built a recognisable brand identity across Instagram
 - Wrote hooks and kept the visual storytelling consistent
-- Tuned edits for click-through
+- Tuned edits so more people click
 
 ## Results
 - [Real numbers or outcomes — or delete this section]

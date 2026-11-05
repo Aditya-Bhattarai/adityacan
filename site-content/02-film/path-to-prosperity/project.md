@@ -1,14 +1,15 @@
 ---
-title: "Notes from the road"
-order: 230
-chapter: "3-mountains"
-client: "Personal"
+title: "Path to Prosperity"
+order: 105
+chapter: "film"
+client: "Bikram Khanal"
+client_label: "DIRECTOR"
 people: []
-roles: ["Photographer"]
-years: "Ongoing"
-format: "Travel & street photographs"
+roles: ["Assistant Director"]
+years: "2026"
+format: "Short film"
 formats: []
-featured: false
+featured: true
 permission: "yes"
 links: {"featured_video": "", "more": []}
 stats: []
@@ -22,16 +23,17 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-Photographs from Kathmandu and the road beyond it.
+A short film directed by Bikram Khanal, selected for the 15th European Union Film Festival Nepal.
 
 ## The brief
-[What the client needed / why the project existed.]
+[What the film is about, in a line or two.]
 
 ## What I did
-- [Your role, in plain words]
+- Assistant director on the film
 
 ## Results
-- [Real numbers or outcomes — or delete this section]
+- Selected for the 15th European Union Film Festival Nepal, 2026. Kathmandu 21 to 22 November, Janakpur 28 to 29 November.
 
 ## Credits
-- [Role — Name]
+- Director — Bikram Khanal
+- Assistant director — Aditya Bhattarai

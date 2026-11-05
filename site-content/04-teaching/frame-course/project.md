@@ -1,12 +1,12 @@
 ---
-title: "Frame — video editing course"
+title: "Frame: video editing course"
 order: 300
-chapter: "4-teaching"
+chapter: "teaching"
 client: "Own course"
 people: []
 roles: ["Course creator", "Teacher"]
 years: "[YEAR]"
-format: "3 levels · 18 modules — CapCut, Premiere Pro, After Effects, colour grading"
+format: "3 levels · 18 modules: CapCut, Premiere Pro, After Effects, colour grading"
 formats: []
 featured: false
 permission: "yes"
@@ -22,7 +22,7 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-A three-level, 18-module video editing course, from CapCut to Premiere Pro, After Effects and colour grading.
+A three level, 18 module video editing course, from CapCut to Premiere Pro, After Effects and colour grading.
 
 ## The brief
 [What the client needed / why the project existed.]

@@ -10,7 +10,7 @@ const settings = getSettings();
 
 // Uses your portrait as soon as one is in about/portrait/. Until then, one of your photographs.
 const portrait = getImages('about/portrait')[0];
-const fallback = getImages('03-mountains/photography/photos').find((item) => item.path.includes('street-silhouette'));
+const fallback = getImages('03-trekking-guide/photography/photos').find((item) => item.path.includes('street-silhouette'));
 const lead = portrait ?? fallback;
 
 const cvFiles = import.meta.glob('/site-content/about/cv/*.pdf', { eager: true, query: '?url', import: 'default' });
@@ -73,7 +73,7 @@ const credits = page.credits.map((credit) => (
     <div class="details__column">
       <span class="label">RIGHT NOW</span>
       {rightNow.map((line) => (
-        <div class="now"><span class="rec-dot"></span><span>{line}</span></div>
+        <div class="now"><span class="live-dot"></span><span>{line}</span></div>
       ))}
     </div>
   </section>
@@ -102,7 +102,7 @@ const credits = page.credits.map((credit) => (
   .influence__name { font-family: var(--font-serif); font-size: 24px; line-height: 1.2; }
   .influence__why { font: 500 11px/1.6 var(--font-mono); color: var(--muted); text-align: right; }
   .now { display: flex; align-items: baseline; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line); font-size: 17px; line-height: 1.45; }
-  .now .rec-dot { transform: translateY(-2px); }
+  .now .live-dot { transform: translateY(-2px); }
 
   @media (max-width: 800px) {
     .intro { padding-block: 24px 64px; }

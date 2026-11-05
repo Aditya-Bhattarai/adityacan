@@ -1,7 +1,7 @@
 ---
 title: "Creators Headquarters"
 order: 40
-chapter: "1-strategy-content"
+chapter: "strategy-content"
 client: "Creators Headquarters"
 what: "Creator company founded by Sanjog Koirala"
 people: ["Sanjog Koirala"]

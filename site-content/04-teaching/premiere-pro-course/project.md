@@ -1,7 +1,7 @@
 ---
 title: "Premiere Pro for creators"
 order: 310
-chapter: "4-teaching"
+chapter: "teaching"
 client: "[Organiser]"
 people: []
 roles: ["Teacher"]
@@ -22,7 +22,7 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-Eight-day Premiere Pro course for reels and online creators.
+An eight day Premiere Pro course for reels and online creators.
 
 ## The brief
 [What the client needed / why the project existed.]

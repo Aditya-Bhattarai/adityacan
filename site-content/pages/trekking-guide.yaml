@@ -1,6 +1,6 @@
-# CHAPTER III: MOUNTAINS page words.
+# TREKKING GUIDE chapter words. The chapter number comes from chapters.yaml.
 
-statement: Roads, ridgelines and the people who live along them.
+statement: I’m a licensed trekking guide, and I film what I see on the way.
 footer_line: LICENSED TREKKING GUIDE · NEPAL
 
 credentials:
@@ -16,17 +16,17 @@ credentials:
     value: Kathmandu Valley
 
 langtang:
-  kicker: III.1 — TRAVEL FILM
+  kicker: TRAVEL FILM
   title: Langtang Diaries
-  text: "[Two lines on the trip — route, days, what you wanted to capture.]"
+  text: "[Two lines on the trip: route, days, what you wanted to capture.]"
 
 homestay:
-  kicker: III.2 — COMMUNITY
+  kicker: COMMUNITY
   title: Content classes at a community homestay
   text: I taught content creation to older adults at a community homestay.
 
 photos:
-  kicker: III.3 — PHOTOGRAPHS
+  kicker: PHOTOGRAPHS
   title: Notes from the road
 
 cta:

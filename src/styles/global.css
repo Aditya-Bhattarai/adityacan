@@ -171,6 +171,14 @@ a:hover { color: var(--label); }
   border-radius: 50%;
   background: var(--rec);
 }
+.live-dot {
+  display: inline-block;
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--live);
+}
 
 /* ---------- Images ---------- */
 .frame {
@@ -185,12 +193,17 @@ a:hover { color: var(--label); }
 .frame--contain { background: var(--paper); border: 1px solid var(--hairline); }
 .frame--contain img { object-fit: contain; padding: 12%; }
 
-/* Rows that scroll sideways without a visible scrollbar */
-.scroll-row {
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
+/* Rows that scroll sideways. Phones swipe, computers get a thin scrollbar and can drag. */
+.scroll-row { -webkit-overflow-scrolling: touch; }
+@media (hover: none) {
+  .scroll-row { scrollbar-width: none; }
+  .scroll-row::-webkit-scrollbar { display: none; }
 }
-.scroll-row::-webkit-scrollbar { display: none; }
+@media (hover: hover) {
+  .scroll-row { scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+  [data-row] { cursor: grab; }
+  [data-row]:active { cursor: grabbing; }
+}
 
 /* ---------- Chapter title card (Wes Anderson framing) ---------- */
 .title-card-section { padding: 80px var(--gutter); }

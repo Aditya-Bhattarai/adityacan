@@ -1,12 +1,12 @@
 ---
 title: "Deadline"
 order: 110
-chapter: "2-film"
+chapter: "film"
 client: "Short film"
 people: []
 roles: ["Writer", "Director"]
 years: "[YEAR]"
-format: "Screen-based short film"
+format: "Screen based short film"
 formats: []
 featured: false
 permission: "yes"

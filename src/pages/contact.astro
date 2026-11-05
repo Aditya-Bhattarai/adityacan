@@ -1,7 +1,7 @@
 ---
 // CONTACT. Words are in site-content/pages/contact.yaml. Email and links are in site-content/about/bio.md
 import Base from '../layouts/Base.astro';
-import { getPage, getSettings } from '../lib/content.js';
+import { getPage, getSettings, handleFrom } from '../lib/content.js';
 
 const page = await getPage('contact');
 const settings = getSettings();
@@ -11,14 +11,15 @@ const channels = [
   settings.email && { label: 'EMAIL', value: settings.email, href: `mailto:${settings.email}` },
   settings.whatsapp && { label: 'WHATSAPP', value: settings.whatsapp, href: `https://wa.me/${settings.whatsapp.replace(/\D/g, '')}` },
   settings.linkedin && { label: 'LINKEDIN', value: short(settings.linkedin), href: settings.linkedin },
-  settings.instagram && { label: 'INSTAGRAM', value: '@anorigix', href: settings.instagram },
+  settings.instagram && { label: 'INSTAGRAM', value: handleFrom(settings.instagram), href: settings.instagram },
+  settings.instagramPhotos && { label: 'MY PHOTOGRAPHS', value: handleFrom(settings.instagramPhotos), href: settings.instagramPhotos },
   settings.calendly && { label: 'CALENDLY', value: 'Book 30 minutes', href: settings.calendly },
 ].filter(Boolean);
 
 const calendarUrl = `${settings.calendly}?hide_gdpr_banner=1&background_color=f1f0ec&text_color=121212&primary_color=121212`;
 ---
 
-<Base title="Contact" current="contact" description="Book a 30-minute call with Aditya Bhattarai, or send an email. Based in Kathmandu, working with clients worldwide.">
+<Base title="Contact" current="contact" description="Book a free 30 minute call with Aditya Bhattarai, or send an email. Working with clients worldwide.">
   <section class="wrap contact">
     <div class="contact__left">
       <div class="label">CONTACT</div>
@@ -37,7 +38,7 @@ const calendarUrl = `${settings.calendly}?hide_gdpr_banner=1&background_color=f1
           </a>
         ))}
       </div>
-      <div class="contact__location"><span class="rec-dot"></span>{page.location_line}</div>
+      <div class="contact__location"><span class="live-dot"></span>{page.location_line}</div>
     </div>
 
     <div class="contact__right" id="book">

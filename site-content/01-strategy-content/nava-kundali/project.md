@@ -1,13 +1,13 @@
 ---
 title: "Nava Kundali"
 order: 50
-chapter: "1-strategy-content"
+chapter: "strategy-content"
 client: "Nava Kundali"
 what: "Nepali astrology app"
 people: ["Sanjog Koirala"]
 roles: ["Production assets"]
 years: "[YEAR]"
-format: "Astrology app — promo concepts, mascot, print"
+format: "Astrology app: promo concepts, mascot, print"
 formats: ["Promo", "Print", "Mascot"]
 featured: false
 permission: "yes"

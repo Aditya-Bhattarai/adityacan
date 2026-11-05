@@ -1,7 +1,7 @@
 ---
 title: "[LinkedIn series client]"
 order: 95
-chapter: "1-strategy-content"
+chapter: "strategy-content"
 client: "[Client name]"
 people: []
 roles: ["Editor"]

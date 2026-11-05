@@ -61,7 +61,8 @@
   --night-panel: #1a1a18;
   --night-ink: #ecebe6;   /* text on night */
   --night-muted: #a3a29c; /* labels on night */
-  --rec: #d9411e;         /* accent: dots only */
+  --rec: #d9411e;         /* camera record light: only beside the reel */
+  --live: #2e9e5b;        /* available, online, happening now */
 
   /* Colours that change with the page theme */
   --bg: var(--paper);

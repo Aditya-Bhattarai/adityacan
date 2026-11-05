@@ -1,7 +1,7 @@
 ---
 title: "Hamro Motors"
 order: 70
-chapter: "1-strategy-content"
+chapter: "strategy-content"
 client: "Hamro Motors"
 what: "Automotive brand by Manish Adhikari"
 people: ["Manish Adhikari"]

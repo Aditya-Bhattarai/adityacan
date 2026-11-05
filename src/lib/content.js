@@ -26,13 +26,13 @@ export function clean(value) {
   return isBlank(value) ? '' : String(value).trim();
 }
 
-const UPPERCASE_WORDS = { sip: 'SIP', nepse: 'NEPSE', emi: 'EMI', upi: 'UPI', tms: 'TMS', swf: 'SWF', vat: 'VAT', pan: 'PAN', evs: 'EVs', sebon: 'SEBON', nav: 'NAV', xirr: 'XIRR', rs: 'Rs', it: 'IT', nas: 'NAS', ii: 'II' };
+const UPPERCASE_WORDS = { boudhanath: 'Boudhanath', durbar: 'Durbar', langtang: 'Langtang', kathmandu: 'Kathmandu', sip: 'SIP', nepse: 'NEPSE', emi: 'EMI', upi: 'UPI', tms: 'TMS', swf: 'SWF', vat: 'VAT', pan: 'PAN', evs: 'EVs', sebon: 'SEBON', nav: 'NAV', xirr: 'XIRR', rs: 'Rs', it: 'IT', nas: 'NAS', ii: 'II' };
 
 /** Turns "01_truth-behind-pokhara-crash.jpg" into "Truth behind Pokhara crash". */
 export function captionFromFile(path) {
   const name = path.split('/').pop().replace(/\.[^.]+$/, '').replace(/^\d+[_-]/, '');
   const words = name.split(/[-_ ]+/).map((word) => UPPERCASE_WORDS[word] ?? word);
-  const text = words.join(' ').replace('NAS IT', 'NAS-IT').replace(' pokhara', ' Pokhara').replace('nepals', 'Nepal’s');
+  const text = words.join(' ').replace('NAS IT', 'NAS-IT').replace(' pokhara', ' Pokhara').replace('nepals', 'Nepal’s').replace('european union film festival nepal', 'European Union Film Festival Nepal');
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
@@ -67,8 +67,22 @@ export async function getPage(name) {
   return entry?.data ?? {};
 }
 
+const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
+
+/** The chapters, in the order of site-content/pages/chapters.yaml. Numbers and "next chapter" links come from that order. */
 export function getChapters() {
-  return parseYaml(readFileSync('site-content/pages/chapters.yaml', 'utf8'));
+  const chapters = parseYaml(readFileSync('site-content/pages/chapters.yaml', 'utf8')).map((chapter, index) => ({ ...chapter, number: ROMAN[index] }));
+  return chapters.map((chapter, index) => ({ ...chapter, next: chapters[index + 1] ?? null }));
+}
+
+/** One chapter by its key, for example "film". */
+export function getChapter(key) {
+  return getChapters().find((chapter) => chapter.key === key);
+}
+
+/** Turns an Instagram link into a handle, like @name. */
+export function handleFrom(url) {
+  return `@${url.replace(/\/$/, '').split('/').pop()}`;
 }
 
 let settingsCache;
@@ -85,6 +99,7 @@ export function getSettings() {
     whatsapp: clean(data.whatsapp),
     linkedin: clean(data.linkedin),
     instagram: clean(data.instagram),
+    instagramPhotos: clean(data.instagram_photos),
     youtube: clean(data.youtube),
     vimeo: clean(data.vimeo),
     calendly: clean(data.calendly),
@@ -152,11 +167,11 @@ const ROLE_NAMES = {
   'Motion Graphics': 'Motion',
   'Thumbnails & Covers': 'Thumbnails',
   'Production assets': 'Production',
-  'Assistant Director': 'AD',
+  'Assistant Director': 'Assistant director',
   'Documentary Editor': 'Editor',
   'Course creator': 'Teacher',
 };
-export const ROLE_ORDER = ['Editor', 'Director', 'Writer', 'Strategist', 'Production', 'Motion', 'Thumbnails', 'AD', 'Filmmaker', 'Colourist', 'Guide', 'Teacher', 'Photographer'];
+export const ROLE_ORDER = ['Editor', 'Director', 'Writer', 'Strategist', 'Production', 'Motion', 'Thumbnails', 'Assistant director', 'Filmmaker', 'Colourist', 'Guide', 'Teacher', 'Photographer'];
 
 /** The media tabs on a project page, in order. A tab only shows if it has files. */
 const TABS = [
@@ -211,6 +226,7 @@ function buildProject(entry) {
     tagline: clean(data.tagline),
     chapterKey: data.chapter,
     client: clean(data.client),
+    clientLabel: clean(data.client_label),
     what: clean(data.what),
     people: (data.people ?? []).filter((person) => !isBlank(person)),
     roles,

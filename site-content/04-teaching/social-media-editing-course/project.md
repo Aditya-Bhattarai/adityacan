@@ -1,13 +1,13 @@
 ---
 title: "Editing for social media"
 order: 320
-chapter: "4-teaching"
+chapter: "teaching"
 client: "[Organiser]"
 people: []
 roles: ["Teacher"]
 years: "[YEAR]"
-format: "7-module classroom course"
-formats: ["7 modules", "Short-form"]
+format: "7 module classroom course"
+formats: ["7 modules", "Short form"]
 featured: false
 permission: "yes"
 links: {"featured_video": "", "more": []}
@@ -22,7 +22,7 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-A seven-module classroom course focused on short-form social content.
+A seven module classroom course focused on short form social content.
 
 ## The brief
 [What the client needed / why the project existed.]

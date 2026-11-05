@@ -43,7 +43,7 @@ const elsewhere = [
     </nav>
 
     <div class="site-header__actions">
-      <span class="site-header__available"><span class="rec-dot"></span>{available}</span>
+      <span class="site-header__available"><span class="live-dot"></span>{available}</span>
       <a class="btn btn--primary site-header__book" href="/contact#book">Book a call</a>
     </div>
 
@@ -53,7 +53,7 @@ const elsewhere = [
 
 <div class="phone-status" aria-hidden="true">
   <span>KTM <span data-timecode>00:00:00:00</span></span>
-  <span class="phone-status__available"><span class="rec-dot"></span>{available.toUpperCase()}</span>
+  <span class="phone-status__available"><span class="live-dot"></span>{available.toUpperCase()}</span>
 </div>
 
 <dialog class="menu" data-menu aria-label="Menu">
@@ -172,7 +172,7 @@ const elsewhere = [
     font-variant-numeric: tabular-nums;
   }
   .phone-status__available { display: inline-flex; align-items: center; gap: 6px; }
-  .phone-status .rec-dot { width: 6px; height: 6px; }
+  .phone-status .live-dot { width: 6px; height: 6px; }
 
   /* Full-screen dark menu */
   .menu {

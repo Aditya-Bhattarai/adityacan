@@ -1,9 +1,9 @@
 ---
 title: "Global IME"
 order: 82
-chapter: "1-strategy-content"
+chapter: "strategy-content"
 client: "Global IME (via Viewfinders)"
-what: "Bank — via Viewfinders"
+what: "Bank, with Viewfinders"
 people: ["Anup Ghimire"]
 roles: ["Production", "Editor"]
 years: "[YEAR]"

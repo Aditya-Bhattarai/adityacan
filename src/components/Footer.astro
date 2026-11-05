@@ -1,6 +1,6 @@
 ---
 // The "end credits" footer with the big wordmark.
-import { getChapters, getSettings } from '../lib/content.js';
+import { getChapters, getSettings, handleFrom } from '../lib/content.js';
 
 const settings = getSettings();
 const chapters = getChapters();
@@ -9,7 +9,7 @@ const year = new Date().getFullYear();
 const columns = [
   {
     heading: 'CHAPTERS',
-    items: chapters.map((chapter) => ({ text: `${chapter.number} — ${chapter.title}`, href: chapter.href })),
+    items: chapters.map((chapter) => ({ text: `${chapter.number} · ${chapter.title}`, href: chapter.href })),
   },
   {
     heading: 'PAGES',
@@ -24,7 +24,8 @@ const columns = [
   {
     heading: 'ELSEWHERE',
     items: [
-      settings.instagram && { text: 'Instagram — @anorigix', href: settings.instagram },
+      settings.instagram && { text: `Instagram ${handleFrom(settings.instagram)}`, href: settings.instagram },
+      settings.instagramPhotos && { text: `Photographs ${handleFrom(settings.instagramPhotos)}`, href: settings.instagramPhotos },
       settings.linkedin && { text: 'LinkedIn', href: settings.linkedin },
       settings.youtube && { text: 'YouTube', href: settings.youtube },
       settings.vimeo && { text: 'Vimeo', href: settings.vimeo },
@@ -35,7 +36,7 @@ const columns = [
     items: [
       { text: 'Book a call (Calendly)', href: '/contact#book' },
       settings.email && { text: settings.email, href: `mailto:${settings.email}` },
-      settings.whatsapp && { text: `WhatsApp — ${settings.whatsapp}`, href: `https://wa.me/${settings.whatsapp.replace(/\D/g, '')}` },
+      settings.whatsapp && { text: `WhatsApp ${settings.whatsapp}`, href: `https://wa.me/${settings.whatsapp.replace(/\D/g, '')}` },
     ].filter(Boolean),
   },
 ];
@@ -43,7 +44,7 @@ const columns = [
 
 <footer class="site-footer">
   <div class="wrap site-footer__inner">
-    <div class="site-footer__title">— END CREDITS —</div>
+    <div class="site-footer__title">END CREDITS</div>
     <div class="site-footer__columns">
       {columns.map((column) => (
         <div class="site-footer__column">

@@ -11,7 +11,13 @@ const settings = getSettings();
 const chapters = getChapters();
 const work = await getWorkProjects();
 const testimonials = getTestimonials();
-const stats = home.stats.filter((stat) => stat.show);
+const stats = home.stats.filter((stat) => stat.show).map((stat) => ({ ...stat, number: stat.number === 'auto' ? home.clients.length : stat.number }));
+
+// Client logos come from site-content/clients/logos/, named after each project folder.
+const logos = getImages('clients/logos');
+const logoFor = (slug) => logos.find((item) => item.path.split('/').pop().replace(/\.[^.]+$/, '') === slug);
+const clients = await Promise.all(home.clients.map(async (client) => ({ ...client, logo: logoFor(client.project), href: (await getProject(client.project))?.href ?? '/clients' })));
+const initials = (name) => name.split(' ').map((word) => word[0]).join('').slice(0, 2);
 const selected = (home.selected_work ?? []).map((slug) => work.find((project) => project.slug === slug)).filter(Boolean);
 
 const strip = await Promise.all(home.strip.map(async (item) => ({ ...item, data: await getProject(item.project) })));
@@ -72,7 +78,7 @@ const heroSizes = '100vw';
       <div class="hero__reel-label"><span class="rec-dot"></span>{home.hero.reel_label}</div>
 
       <div class="hero__card">
-        <div class="hero__presents">{home.hero.presents}</div>
+        <div class="hero__name">{home.hero.name}</div>
         <h1 class="hero__title">{home.hero.title}</h1>
         <p class="hero__statement">{home.hero.statement}</p>
         <div class="hero__roles">{home.hero.roles}</div>
@@ -91,7 +97,9 @@ const heroSizes = '100vw';
           <div class="strip-card__image">
             {item.data?.cover
               ? <Picture image={item.data.cover.image} alt="" widths={[224, 336]} sizes="112px" />
-              : <span class="strip-card__blank">{item.title.split(' ')[0]}</span>}
+              : item.data?.logo
+                ? <Picture class="strip-card__logo" image={item.data.logo.image} alt="" widths={[224, 336]} sizes="112px" />
+                : <span class="strip-card__blank">{item.title.split(' ')[0]}</span>}
           </div>
           <div class="strip-card__text">
             <span class="strip-card__title">{item.title}</span>
@@ -142,24 +150,28 @@ const heroSizes = '100vw';
   </section>
 
   <!-- Selected work -->
-  <section class="selected">
+  <section class="selected" data-row-box>
     <div class="wrap selected__heading">
       <h2 class="h2 h2--small">Selected work</h2>
-      <a class="selected__all" href="/work">ALL WORK →</a>
+      <div class="selected__controls">
+        <button class="row-arrow" type="button" data-row-prev aria-label="Previous project">←</button>
+        <button class="row-arrow" type="button" data-row-next aria-label="Next project">→</button>
+        <a class="selected__all" href="/work">ALL WORK →</a>
+      </div>
     </div>
-    <div class="selected__row scroll-row">
+    <div class="selected__row scroll-row" data-row data-row-auto>
       {selected.map((project) => (
         <a class="work-card" href={project.href}>
           <div class="work-card__image">
             {project.cover ? (
               <div class="frame" style="aspect-ratio:16/10;border-radius:6px"><Picture image={project.cover.image} alt={project.title} widths={[560, 1120]} sizes="(max-width: 700px) 86vw, 560px" /></div>
             ) : (
-              <TitleTile kicker={`CHAPTER ${project.chapter?.number}`} title={project.title} dark={project.chapterKey === '2-film'} />
+              <TitleTile kicker={`CHAPTER ${project.chapter?.number}`} title={project.title} dark={project.chapterKey === 'film'} />
             )}
             <span class="work-card__name">{project.title}</span>
             <span class="work-card__roles">{project.shortRoles.slice(0, 2).map((role) => <span>{role}</span>)}</span>
           </div>
-          <div class="work-card__meta"><span>{project.client}{project.format && project.client !== project.format ? ` · ${project.format.split(' — ')[0].split(',')[0]}` : ''}</span><span class="work-card__year">{project.years}</span></div>
+          <div class="work-card__meta"><span>{project.client}{project.format && project.client !== project.format ? ` · ${project.format.split(':')[0].split(',')[0]}` : ''}</span><span class="work-card__year">{project.years}</span></div>
         </a>
       ))}
     </div>
@@ -172,12 +184,22 @@ const heroSizes = '100vw';
       <a class="selected__all" href="/clients">WHO I’VE WORKED WITH →</a>
     </div>
     <div class="clients__grid">
-      {home.clients.map((client) => (
-        <div class="clients__item">
+      {clients.map((client) => (
+        <a class="clients__item" href={client.href}>
+          <span class="clients__logo">
+            {client.logo
+              ? <Picture image={client.logo.image} alt="" widths={[160, 320]} sizes="140px" />
+              : <span class="clients__mark" aria-hidden="true">{initials(client.name)}</span>}
+          </span>
           <span class="clients__name">{client.name}</span>
           <span class="clients__note">{client.note}</span>
-        </div>
+        </a>
       ))}
+      <a class="clients__item" href="/contact#book">
+        <span class="clients__logo"><span class="clients__mark" aria-hidden="true">+</span></span>
+        <span class="clients__name">Your brand</span>
+        <span class="clients__note">BOOK A FREE CALL</span>
+      </a>
     </div>
   </section>
 
@@ -222,6 +244,7 @@ const heroSizes = '100vw';
 </Base>
 
 <script src="../scripts/hero.js"></script>
+<script src="../scripts/row.js"></script>
 
 <style>
   /* Ticker */
@@ -277,7 +300,7 @@ const heroSizes = '100vw';
     align-items: center;
     gap: 18px;
   }
-  .hero__presents {
+  .hero__name {
     font: 500 12px/1.3 var(--font-mono);
     letter-spacing: 0.24em;
     text-transform: uppercase;
@@ -341,6 +364,7 @@ const heroSizes = '100vw';
   .strip-card:hover { background: var(--panel); color: var(--ink); }
   .strip-card__image { flex: none; width: 112px; height: 63px; overflow: hidden; background: var(--panel); border-radius: var(--radius-thumb); }
   .strip-card__image :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .strip-card__image :global(.strip-card__logo) { object-fit: contain; padding: 8px; }
   .strip-card__blank {
     height: 100%;
     display: flex;
@@ -374,7 +398,7 @@ const heroSizes = '100vw';
   .chapters__heading-left { display: flex; flex-direction: column; gap: 14px; }
   .chapters__title { font-weight: 600; font-size: clamp(36px, 4.6vw, 64px); line-height: 1; letter-spacing: -0.035em; }
   .chapters__note { max-width: 420px; font-size: 22px; line-height: 1.3; }
-  .chapters__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 16px; }
+  .chapters__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
   .chapter-card {
     display: flex;
     flex-direction: column;
@@ -385,9 +409,9 @@ const heroSizes = '100vw';
     text-decoration: none;
     transition: opacity 200ms ease;
   }
-  .chapter-card:hover { opacity: 0.92; color: inherit; }
-  .chapter-card--panel { background: var(--panel); color: var(--ink); }
-  .chapter-card--ink { background: var(--ink); color: var(--night-ink); }
+  .chapter-card:hover { opacity: 0.92; }
+  .chapter-card--panel, .chapter-card--panel:hover { background: var(--panel); color: var(--ink); }
+  .chapter-card--ink, .chapter-card--ink:hover { background: var(--ink); color: var(--night-ink); }
   .chapter-card--ink .frame { background: #2a2a28; }
   .chapter-card__top { display: flex; justify-content: space-between; font: 500 12px/1 var(--font-mono); letter-spacing: 0.14em; }
   .chapter-card__title { font-weight: 600; font-size: clamp(34px, 3.4vw, 48px); line-height: 1; letter-spacing: -0.035em; }
@@ -400,6 +424,10 @@ const heroSizes = '100vw';
   /* Selected work */
   .selected { padding-block: 72px 24px; }
   .selected__heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; padding-bottom: 28px; }
+  .selected__controls { display: flex; align-items: center; gap: 8px; }
+  .row-arrow { width: 44px; height: 44px; border: 1px solid var(--ink); border-radius: 50%; background: transparent; color: var(--ink); font: 500 16px/1 var(--font-mono); cursor: pointer; transition: background-color 200ms ease, color 200ms ease; }
+  .row-arrow:hover { background: var(--ink); color: var(--paper); }
+  .selected__controls .selected__all { margin-left: 12px; }
   .selected__all { display: inline-flex; align-items: center; min-height: 44px; font: 500 13px/1 var(--font-mono); letter-spacing: 0.06em; }
   .selected__row { display: flex; gap: 16px; overflow-x: auto; padding: 0 max(var(--gutter), calc((100vw - var(--max-width)) / 2 + var(--gutter))) 8px; }
   .work-card { flex: 0 0 min(560px, 86vw); display: flex; flex-direction: column; gap: 12px; color: var(--ink); text-decoration: none; }
@@ -414,20 +442,27 @@ const heroSizes = '100vw';
   /* Clients */
   .clients { padding-block: 96px; display: flex; flex-direction: column; gap: 32px; }
   .clients__heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px; }
-  .clients__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+  .clients__grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
   .clients__item {
-    height: 120px;
-    padding: 0 12px;
+    min-height: 196px;
+    padding: 20px 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 8px;
     text-align: center;
     border-right: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    text-decoration: none;
+    transition: background-color 200ms ease;
   }
-  .clients__name { font-weight: 600; font-size: 18px; letter-spacing: -0.02em; }
+  .clients__item:hover { background: var(--panel); color: var(--ink); }
+  .clients__logo { display: flex; align-items: center; justify-content: center; width: 100%; height: 64px; margin-bottom: 4px; }
+  .clients__logo :global(img) { width: auto; height: auto; max-width: 132px; max-height: 64px; object-fit: contain; border-radius: 4px; }
+  .clients__mark { width: 56px; height: 56px; border: 1px solid var(--ink); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 18px; letter-spacing: -0.02em; }
+  .clients__name { font-weight: 600; font-size: 18px; line-height: 1.15; letter-spacing: -0.02em; }
   .clients__note { font: 500 10px/1.3 var(--font-mono); color: var(--muted); letter-spacing: 0.04em; }
 
   /* Why me */
@@ -453,6 +488,9 @@ const heroSizes = '100vw';
   .cta__buttons { justify-content: center; }
   .cta__note { font: 500 12px/1.6 var(--font-mono); color: var(--muted); letter-spacing: 0.04em; }
 
+  @media (max-width: 1100px) {
+    .clients__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
   @media (max-width: 900px) {
     .why { grid-template-columns: 1fr; padding-block: 88px; }
     .why__right { grid-column: auto; }
@@ -472,7 +510,7 @@ const heroSizes = '100vw';
       padding: 22px 18px;
       gap: 10px;
     }
-    .hero__presents { font-size: 9px; letter-spacing: 0.2em; }
+    .hero__name { font-size: 9px; letter-spacing: 0.2em; }
     .hero__roles { display: none; }
     .hero__buttons { flex-wrap: nowrap; gap: 8px; margin-top: 4px; }
     .hero__buttons .btn { min-height: 44px; padding: 0 18px; font-size: 14px; }
@@ -484,11 +522,15 @@ const heroSizes = '100vw';
     .stats__number { font-size: 38px; }
     .stats__label { font-size: 10px; letter-spacing: 0.04em; }
     .chapters { padding-block: 56px 32px; }
+    .chapters__grid { grid-template-columns: minmax(0, 1fr); }
     .chapter-card { min-height: 0; padding: 20px; }
     .selected { padding-block: 40px 16px; }
     .clients { padding-block: 64px; }
     .clients__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .clients__item { height: 96px; }
+    .clients__item { min-height: 168px; padding: 16px 8px; }
+    .clients__logo { height: 52px; }
+    .clients__logo :global(img) { max-width: 112px; max-height: 52px; }
+    .clients__mark { width: 48px; height: 48px; font-size: 16px; }
     .clients__name { font-size: 16px; }
     .cta__inner { padding-block: 88px; }
     .cta__buttons .btn { width: 100%; }

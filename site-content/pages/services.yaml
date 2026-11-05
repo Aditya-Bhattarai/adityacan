@@ -1,35 +1,35 @@
 # SERVICES & PROCESS page words. No prices anywhere.
 
-title: Strategy and story, in one head.
-statement: I plan your content like a strategist and make it like a filmmaker — then read the data and make it better.
+title: Strategy and story from the same person.
+statement: I plan your content like a strategist, make it like a filmmaker, then read the data and make the next one better.
 
 comparison:
-  - them: Agencies edit videos.
-    me: I engineer platform-specific stories that hook the right audience.
-  - them: Consultants theorise about going viral.
-    me: I build repeatable systems for long-term growth.
-  - them: Freelancers fix surface problems.
-    me: I fix the root — audience, structure, workflow — then shoot and cut it myself.
+  - them: Agencies edit what you send them.
+    me: I shape the story for each platform before anything gets cut.
+  - them: Consultants talk about going viral.
+    me: I set up a way of working your team can repeat every month.
+  - them: Freelancers fix the video in front of them.
+    me: I look at your audience, structure and workflow, then shoot and cut it myself.
 
 services:
   - title: Content strategy & audits
-    text: I audit your channels against platform data, find why strong ideas underperform, and write a playbook your team can repeat.
+    text: I audit your channels against platform data, find out why strong ideas underperform, and write a playbook your team can repeat.
     outputs: [Audit, Playbook, Content calendar]
-  - title: Long-form editing
-    text: YouTube explainers, interviews and podcasts — structured for retention, paced like a film.
+  - title: Long form editing
+    text: YouTube explainers, interviews and podcasts, structured to hold attention and paced like a film.
     outputs: [YouTube, Podcasts, Interviews]
-  - title: Short-form systems
+  - title: Short form systems
     text: Reels and shorts cut from every long video, with hooks written for each platform.
     outputs: [Reels, Shorts, Repurposing]
   - title: Thumbnails & covers
-    text: "Click-through first: titles, thumbnails and vertical covers designed together."
+    text: Titles, thumbnails and vertical covers designed together, so people click.
     outputs: [YouTube thumbnails, Vertical covers]
   - title: Motion graphics
     text: Data animations and explainer graphics that make numbers easy to follow.
     outputs: [Charts, Lower thirds, Titles]
   - title: Direction & production
-    text: Concept, script, shot list, call sheet and shoot — for brand films and campaigns.
-    outputs: [Brand films, Scripts, On-set]
+    text: Concept, script, shot list, call sheet and shoot for brand films and campaigns.
+    outputs: [Brand films, Scripts, On set]
   - title: Film & documentary editing
     text: Narrative and documentary edits with sound design and colour.
     outputs: [Documentary, Short film, Colour]
@@ -37,30 +37,30 @@ services:
 process:
   - when: WEEK 1
     title: Audit
-    text: Your channels, data and audience — what works, what doesn’t, and why.
+    text: Your channels, data and audience. What works, what doesn’t and why.
   - when: WEEK 1
     title: Strategy
     text: Positioning, formats and a calendar built for your platforms.
   - when: WEEK 2
-    title: Pre-production
-    text: Scripts, hooks, shot lists — planned like a film.
+    title: Preproduction
+    text: Scripts, hooks and shot lists, planned like a film.
   - when: ONGOING
     title: Shoot & edit
-    text: Long-form first, then every short you can cut from it.
+    text: The long version first, then every short you can cut from it.
   - when: ONGOING
     title: Package
     text: Titles, thumbnails, covers and captions, ready to post.
   - when: MONTHLY
-    title: Review & iterate
-    text: We read the numbers together and sharpen the next batch.
+    title: Review
+    text: We read the numbers together and improve the next batch.
 
 ways:
-  - kicker: ONE-OFF
+  - kicker: ONE PROJECT
     title: A single project
-    text: One film, one campaign or one channel audit — clearly scoped, start to finish.
+    text: One film, one campaign or one channel audit, scoped from start to finish.
   - kicker: ONGOING
     title: Monthly content partner
-    text: Strategy, editing and packaging every month — like an in-house team, without the overhead.
+    text: Strategy, editing and packaging every month, the way an in house team would do it.
   - kicker: FILM
     title: Film & production
     text: Direction, production and editing for brand films, documentaries and short films.
@@ -70,11 +70,11 @@ faq:
   - question: Do you work with clients outside Nepal?
     answer: Yes. I’m in Kathmandu (GMT+5:45) and work remotely with clients worldwide.
   - question: How do we get started?
-    answer: Book a 30-minute call and share links to your channel, brand or project. I’ll come back with a scope and a proposal.
+    answer: Book a free 30 minute call. I’d love to hear about your brand, your work and what you’re looking for. We can just talk it through, and we don’t have to get into money for now.
   - question: What languages do you work in?
-    answer: "[Nepali and English — confirm.]"
+    answer: "[Nepali and English: confirm.]"
   - question: How do payments work?
-    answer: "[Bank / SWIFT transfer — confirm.]"
+    answer: "[Bank / SWIFT transfer: confirm.]"
   - question: How fast is turnaround?
     answer: "[Typical turnaround per format.]"
   - question: How many revisions are included?
@@ -82,4 +82,4 @@ faq:
 
 cta:
   title: Tell me what you’re making.
-  button: Book a 30-min call
+  button: Book a free 30 minute call

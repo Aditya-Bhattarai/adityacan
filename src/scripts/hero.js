@@ -4,7 +4,8 @@ const soundButton = document.querySelector('[data-hero-sound]');
 
 if (video) {
   const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const saving = navigator.connection?.saveData;
+  // Slow connections and data saver keep the still picture instead of the video.
+  const saving = navigator.connection?.saveData || /2g|3g/.test(navigator.connection?.effectiveType ?? '');
   const phoneShape = window.matchMedia('(max-width: 700px)').matches;
 
   function addSources() {

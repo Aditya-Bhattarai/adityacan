@@ -1,13 +1,15 @@
 ---
-// CHAPTER II (dark). Words are in site-content/pages/film.yaml
+// FILM CHAPTER (dark). Words are in site-content/pages/film.yaml
 import Base from '../layouts/Base.astro';
 import GradeSlider from '../components/GradeSlider.astro';
+import NextChapter from '../components/NextChapter.astro';
 import Picture from '../components/Picture.astro';
 import TitleTile from '../components/TitleTile.astro';
 import VideoFacade from '../components/VideoFacade.astro';
-import { getImages, getPage, getProjects, getWorkProjects, getWriting } from '../lib/content.js';
+import { getChapter, getImages, getPage, getProjects, getWorkProjects, getWriting } from '../lib/content.js';
 
 const page = await getPage('film');
+const chapter = getChapter('film');
 const projects = await getProjects();
 const work = await getWorkProjects();
 const writing = await getWriting();
@@ -19,17 +21,21 @@ const docs = [
   ...(sapanaScript?.pdf ? [{ url: sapanaScript.pdf.url, caption: 'Screenplay V4', preview: sapanaScript.pdf.preview }] : []),
   ...(sapana?.documents ?? []),
 ];
-const films = work.filter((project) => project.chapterKey === '2-film');
+const selection = projects.find((project) => project.slug === page.selection?.project);
+const selectionStills = selection ? getImages(`${selection.folder}/stills`) : [];
+const selectionPhotos = (page.selection?.photos ?? []).map((name) => selectionStills.find((still) => still.path.includes(name))).filter(Boolean);
+
+const films = work.filter((project) => project.chapterKey === 'film');
 
 const grade = projects.find((project) => project.slug === page.grade.project);
 const before = grade ? getImages(`${grade.folder}/before`)[0] : null;
 const after = grade ? getImages(`${grade.folder}/after`)[0] : null;
 ---
 
-<Base title="Chapter II — Film" current="work" theme="dark" description="Short films written and directed by Aditya Bhattarai. Still frames, natural light, real sound.">
+<Base title={`Chapter ${chapter.number}: ${chapter.title}`} current="work" theme="dark" description="Short films written and directed by Aditya Bhattarai. Still frames, natural light, real sound.">
   <section class="title-card-section film-title">
     <div class="title-card">
-      <div class="title-card__kicker">CHAPTER II</div>
+      <div class="title-card__kicker">CHAPTER {chapter.number}</div>
       <h1 class="title-card__title film-title__word">Film</h1>
       <p class="title-card__statement">{page.statement}</p>
       <div class="title-card__rule"></div>
@@ -80,6 +86,24 @@ const after = grade ? getImages(`${grade.folder}/after`)[0] : null;
     </section>
   )}
 
+  {selection && (
+    <section class="wrap selection">
+      <div class="selection__text">
+        <span class="label">{page.selection.kicker}</span>
+        <h2 class="selection__title">{page.selection.title}</h2>
+        <p class="body-text">{page.selection.text}</p>
+        <a class="btn btn--ghost selection__button" href={selection.href}>{page.selection.button}</a>
+      </div>
+      {selectionPhotos.length > 0 && (
+        <div class="selection__photos">
+          {selectionPhotos.map((photo) => (
+            <div class="frame" style="aspect-ratio:3/4;border-radius:6px"><Picture image={photo.image} alt={photo.caption} widths={[400, 800]} sizes="(max-width: 700px) 50vw, 25vw" /></div>
+          ))}
+        </div>
+      )}
+    </section>
+  )}
+
   <section class="wrap filmography">
     <div class="filmography__head">
       <h2 class="h2 h2--small">{page.filmography.title}</h2>
@@ -110,12 +134,7 @@ const after = grade ? getImages(`${grade.folder}/after`)[0] : null;
     </section>
   )}
 
-  <a class="next-chapter next-chapter--light" href="/mountains">
-    <div class="wrap next-chapter__inner">
-      <span class="next-chapter__kicker">NEXT — CHAPTER III</span>
-      <span class="next-chapter__title">Mountains →</span>
-    </div>
-  </a>
+  <NextChapter current="film" />
 </Base>
 
 <style>
@@ -140,6 +159,12 @@ const after = grade ? getImages(`${grade.folder}/after`)[0] : null;
   .docs__item :global(img) { object-fit: contain; transition: opacity 200ms ease; }
   .docs__item:hover :global(img) { opacity: 0.8; }
 
+  .selection { padding-bottom: 96px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; }
+  .selection__text { flex: 1 1 360px; display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+  .selection__title { font-weight: 600; font-size: clamp(40px, 5vw, 72px); line-height: 0.95; letter-spacing: -0.035em; }
+  .selection__button { margin-top: 8px; }
+  .selection__photos { flex: 1.4 1 min(520px, 100%); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+
   .filmography { padding-bottom: 96px; }
   .filmography__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 20px; }
   .filmography__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 46%), 1fr)); gap: 32px 16px; }
@@ -152,12 +177,9 @@ const after = grade ? getImages(`${grade.folder}/after`)[0] : null;
   .craft { padding-bottom: 112px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 40px; align-items: center; }
   .craft__text { display: flex; flex-direction: column; gap: 16px; }
 
-  .next-chapter--light { background: var(--paper); color: var(--ink); --label: var(--muted); }
-  .next-chapter--light:hover { color: var(--ink); }
-
   @media (max-width: 700px) {
     .film-title { padding-block: 32px 48px; }
-    .featured, .filmography { padding-bottom: 64px; }
+    .featured, .filmography, .selection { padding-bottom: 64px; }
     .craft { padding-bottom: 72px; }
   }
 </style>

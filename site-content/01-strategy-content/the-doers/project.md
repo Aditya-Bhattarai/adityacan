@@ -1,7 +1,7 @@
 ---
 title: "The Doers"
 order: 90
-chapter: "1-strategy-content"
+chapter: "strategy-content"
 client: "The Doers"
 what: "Podcast hosted by Anup Ghimire"
 people: ["Anup Ghimire"]

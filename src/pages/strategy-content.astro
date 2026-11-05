@@ -1,10 +1,14 @@
 ---
-// CHAPTER I. Words are in site-content/pages/strategy.yaml. Media fills in from each project's folders.
+// STRATEGY & CONTENT CHAPTER. Words are in site-content/pages/strategy.yaml. Media fills in from each project's folders.
 import Base from '../layouts/Base.astro';
+import NextChapter from '../components/NextChapter.astro';
 import Picture from '../components/Picture.astro';
-import { getImages, getPage, getProjects } from '../lib/content.js';
+import { getChapter, getImages, getPage, getProjects } from '../lib/content.js';
 
 const page = await getPage('strategy');
+const home = await getPage('home');
+const chapter = getChapter('strategy-content');
+const stats = page.stats.map((stat) => ({ ...stat, number: stat.number === 'auto' ? home.clients.length : stat.number }));
 const projects = await getProjects();
 const bySlug = Object.fromEntries(projects.map((project) => [project.slug, project]));
 
@@ -27,19 +31,20 @@ const groups = page.groups
     ...group,
     brands: group.brands.map((slug) => bySlug[slug]).filter(Boolean).map((project) => ({ ...project, strip: stripFor(project) })),
   }))
-  .filter((group) => group.brands.length > 0);
+  .filter((group) => group.brands.length > 0)
+  .map((group, index) => ({ ...group, number: `${chapter.number}.${index + 1}` }));
 
 // The wall: every thumbnail and cover from this chapter, shuffled evenly between shapes.
 const wall = projects
-  .filter((project) => project.chapterKey === '1-strategy-content')
+  .filter((project) => project.chapterKey === 'strategy-content')
   .flatMap((project) => ['thumbnails', 'covers'].flatMap((name) => getImages(`${project.folder}/${name}`).map((item) => ({ ...item, href: project.href, project: project.title }))))
   .sort((a, b) => a.path.split('/').pop().localeCompare(b.path.split('/').pop()));
 ---
 
-<Base title="Chapter I — Strategy & Content" current="work" description="YouTube, podcasts, reels and brand content for Nepal’s leading creators, planned for the algorithm and cut for the audience.">
+<Base title={`Chapter ${chapter.number}: ${chapter.title}`} current="work" description="YouTube, podcasts, reels and brand content for some of Nepal’s biggest creators.">
   <section class="title-card-section">
     <div class="title-card">
-      <div class="title-card__kicker">CHAPTER I</div>
+      <div class="title-card__kicker">CHAPTER {chapter.number}</div>
       <h1 class="title-card__title">Strategy &amp; Content</h1>
       <p class="title-card__statement">{page.statement}</p>
       <div class="title-card__rule"></div>
@@ -48,7 +53,7 @@ const wall = projects
   </section>
 
   <section class="wrap numbers">
-    {page.stats.map((stat) => (
+    {stats.map((stat) => (
       <div class="numbers__item">
         <span class="stat-number numbers__value">{stat.number}</span>
         <span class="label label--small">{stat.label}</span>
@@ -66,7 +71,7 @@ const wall = projects
     <section id={group.id} class="wrap group">
       <div class="group__head">
         <div class="group__titles">
-          <span class="label">{group.number} — {group.kicker}</span>
+          <span class="label">{group.number} · {group.kicker}</span>
           <h2 class="h2">{group.title}</h2>
         </div>
         <div class="tag-row">{group.roles.map((role) => <span class="tag tag--solid">{role}</span>)}</div>
@@ -80,7 +85,7 @@ const wall = projects
             <a class="brand__link" href={brand.href}>Open project →</a>
           </div>
           {brand.strip.length > 0 && (
-            <div class="brand__strip scroll-row">
+            <div class="brand__strip scroll-row" data-row>
               {brand.strip.map((item) => (
                 <div class:list={['brand__tile', { 'brand__tile--logo': item.kind === 'assets' }]} style={`aspect-ratio:${item.image.width}/${item.image.height}`}>
                   <Picture image={item.image} alt={item.caption} widths={[240, 480]} sizes="220px" />
@@ -110,13 +115,10 @@ const wall = projects
     </div>
   </section>
 
-  <a class="next-chapter theme-night next-chapter--dark" href="/film">
-    <div class="wrap next-chapter__inner">
-      <span class="next-chapter__kicker">NEXT — CHAPTER II</span>
-      <span class="next-chapter__title">Film →</span>
-    </div>
-  </a>
+  <NextChapter current="strategy-content" />
 </Base>
+
+<script src="../scripts/row.js"></script>
 
 <style>
   .numbers { padding-bottom: 64px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
@@ -150,8 +152,6 @@ const wall = projects
   .wall__tile { display: block; margin-bottom: 12px; break-inside: avoid; overflow: hidden; border-radius: var(--radius-thumb); background: var(--panel); transition: opacity 200ms ease; }
   .wall__tile:hover { opacity: 0.85; }
   .wall__tile :global(img) { width: 100%; height: auto; }
-
-  .next-chapter--dark { background: var(--night); color: var(--night-ink); }
 
   @media (max-width: 700px) {
     .title-card-section { padding-block: 32px 48px; }

@@ -1,12 +1,12 @@
 ---
 title: "Social media for older adults"
 order: 330
-chapter: "4-teaching"
+chapter: "teaching"
 client: "[Organiser / place]"
 people: []
 roles: ["Teacher"]
 years: "[YEAR]"
-format: "Digital-literacy programme"
+format: "Digital literacy programme"
 formats: ["Digital literacy", "Community"]
 featured: false
 permission: "yes"
@@ -22,7 +22,7 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-A digital-literacy programme teaching older adults what social media is, why it matters and how to use it.
+A digital literacy programme teaching older adults what social media is, why it matters and how to use it.
 
 ## The brief
 [What the client needed / why the project existed.]

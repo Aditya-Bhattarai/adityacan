@@ -1,7 +1,7 @@
 # CLIENTS & PROJECTS page words.
 
-title: "Who I’ve\nbuilt with."
-note: The people behind Nepal’s biggest creator brands — and everything we made together.
+title: "Who I’ve\nworked with."
+note: The people behind some of Nepal’s biggest creator brands, and what we made together.
 
 # The map. "brands" and each "made" project are project folder names.
 people:
@@ -9,7 +9,7 @@ people:
     title: Showrunner, Shark Tank Nepal · Founder, Ideapreneur Nepal
     brands: [ideapreneur-nepal, satik-kura, money-mitra, nava-kundali, creators-headquarters]
     made:
-      - label: Long-form explainers
+      - label: Long form explainers
         project: ideapreneur-nepal
       - label: Podcast episodes
         project: satik-kura
@@ -39,7 +39,7 @@ people:
     made:
       - label: Explainer edits
         project: explainer-nepali
-      - label: Instagram strategy — 3.8M views in 2024
+      - label: Instagram strategy, 3.8M views in 2024
         project: explainer-nepali
       - label: Automotive content
         project: hamro-motors

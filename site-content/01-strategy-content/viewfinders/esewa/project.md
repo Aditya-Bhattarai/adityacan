@@ -1,9 +1,9 @@
 ---
 title: "eSewa"
 order: 81
-chapter: "1-strategy-content"
+chapter: "strategy-content"
 client: "eSewa (via Viewfinders)"
-what: "Digital wallet — via Viewfinders"
+what: "Digital wallet, with Viewfinders"
 people: ["Anup Ghimire"]
 roles: ["Production", "Editor"]
 years: "[YEAR]"

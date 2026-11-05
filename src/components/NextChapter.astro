@@ -1,0 +1,25 @@
+---
+// The "next chapter" band at the bottom of a chapter page.
+// The order comes from site-content/pages/chapters.yaml. The last chapter shows nothing.
+import { getChapter } from '../lib/content.js';
+
+const { current } = Astro.props;
+const next = getChapter(current)?.next;
+const dark = next?.theme === 'ink';
+---
+
+{next && (
+  <a class:list={['next-chapter', dark ? 'theme-night next-band--dark' : 'next-band--light']} href={next.href}>
+    <div class="wrap next-chapter__inner">
+      <span class="next-chapter__kicker">NEXT · CHAPTER {next.number}</span>
+      <span class="next-chapter__title">{next.title} →</span>
+    </div>
+  </a>
+)}
+
+<style>
+  .next-band--dark { background: var(--night); color: var(--night-ink); }
+  .next-band--dark:hover { color: var(--night-ink); }
+  .next-band--light { background: var(--panel); color: var(--ink); --label: var(--muted); }
+  .next-band--light:hover { color: var(--ink); }
+</style>

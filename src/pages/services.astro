@@ -11,7 +11,7 @@ const faq = page.faq.filter((item) => clean(item.answer));
 const number = (index) => String(index + 1).padStart(2, '0');
 ---
 
-<Base title="Services & process" current="services" description="Content strategy, long-form and short-form editing, thumbnails, motion graphics, direction and film editing, from one person.">
+<Base title="Services & process" current="services" description="Content strategy, long form and short form editing, thumbnails, motion graphics, direction and film editing, from one person.">
   <section class="wrap head">
     <div class="label">SERVICES &amp; PROCESS</div>
     <h1 class="h1-huge head__title">{page.title}</h1>
@@ -81,7 +81,7 @@ const number = (index) => String(index + 1).padStart(2, '0');
   <section class="wrap ways">
     <div class="ways__head">
       <h2 class="h2 h2--small">Ways to work together</h2>
-      <span class="meta">SCOPE &amp; PRICING ON A CALL</span>
+      <span class="meta">WE WORK OUT THE SCOPE TOGETHER</span>
     </div>
     <div class="ways__grid">
       {page.ways.map((way) => (
@@ -167,7 +167,7 @@ const number = (index) => String(index + 1).padStart(2, '0');
   .faq__item summary { min-height: 56px; display: flex; align-items: center; cursor: pointer; font-weight: 500; font-size: 19px; list-style: none; }
   .faq__item summary::-webkit-details-marker { display: none; }
   .faq__item summary::after { content: '+'; margin-left: auto; padding-left: 16px; font: 500 18px/1 var(--font-mono); color: var(--muted); }
-  .faq__item[open] summary::after { content: '–'; }
+  .faq__item[open] summary::after { content: '×'; }
   .faq__item p { margin-bottom: 20px; font-size: 16px; line-height: 1.6; color: var(--body); }
 
   .closing { padding-block: 112px; display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }

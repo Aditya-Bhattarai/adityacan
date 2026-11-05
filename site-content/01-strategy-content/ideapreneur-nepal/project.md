@@ -1,14 +1,14 @@
 ---
 title: "Ideapreneur Nepal"
 order: 10
-chapter: "1-strategy-content"
+chapter: "strategy-content"
 client: "Ideapreneur Nepal"
 what: "Financial & economic education on YouTube"
 people: ["Sanjog Koirala"]
 roles: ["Editor", "Content Strategist", "Motion Graphics", "Thumbnails"]
 years: "[YEAR]"
-format: "YouTube — financial & economic explainers, course modules"
-formats: ["Long-form", "Course modules", "Thumbnails", "Motion graphics"]
+format: "YouTube: financial and economic explainers, course modules"
+formats: ["Long form", "Course modules", "Thumbnails", "Motion graphics"]
 featured: true
 permission: "yes"
 links: {"featured_video": "https://www.youtube.com/watch?v=GmBr1yHPZG0", "more": []}
@@ -23,14 +23,14 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-Financial and economic education for Nepali audiences — NEPSE, budgets, remittance, SIPs.
+Financial and economic education for Nepali audiences: NEPSE, budgets, remittance, SIPs.
 
 ## The brief
-Grow watch time and subscriber conversion for a finance-education channel.
+Grow watch time and subscriber conversion for a finance education channel.
 
 ## What I did
 - Restructured videos around YouTube analytics
-- Edited long-form explainers and course modules
+- Edited long form explainers and course modules
 - Designed thumbnails and covers
 - Built SIP data animations
 

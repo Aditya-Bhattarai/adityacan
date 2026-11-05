@@ -1,7 +1,7 @@
 ---
 title: "[Short film title]"
 order: 140
-chapter: "2-film"
+chapter: "film"
 client: "[Director]"
 people: []
 roles: ["Editor"]

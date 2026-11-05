@@ -1,12 +1,12 @@
 ---
-title: "[Production title]"
-order: 130
-chapter: "2-film"
-client: "[Production]"
+title: "Notes from the road"
+order: 230
+chapter: "trekking-guide"
+client: "Personal"
 people: []
-roles: ["Assistant Director"]
-years: "[YEAR]"
-format: ""
+roles: ["Photographer"]
+years: "Ongoing"
+format: "Travel & street photographs"
 formats: []
 featured: false
 permission: "yes"
@@ -22,7 +22,7 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-[One sentence a stranger would understand.]
+Photographs from Kathmandu and the road beyond it.
 
 ## The brief
 [What the client needed / why the project existed.]

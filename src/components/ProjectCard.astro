@@ -14,7 +14,7 @@ const line = project.what || project.client;
     ) : project.logo ? (
       <div class="frame frame--contain" style="aspect-ratio:16/10;border-radius:6px"><Picture image={project.logo.image} alt={`${project.title} logo`} widths={[320, 640]} sizes="(max-width: 700px) 70vw, 25vw" /></div>
     ) : (
-      <TitleTile title={project.title} dark={project.chapterKey === '2-film'} />
+      <TitleTile title={project.title} dark={project.chapterKey === 'film'} />
     )}
     <span class="card__chapter">CH. {project.chapter?.number}</span>
   </div>

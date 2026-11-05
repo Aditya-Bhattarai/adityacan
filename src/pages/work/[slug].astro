@@ -22,8 +22,10 @@ const previous = index >= 0 ? work[(index - 1 + work.length) % work.length] : wo
 const writing = await getWriting();
 const screenplay = writing.find((piece) => piece.slug === project.screenplay);
 
-const hasFeature = project.video || project.wideImage;
-const dark = project.chapterKey === '2-film';
+// A tall picture would crop badly in the wide banner, so it shows at its own shape instead.
+const wideIsTall = project.wideImage && project.wideImage.image.height > project.wideImage.image.width;
+const hasFeature = project.video || (project.wideImage && !wideIsTall);
+const dark = project.chapterKey === 'film';
 
 // Results that start with a number become big stats; anything else stays a sentence.
 const results = project.results.map((line) => {
@@ -33,7 +35,7 @@ const results = project.results.map((line) => {
 
 const people = project.people.length ? `Host: ${project.people.join(', ')}` : '';
 const meta = [
-  project.client && { label: 'CLIENT', lines: [project.client, project.client !== project.people[0] ? people : ''].filter(Boolean) },
+  project.client && { label: project.clientLabel || 'CLIENT', lines: [project.client, project.client !== project.people[0] ? people : ''].filter(Boolean) },
   project.format && { label: 'FORMAT', lines: [project.format] },
   project.years && { label: 'YEAR', lines: [project.years] },
 ].filter(Boolean);
@@ -55,11 +57,11 @@ const jsonLd = {
 };
 ---
 
-<Base title={project.title} current="work" description={project.oneLiner || `${project.title}, a project by Aditya Bhattarai.`} image={project.wideImage?.image ?? project.cover?.image} jsonLd={jsonLd}>
+<Base title={project.title} current="work" description={project.oneLiner || `${project.title}, a project by Aditya Bhattarai.`} image={project.wideImage?.image ?? project.cover?.image ?? project.logo?.image} jsonLd={jsonLd}>
   <section class="wrap head">
     <nav class="crumbs" aria-label="Breadcrumb">
       <a href="/work">WORK</a><span>/</span>
-      <a href={project.chapter?.href}>CHAPTER {project.chapter?.number} — {project.chapter?.title.toUpperCase()}</a><span>/</span>
+      <a href={project.chapter?.href}>CHAPTER {project.chapter?.number} · {project.chapter?.title.toUpperCase()}</a><span>/</span>
       <span class="crumbs__current">{project.title.toUpperCase()}</span>
     </nav>
     <div class="head__row">
@@ -96,6 +98,10 @@ const jsonLd = {
   ) : project.cover ? (
     <section class="wrap feature feature--poster">
       <div class="frame" style={`aspect-ratio:${project.cover.image.width}/${project.cover.image.height};border-radius:6px`}><Picture image={project.cover.image} alt={project.title} widths={[400, 800]} sizes="400px" eager /></div>
+    </section>
+  ) : project.logo ? (
+    <section class="wrap feature">
+      <div class="frame frame--contain" style="aspect-ratio:21/9;border-radius:6px"><Picture image={project.logo.image} alt={`${project.title} logo`} widths={[480, 960]} sizes="(max-width: 700px) 100vw, 640px" eager /></div>
     </section>
   ) : (
     <section class="wrap feature">

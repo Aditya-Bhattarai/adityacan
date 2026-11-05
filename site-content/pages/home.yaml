@@ -1,17 +1,17 @@
 # HOMEPAGE WORDS. Change the text after each colon and save.
 
 ticker:
-  - Filmmaker & content strategist — Kathmandu, Nepal
+  - Filmmaker & content strategist
   - 320M+ impressions for Nepal’s leading creators
+  - Assistant director on Path to Prosperity, selected for the European Union Film Festival Nepal
   - Directing · Editing · Strategy · Production
   - Licensed trekking guide
-  - Available for international projects
 
 hero:
-  presents: Aditya Bhattarai presents
+  name: Aditya Bhattarai
   title: Made to perform.
-  statement: Content, directed like films. Built to perform.
-  roles: Strategy · Direction · Edit — for creators & brands worldwide
+  statement: Content, directed like films.
+  roles: Strategy · Direction · Edit · For creators and brands worldwide
   reel_label: REEL 2026
 
 # The four projects along the bottom of the hero. "project" is the project's folder name.
@@ -30,65 +30,81 @@ strip:
     role: Travel film · Filmmaker
 
 # The big numbers. Set show to false to hide one, or true to show it.
+# "number: auto" counts the clients listed further down this file.
 stats:
   - number: 320M+
-    label: Impressions generated for client channels
+    label: Impressions for the channels I’ve worked on
     show: true
   - number: 15M+
-    label: Views from strategic, non-viral growth
+    label: Views from strategic growth, without going viral
     show: false # Hidden until you confirm this number is real, not expected.
-  - number: 3.8M
-    label: Views for Explainer Nepali in 2024
+  - number: 28 days
+    label: For Ideapreneur Nepal’s new video structure to lift watch time and subscribers
     show: true
-  - number: 150+
-    label: Custom assets designed for content
+  - number: EUFF
+    label: European Union Film Festival Nepal 2026 selection, as assistant director on Path to Prosperity
     show: true
-  - number: 32%
-    label: Of content repurposed from core videos
+  - number: auto
+    label: Brands and creators, including eSewa and Global IME
     show: true
 
 # The "Selected work" row, in this order. Use project folder names.
 selected_work:
   - satik-kura
   - sapana
+  - path-to-prosperity
   - explainer-nepali
   - langtang-diaries
   - ideapreneur-nepal
 
 chapters_heading:
-  kicker: INDEX — FOUR CHAPTERS
-  title: One storyteller, four chapters.
-  note: Every project lives in the chapter it belongs to — and is tagged by the role I played.
+  kicker: INDEX · FOUR CHAPTERS
+  title: The work, in four chapters.
+  note: Each project sits in the chapter it belongs to and is tagged with the role I played.
 
+# "project" is the project's folder name. The logo comes from site-content/clients/logos/.
 clients:
   - name: Ideapreneur Nepal
-    note: YOUTUBE
-  - name: सटीक कुरा
-    note: SATIK KURA · PODCAST
+    note: YOUTUBE · SANJOG KOIRALA
+    project: ideapreneur-nepal
+  - name: Satik Kura
+    note: PODCAST · SANJOG KOIRALA
+    project: satik-kura
   - name: Money Mitra
-    note: FINANCE
+    note: PERSONAL FINANCE
+    project: money-mitra
   - name: Creators HQ
-    note: CREATOR COMPANY
+    note: CREATOR COMPANY · SANJOG KOIRALA
+    project: creators-headquarters
   - name: Explainer Nepali
-    note: MANISH ADHIKARI
+    note: INSTAGRAM · MANISH ADHIKARI
+    project: explainer-nepali
   - name: Hamro Motors
-    note: AUTOMOTIVE
+    note: AUTOMOTIVE · MANISH ADHIKARI
+    project: hamro-motors
   - name: The Doers
-    note: PODCAST
+    note: PODCAST · ANUP GHIMIRE
+    project: the-doers
   - name: Viewfinders
-    note: PRODUCTION HOUSE
+    note: PRODUCTION HOUSE · ANUP GHIMIRE
+    project: viewfinders
   - name: eSewa
-    note: VIA VIEWFINDERS
+    note: DIGITAL WALLET · WITH VIEWFINDERS
+    project: esewa
   - name: Global IME
-    note: VIA VIEWFINDERS
+    note: BANK · WITH VIEWFINDERS
+    project: global-ime
+  - name: Nava Kundali
+    note: ASTROLOGY APP
+    project: nava-kundali
 
 why:
   kicker: WHY WORK WITH ME
-  text: Most editors don’t think about strategy. Most strategists have never held a camera. I do both — so your content is planned like a campaign and made like a film.
+  text: I plan the content and I make it. The person reading your analytics is the same person holding the camera and cutting the edit.
   link: How I work, step by step →
 
 cta:
   kicker: THE NEXT CHAPTER
   title: Let’s make something that performs.
-  button: Book a 30-min call
-  note: Kathmandu · GMT+5:45 · Replies within 24 h
+  button: Book a free 30 minute call
+  note: Get instant replies on email, Instagram or any other channel

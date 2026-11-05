@@ -1,7 +1,7 @@
 ---
 title: "Money Mitra"
 order: 30
-chapter: "1-strategy-content"
+chapter: "strategy-content"
 client: "Money Mitra"
 what: "Personal finance brand"
 people: ["Sanjog Koirala"]
@@ -23,7 +23,7 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-A personal finance brand, using the same algorithm-first content system as Ideapreneur Nepal.
+A personal finance brand, using the same video system as Ideapreneur Nepal.
 
 ## The brief
 [What the client needed / why the project existed.]

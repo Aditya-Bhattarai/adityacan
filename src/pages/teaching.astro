@@ -1,26 +1,28 @@
 ---
-// CHAPTER IV. Words are in site-content/pages/teaching.yaml
+// TEACHING CHAPTER. Words are in site-content/pages/teaching.yaml
 import Base from '../layouts/Base.astro';
+import NextChapter from '../components/NextChapter.astro';
 import Picture from '../components/Picture.astro';
-import { clean, getImages, getPage, getProjects } from '../lib/content.js';
+import { clean, getChapter, getImages, getPage, getProjects } from '../lib/content.js';
 
 const page = await getPage('teaching');
+const chapter = getChapter('teaching');
 const projects = await getProjects();
 const bySlug = Object.fromEntries(projects.map((project) => [project.slug, project]));
 const curriculum = clean(page.frame.curriculum_link);
 const enrol = clean(page.frame.enrol_link);
 
-const courses = page.courses.map((course) => {
+const courses = page.courses.map((course, index) => {
   const project = bySlug[course.project];
   const photos = project ? ['stills', 'photos'].flatMap((name) => getImages(`${project.folder}/${name}`)) : [];
-  return { ...course, href: project?.href, photos: photos.slice(0, 3) };
+  return { ...course, number: `${chapter.number}.${index + 2}`, href: project?.href, photos: photos.slice(0, 3) };
 });
 ---
 
-<Base title="Chapter IV — Teaching" current="work" description="Editing courses for creators, from CapCut to colour grading, and digital-literacy classes for older adults.">
+<Base title={`Chapter ${chapter.number}: ${chapter.title}`} current="work" description="Editing courses for creators, from CapCut to colour grading, and digital literacy classes for older adults.">
   <section class="title-card-section">
     <div class="title-card">
-      <div class="title-card__kicker">CHAPTER IV</div>
+      <div class="title-card__kicker">CHAPTER {chapter.number}</div>
       <h1 class="title-card__title teaching-word">Teaching</h1>
       <p class="title-card__statement">{page.statement}</p>
     </div>
@@ -29,7 +31,7 @@ const courses = page.courses.map((course) => {
   <section class="wrap teaching">
     <div class="course course--frame">
       <div class="course__text">
-        <span class="label">{page.frame.kicker}</span>
+        <span class="label">{chapter.number}.1 · {page.frame.kicker}</span>
         <h2 class="frame-title">{page.frame.title}</h2>
         <p class="body-text">{page.frame.text}</p>
         {(curriculum || enrol) && (
@@ -53,7 +55,7 @@ const courses = page.courses.map((course) => {
     {courses.map((course) => (
       <div class="course">
         <div class="course__text">
-          <span class="label">{course.kicker}</span>
+          <span class="label">{course.number} · {course.kicker}</span>
           <h2 class="h2 h2--small">{course.title}</h2>
         </div>
         <div class="course__detail">
@@ -80,6 +82,8 @@ const courses = page.courses.map((course) => {
       <a class="btn btn--primary btn--large" href="/contact#book">{page.workshops.button}</a>
     </div>
   </section>
+
+  <NextChapter current="teaching" />
 </Base>
 
 <style>

@@ -1,7 +1,7 @@
 ---
-title: "Colour grading — log to grade"
+title: "Colour grading: log to grade"
 order: 150
-chapter: "2-film"
+chapter: "film"
 client: "Craft showcase"
 people: []
 roles: ["Colourist"]

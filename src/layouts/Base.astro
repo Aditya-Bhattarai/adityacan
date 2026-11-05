@@ -19,7 +19,7 @@ import { getImages, getSettings } from '../lib/content.js';
 
 const {
   title,
-  description = 'Filmmaker and content strategist from Kathmandu, Nepal. Content, directed like films. Built to perform.',
+  description = 'Filmmaker and content strategist from Kathmandu, Nepal. Content, directed like films.',
   current = '',
   theme = 'light',
   image = null,
@@ -28,7 +28,7 @@ const {
 } = Astro.props;
 
 const settings = getSettings();
-const pageTitle = title ? `${title} — ${settings.name}` : `${settings.name} — Filmmaker & content strategist, Kathmandu`;
+const pageTitle = title ? `${title} | ${settings.name}` : `${settings.name} | Filmmaker and content strategist`;
 // The clean address of this page, like /about (never /about.html).
 const cleanPath = Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '').replace(/\/$/, '') || '/';
 const canonical = new URL(cleanPath, Astro.site);
@@ -48,7 +48,7 @@ const person = {
   jobTitle: 'Filmmaker and content strategist',
   address: { '@type': 'PostalAddress', addressLocality: 'Kathmandu', addressCountry: 'NP' },
   email: settings.email ? `mailto:${settings.email}` : undefined,
-  sameAs: [settings.instagram, settings.linkedin, settings.youtube, settings.vimeo].filter(Boolean),
+  sameAs: [settings.instagram, settings.instagramPhotos, settings.linkedin, settings.youtube, settings.vimeo].filter(Boolean),
 };
 ---
 
