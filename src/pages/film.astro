@@ -1,7 +1,6 @@
 ---
 // FILM CHAPTER (dark). Words are in site-content/pages/film.yaml
 import Base from '../layouts/Base.astro';
-import GradeSlider from '../components/GradeSlider.astro';
 import NextChapter from '../components/NextChapter.astro';
 import Picture from '../components/Picture.astro';
 import TitleTile from '../components/TitleTile.astro';
@@ -26,10 +25,6 @@ const selectionStills = selection ? getImages(`${selection.folder}/stills`) : []
 const selectionPhotos = (page.selection?.photos ?? []).map((name) => selectionStills.find((still) => still.path.includes(name))).filter(Boolean);
 
 const films = work.filter((project) => project.chapterKey === 'film');
-
-const grade = projects.find((project) => project.slug === page.grade.project);
-const before = grade ? getImages(`${grade.folder}/before`)[0] : null;
-const after = grade ? getImages(`${grade.folder}/after`)[0] : null;
 ---
 
 <Base title={`Chapter ${chapter.number}: ${chapter.title}`} current="work" theme="dark" description="Short films written and directed by Aditya Bhattarai. Still frames, natural light, real sound.">
@@ -123,17 +118,6 @@ const after = grade ? getImages(`${grade.folder}/after`)[0] : null;
     </div>
   </section>
 
-  {before && after && (
-    <section class="wrap craft">
-      <div class="craft__text">
-        <span class="label">{page.grade.kicker}</span>
-        <h2 class="h2 h2--small">{page.grade.title}</h2>
-        <p class="body-text">{page.grade.text}</p>
-      </div>
-      <GradeSlider before={before.image} after={after.image} />
-    </section>
-  )}
-
   <NextChapter current="film" />
 </Base>
 
@@ -143,7 +127,6 @@ const after = grade ? getImages(`${grade.folder}/after`)[0] : null;
 
   .featured { padding-bottom: 96px; display: flex; flex-direction: column; gap: 28px; }
   .featured__labels { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font: 500 12px/1 var(--font-mono); letter-spacing: 0.14em; color: var(--label); }
-  .featured__band { background: #000; padding-block: clamp(16px, 3vw, 40px); }
   .scope { aspect-ratio: 2.39 / 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(8px, 2vw, 20px); border-block: 1px solid #2a2a28; }
   .scope__word { font-weight: 600; font-size: clamp(56px, 15vw, 200px); line-height: 1; letter-spacing: -0.01em; }
   .scope__credit { font: 500 clamp(9px, 1.1vw, 13px)/1 var(--font-mono); letter-spacing: 0.3em; color: var(--night-muted); text-align: center; }
@@ -174,12 +157,8 @@ const after = grade ? getImages(`${grade.folder}/after`)[0] : null;
   .film__title { font-weight: 600; font-size: 20px; line-height: 1.15; letter-spacing: -0.02em; }
   .film__log { font-size: 14px; line-height: 1.45; color: var(--text); }
 
-  .craft { padding-bottom: 112px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 40px; align-items: center; }
-  .craft__text { display: flex; flex-direction: column; gap: 16px; }
-
   @media (max-width: 700px) {
     .film-title { padding-block: 32px 48px; }
     .featured, .filmography, .selection { padding-bottom: 64px; }
-    .craft { padding-bottom: 72px; }
   }
 </style>

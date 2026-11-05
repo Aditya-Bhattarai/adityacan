@@ -1,6 +1,6 @@
 # FILM chapter words. The chapter number comes from chapters.yaml.
 
-statement: Static frames, natural light and the sound that was really there.
+statement: Small stories I couldn’t leave alone.
 intro: Films I’ve written and directed at film school, the screenplays behind them, and the sets I’ve worked on.
 
 featured:
@@ -9,7 +9,7 @@ featured:
   nepali: सपना
   english: Sapana
   meta: SHORT FILM · ABOUT 2 MIN · NEPALI · FILM SCHOOL FIRST YEAR FINAL
-  logline: A daughter walks to her mother’s grave, scolded the whole way by a mother who isn’t there.
+  logline: A daughter walks through the pines with a white lily in her hand. Her mother has something to say about everything.
   note: Shot entirely in static frames with natural light, live sound and no score.
 
 # The festival selection band. Pictures come from the project's stills folder.
@@ -25,9 +25,3 @@ selection:
 filmography:
   title: Filmography
   note: "ROLE TAGS: DIRECTOR · WRITER · EDITOR · ASSISTANT DIRECTOR"
-
-grade:
-  project: colour-grading
-  kicker: CRAFT · COLOUR
-  title: Log to grade.
-  text: Drag the line to compare the flat camera file with the final grade.

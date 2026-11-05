@@ -57,7 +57,7 @@ const jsonLd = {
 };
 ---
 
-<Base title={project.title} current="work" description={project.oneLiner || `${project.title}, a project by Aditya Bhattarai.`} image={project.wideImage?.image ?? project.cover?.image ?? project.logo?.image} jsonLd={jsonLd}>
+<Base title={project.title} current="work" theme={dark ? 'dark' : 'light'} description={project.oneLiner || `${project.title}, a project by Aditya Bhattarai.`} image={project.wideImage?.image ?? project.cover?.image ?? project.logo?.image} jsonLd={jsonLd}>
   <section class="wrap head">
     <nav class="crumbs" aria-label="Breadcrumb">
       <a href="/work">WORK</a><span>/</span>
@@ -264,8 +264,11 @@ const jsonLd = {
   .media__caption { font-size: 14px; line-height: 1.35; }
 
   .documents { padding-bottom: 96px; }
-  .documents__grid { margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr)); gap: 12px; }
+  .documents__grid { margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(200px, 46%), 1fr)); gap: 12px; }
   .documents__item { display: flex; flex-direction: column; gap: 8px; font-size: 14px; text-decoration: none; }
+  /* Show the whole page of a document, not a cropped part of it. */
+  .documents__item .frame { background: #fff; }
+  .documents__item :global(img) { object-fit: contain; }
 
   .credits { border-block: 1px solid var(--hairline); }
   .credits__inner { max-width: 880px; margin-inline: auto; padding: 80px var(--gutter); display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center; }

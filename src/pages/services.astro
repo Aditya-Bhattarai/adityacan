@@ -1,10 +1,15 @@
 ---
 // SERVICES & PROCESS. Words are in site-content/pages/services.yaml. No prices anywhere.
 import Base from '../layouts/Base.astro';
+import GradeSlider from '../components/GradeSlider.astro';
 import Picture from '../components/Picture.astro';
-import { clean, getImages, getPage } from '../lib/content.js';
+import { clean, getImages, getPage, getProjects } from '../lib/content.js';
 
 const page = await getPage('services');
+const projects = await getProjects();
+const grade = projects.find((project) => project.slug === page.grade.project);
+const before = grade ? getImages(`${grade.folder}/before`)[0] : null;
+const after = grade ? getImages(`${grade.folder}/after`)[0] : null;
 // Photos under the process steps. Add or swap files in site-content/services/process-photos.
 const processPhotos = getImages('services/process-photos').slice(0, 4);
 const faq = page.faq.filter((item) => clean(item.answer));
@@ -51,6 +56,17 @@ const number = (index) => String(index + 1).padStart(2, '0');
       ))}
     </div>
   </section>
+
+  {before && after && (
+    <section class="wrap craft">
+      <div class="craft__text">
+        <span class="label">{page.grade.kicker}</span>
+        <h2 class="h2 h2--small">{page.grade.title}</h2>
+        <p class="body-text">{page.grade.text}</p>
+      </div>
+      <GradeSlider before={before.image} after={after.image} />
+    </section>
+  )}
 
   <section class="wrap process">
     <div class="process__head">
@@ -142,6 +158,9 @@ const number = (index) => String(index + 1).padStart(2, '0');
   .service__outputs { align-content: flex-start; }
   .service__output { padding: 6px 10px; background: var(--paper); border-radius: var(--radius-pill); font: 500 11px/1 var(--font-mono); }
 
+  .craft { padding-top: 96px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 40px; align-items: center; }
+  .craft__text { display: flex; flex-direction: column; gap: 16px; }
+
   .process { padding-block: 96px; }
   .process__head { display: flex; flex-direction: column; gap: 12px; margin-bottom: 40px; }
   .steps { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
@@ -181,6 +200,7 @@ const number = (index) => String(index + 1).padStart(2, '0');
     .venn__circle--right { padding-right: 22px; }
     .venn__circle span { max-width: 84px; }
     .what, .process { padding-block: 64px; }
+    .craft { padding-top: 64px; }
     .steps { grid-template-columns: 1fr 1fr; }
     .process__photos { grid-template-columns: 1fr 1fr; margin-top: 32px; }
     .ways, .gap-section { padding-bottom: 64px; }

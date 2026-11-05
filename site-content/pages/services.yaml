@@ -34,6 +34,13 @@ services:
     text: Narrative and documentary edits with sound design and colour.
     outputs: [Documentary, Short film, Colour]
 
+# The before and after colour slider. Pictures come from site-content/02-film/colour-grading.
+grade:
+  project: colour-grading
+  kicker: CRAFT · COLOUR
+  title: Log to grade.
+  text: Drag the line to compare the flat camera file with the final grade.
+
 process:
   - when: WEEK 1
     title: Audit

@@ -23,7 +23,7 @@ screenplay: "sapana"
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-A daughter walks to her mother's grave, scolded the whole way by a mother who isn't there.
+A daughter walks through the pines with a white lily in her hand. Her mother has something to say about everything.
 
 ## The brief
 First year final: static shots, natural light, live sound, no music, about two minutes long.

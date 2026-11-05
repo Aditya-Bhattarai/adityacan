@@ -66,7 +66,7 @@ const columns = [
 
 <style>
   .site-footer { background: var(--bg); color: var(--fg); border-top: 1px solid var(--hairline); }
-  .site-footer__inner { padding-block: 72px 32px; display: flex; flex-direction: column; gap: 56px; }
+  .site-footer__inner { padding-block: 72px 32px; display: flex; flex-direction: column; gap: 56px; container-type: inline-size; }
   .site-footer__title {
     text-align: center;
     font: 500 12px/1 var(--font-mono);
@@ -87,7 +87,9 @@ const columns = [
   .site-footer__column a:hover { text-decoration: underline; color: inherit; }
   .site-footer__wordmark {
     font-weight: 700;
-    font-size: clamp(44px, 12.4vw, 190px);
+    /* The name is about 6.5 times as wide as its font size, so this always fills the row exactly. */
+    font-size: min(12vw, 190px);
+    font-size: calc(100cqw / 6.56);
     line-height: 0.95;
     padding-bottom: 0.08em;
     letter-spacing: -0.055em;
@@ -107,8 +109,8 @@ const columns = [
 
   @media (max-width: 700px) {
     .site-footer__columns { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; }
-    .site-footer__column a { min-height: 44px; }
+    /* Sized so the email address stays on one line in its half width column. */
+    .site-footer__column a { min-height: 44px; font-size: clamp(12px, calc((100vw - 68px) / 21.8), 16px); }
     .site-footer__end a { display: inline-flex; align-items: center; min-height: 44px; }
-    .site-footer__wordmark { font-size: 14.2vw; }
   }
 </style>

@@ -18,7 +18,7 @@ const meta = [typeName, piece.year, piece.minutes ? `${piece.minutes} MIN READ` 
 const next = pieces[(pieces.indexOf(piece) + 1) % pieces.length];
 ---
 
-<Base title={piece.title} current="writing" description={piece.description || `${piece.title}, by Aditya Bhattarai.`}>
+<Base title={piece.title} current="writing" theme={piece.type === 'screenplay' ? 'dark' : 'light'} description={piece.description || `${piece.title}, by Aditya Bhattarai.`}>
   <article class="wrap piece">
     <a class="meta piece__back" href="/writing">← WRITING</a>
     <header class="piece__head">
@@ -58,15 +58,15 @@ const next = pieces[(pieces.indexOf(piece) + 1) % pieces.length];
 <style>
   .piece { padding-block: 48px 96px; }
   .piece__back { display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; }
-  .piece__head { padding-block: 24px 40px; display: flex; flex-direction: column; gap: 16px; border-bottom: 1px solid var(--ink); }
+  .piece__head { padding-block: 24px 40px; display: flex; flex-direction: column; gap: 16px; border-bottom: 1px solid var(--fg); }
   .piece__title { font-size: clamp(52px, 9vw, 136px); line-height: 0.92; }
   .piece__description { max-width: 780px; font-size: clamp(22px, 2.4vw, 32px); line-height: 1.25; }
-  .piece__note { font: 500 12px/1.6 var(--font-mono); letter-spacing: 0.04em; color: var(--muted); }
-  .piece__text { max-width: 680px; margin-inline: auto; padding-top: 56px; display: flex; flex-direction: column; gap: 24px; font-family: var(--font-serif); font-size: clamp(21px, 2vw, 24px); line-height: 1.45; color: var(--quiet); }
+  .piece__note { font: 500 12px/1.6 var(--font-mono); letter-spacing: 0.04em; color: var(--label); }
+  .piece__text { max-width: 680px; margin-inline: auto; padding-top: 56px; display: flex; flex-direction: column; gap: 24px; font-family: var(--font-serif); font-size: clamp(21px, 2vw, 24px); line-height: 1.45; color: var(--statement); }
   .piece__pdf { padding-top: 40px; display: flex; flex-direction: column; align-items: flex-start; gap: 28px; }
-  .piece__preview { display: block; width: min(360px, 70vw); border: 1px solid var(--line); border-radius: var(--radius-thumb); overflow: hidden; transition: opacity 200ms ease; }
+  .piece__preview { display: block; width: min(360px, 70vw); border: 1px solid var(--hairline); border-radius: var(--radius-thumb); overflow: hidden; transition: opacity 200ms ease; }
   .piece__preview:hover { opacity: 0.85; }
-  .next { display: flex; flex-direction: column; gap: 12px; padding-block: 72px; border-top: 1px solid var(--line); text-decoration: none; }
+  .next { display: flex; flex-direction: column; gap: 12px; padding-block: 72px; border-top: 1px solid var(--hairline); text-decoration: none; }
   .next:hover { color: inherit; }
   .next__title { font-weight: 600; font-size: clamp(36px, 6vw, 88px); line-height: 0.95; letter-spacing: -0.045em; }
 
