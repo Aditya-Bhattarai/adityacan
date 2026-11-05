@@ -110,7 +110,7 @@ const langtangText = clean(page.langtang.text);
         <div class="section-head__titles">
           <span class="label">{chapter.number}.3 · {page.photos.kicker}</span>
           <h2 class="h2">{page.photos.title}</h2>
-          {settings.instagramPhotos && <a class="photos__more" href={settings.instagramPhotos} rel="noopener">More of my photographs on Instagram: {handleFrom(settings.instagramPhotos)}</a>}
+          {settings.instagramPhotos && <a class="photos__more" href={settings.instagramPhotos} target="_blank" rel="noopener">More of my photographs on Instagram: {handleFrom(settings.instagramPhotos)}</a>}
         </div>
         {photos.length > PHOTOS_SHOWN && <a class="btn btn--ghost" href={photography.href}>All {photos.length} photographs</a>}
       </div>
@@ -177,7 +177,7 @@ const langtangText = clean(page.langtang.text);
 
   .photos { padding-block: 96px; }
   .photos .section-head { margin-bottom: 28px; }
-  .photos__more { font-size: 15px; line-height: 1.5; }
+  .photos__more { font-size: 15px; line-height: 1.5; padding-block: 10px; margin-block: -10px; }
   .photos__grid { columns: 3 280px; column-gap: 12px; }
   .photos__item { margin-bottom: 12px; break-inside: avoid; display: flex; flex-direction: column; gap: 6px; }
 

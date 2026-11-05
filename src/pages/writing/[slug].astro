@@ -18,7 +18,7 @@ const meta = [typeName, piece.year, piece.minutes ? `${piece.minutes} MIN READ` 
 const next = pieces[(pieces.indexOf(piece) + 1) % pieces.length];
 ---
 
-<Base title={piece.title} current="writing" theme={piece.type === 'screenplay' ? 'dark' : 'light'} description={piece.description || `${piece.title}, by Aditya Bhattarai.`}>
+<Base title={piece.type === 'screenplay' ? `${piece.title}, screenplay` : piece.title} current="writing" theme={piece.type === 'screenplay' ? 'dark' : 'light'} description={piece.description || `${piece.title}, by Aditya Bhattarai.`}>
   <article class="wrap piece">
     <a class="meta piece__back" href="/writing">← WRITING</a>
     <header class="piece__head">

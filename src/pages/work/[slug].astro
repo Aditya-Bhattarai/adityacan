@@ -8,7 +8,8 @@ import VideoFacade from '../../components/VideoFacade.astro';
 import { getProjects, getWorkProjects, getWriting } from '../../lib/content.js';
 
 export async function getStaticPaths() {
-  const projects = await getProjects();
+  // The grade slider's pictures live in a project folder too, but it isn't a project of its own.
+  const projects = await getWorkProjects();
   return projects.map((project) => ({ params: { slug: project.slug }, props: { slug: project.slug } }));
 }
 
@@ -33,9 +34,11 @@ const results = project.results.map((line) => {
   return match ? { number: match[1], label: match[2] } : { text: line };
 });
 
-const people = project.people.length ? `Host: ${project.people.join(', ')}` : '';
+const people = project.people.length ? `With ${project.people.join(', ')}` : '';
+// Only client work gets a CLIENT line. Your own films, courses and photos don't have a client.
+const showClient = project.client && (project.clientLabel || project.chapterKey === 'strategy-content');
 const meta = [
-  project.client && { label: project.clientLabel || 'CLIENT', lines: [project.client, project.client !== project.people[0] ? people : ''].filter(Boolean) },
+  showClient && { label: project.clientLabel || 'CLIENT', lines: [project.client, project.client !== project.people[0] ? people : ''].filter(Boolean) },
   project.format && { label: 'FORMAT', lines: [project.format] },
   project.years && { label: 'YEAR', lines: [project.years] },
 ].filter(Boolean);
@@ -217,7 +220,7 @@ const jsonLd = {
 <style>
   .head { padding-top: 48px; }
   .crumbs { display: flex; flex-wrap: wrap; gap: 8px; font: 500 12px/1.6 var(--font-mono); letter-spacing: 0.05em; color: var(--label); }
-  .crumbs a { color: var(--label); }
+  .crumbs a { color: var(--label); padding-block: 14px; margin-block: -14px; }
   .crumbs__current { color: var(--fg); }
   .head__row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; padding-block: 40px 32px; border-bottom: 1px solid var(--fg); }
   .head__titles { display: flex; flex-direction: column; gap: 10px; min-width: 0; }

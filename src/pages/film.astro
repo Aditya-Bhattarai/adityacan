@@ -45,7 +45,7 @@ const films = work.filter((project) => project.chapterKey === 'film');
         {sapana.video ? (
           <VideoFacade video={sapana.video} poster={sapanaStill?.image} ratio="2.39/1" large widths={[800, 1600]} sizes="(max-width: 1320px) 100vw, 1272px" />
         ) : sapanaStill ? (
-          <div class="frame" style="aspect-ratio:2.39/1;border-radius:0"><Picture image={sapanaStill.image} alt="A still from Sapana" widths={[800, 1600]} sizes="(max-width: 1320px) 100vw, 1272px" /></div>
+          <div class="frame" style="aspect-ratio:2.39/1;border-radius:0"><Picture image={sapanaStill.image} alt="A still from Sapana" widths={[800, 1600]} sizes="(max-width: 1320px) 100vw, 1272px" eager /></div>
         ) : (
           <div class="scope">
             <span class="scope__word">{page.featured.nepali}</span>

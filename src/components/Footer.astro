@@ -50,7 +50,7 @@ const columns = [
         <div class="site-footer__column">
           <div class="label label--small">{column.heading}</div>
           {column.items.map((item) => (
-            <a href={item.href} rel={item.href.startsWith('http') ? 'noopener' : undefined}>{item.text}</a>
+            <a href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noopener' : undefined}>{item.text}</a>
           ))}
         </div>
       ))}

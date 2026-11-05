@@ -81,7 +81,7 @@ const elsewhere = [
       <a class="btn btn--primary btn--large menu__book" href="/contact#book">Book a call</a>
       <p class="menu__meta">
         KTM <span data-timecode>00:00:00:00</span>
-        {elsewhere.map((item) => <> · <a href={item.href} rel="noopener">{item.label.toUpperCase()}</a></>)}
+        {elsewhere.map((item) => <> · <a href={item.href} target="_blank" rel="noopener">{item.label.toUpperCase()}</a></>)}
       </p>
     </div>
   </div>
@@ -109,6 +109,9 @@ const elsewhere = [
   }
   .site-header__brand { display: flex; align-items: baseline; gap: 16px; min-width: 0; }
   .site-header__name {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
     color: inherit;
     text-decoration: none;
     font-weight: 600;

@@ -32,7 +32,7 @@ const calendarUrl = `${settings.calendly}?hide_gdpr_banner=1&background_color=f1
       </ol>
       <div class="channels">
         {channels.map((channel) => (
-          <a href={channel.href} rel={channel.href.startsWith('http') ? 'noopener' : undefined}>
+          <a href={channel.href} target={channel.href.startsWith('http') ? '_blank' : undefined} rel={channel.href.startsWith('http') ? 'noopener' : undefined}>
             <span class="label label--small">{channel.label}</span>
             <span class="channels__value">{channel.value} ↗</span>
           </a>
@@ -46,7 +46,7 @@ const calendarUrl = `${settings.calendly}?hide_gdpr_banner=1&background_color=f1
         <div class="calendar__fallback">
           <span class="calendar__title">Calendly booking calendar</span>
           <span class="meta">30 MINUTES · GOOGLE MEET</span>
-          <a class="btn btn--primary" href={settings.calendly} rel="noopener">Open the calendar</a>
+          <a class="btn btn--primary" href={settings.calendly} target="_blank" rel="noopener">Open the calendar</a>
         </div>
       </div>
     </div>
