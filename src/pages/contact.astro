@@ -1,9 +1,12 @@
 ---
 // CONTACT. Words are in site-content/pages/contact.yaml. Email and links are in site-content/about/bio.md
 import Base from '../layouts/Base.astro';
-import { getPage, getSettings, handleFrom } from '../lib/content.js';
+import Picture from '../components/Picture.astro';
+import { getImages, getPage, getSettings, handleFrom } from '../lib/content.js';
 
 const page = await getPage('contact');
+// Small round photo of you next to the reply line. Comes from site-content/about/avatar/
+const face = getImages('about/avatar')[0];
 const settings = getSettings();
 const short = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
 
@@ -38,7 +41,10 @@ const calendarUrl = `${settings.calendly}?hide_gdpr_banner=1&background_color=f1
           </a>
         ))}
       </div>
-      <div class="contact__location"><span class="live-dot"></span>{page.location_line}</div>
+      <div class="contact__location">
+        {face && <span class="contact__face"><Picture image={face.image} alt="Aditya Bhattarai" widths={[96, 144]} sizes="48px" /></span>}
+        <span class="live-dot"></span>{page.location_line}
+      </div>
     </div>
 
     <div class="contact__right" id="book">
@@ -67,6 +73,8 @@ const calendarUrl = `${settings.calendly}?hide_gdpr_banner=1&background_color=f1
   .channels a { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 52px; border-bottom: 1px solid var(--line); text-decoration: none; }
   .channels__value { font-weight: 500; font-size: 17px; overflow-wrap: anywhere; text-align: right; }
   .contact__location { display: inline-flex; align-items: center; gap: 10px; font: 500 12px/1.5 var(--font-mono); color: var(--muted); }
+  .contact__face { flex: none; width: 48px; height: 48px; border-radius: 50%; overflow: hidden; background: var(--panel); }
+  .contact__face :global(img) { width: 100%; height: 100%; object-fit: cover; }
 
   .contact__right { flex: 1.3 1 min(480px, 100%); min-width: 0; scroll-margin-top: 88px; }
   .calendar { min-height: 720px; border: 1px solid var(--line); border-radius: var(--radius-card); overflow: hidden; background: var(--paper); }

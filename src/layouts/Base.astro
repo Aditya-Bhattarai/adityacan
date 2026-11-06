@@ -40,7 +40,12 @@ const shareImage = shareSource
   : null;
 const shareUrl = shareImage ? new URL(shareImage.src, Astro.site) : null;
 
+// Your portrait, for search engines (site-content/about/portrait/).
+const portraitSource = getImages('about/portrait')[0]?.image;
+const portraitImage = portraitSource ? await getImage({ src: portraitSource, width: 800, format: 'jpeg', quality: 80 }) : null;
+
 const person = {
+  image: portraitImage ? new URL(portraitImage.src, Astro.site).href : undefined,
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: settings.name,

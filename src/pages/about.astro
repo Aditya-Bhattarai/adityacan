@@ -27,7 +27,7 @@ const credits = page.credits.map((credit) => (
   <section class="wrap intro">
     {lead && (
       <div class="intro__image">
-        <div class="frame" style="aspect-ratio:4/5;border-radius:6px"><Picture image={lead.image} alt={portrait ? settings.name : 'A street at dusk in black and white, photographed by Aditya'} widths={[440, 560, 720, 1040]} sizes="(max-width: 800px) 75vw, 520px" eager style="filter:grayscale(1)" /></div>
+        <div class="frame" style="aspect-ratio:4/5;border-radius:6px"><Picture image={lead.image} alt={portrait ? settings.name : 'A street at dusk in black and white, photographed by Aditya'} widths={[440, 560, 720, 1040]} sizes="(max-width: 800px) 75vw, 520px" eager style={portrait ? undefined : 'filter:grayscale(1)'} /></div>
       </div>
     )}
     <div class="intro__text">
