@@ -1,13 +1,13 @@
 ---
-title: "Social media for older adults"
+title: "Social media and editing classes"
 order: 330
 chapter: "teaching"
 client: "[Organiser / place]"
 people: []
 roles: ["Teacher"]
 years: "[YEAR]"
-format: "Classes for older adults"
-formats: ["Digital literacy", "Community"]
+format: "Classroom and community classes"
+formats: ["7 modules", "Older adults", "Community homestay"]
 featured: false
 permission: "yes"
 links: {"featured_video": "", "more": []}
@@ -22,13 +22,15 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-Classes for older people who never grew up with social media. We start with what it is and why people use it, then how to use it.
+Classes on social media and editing short videos. A seven module classroom course on editing for social media, and classes for older people who never grew up with it, including content classes at a community homestay.
 
 ## The brief
 [What the client needed / why the project existed.]
 
 ## What I did
-- [Your role, in plain words]
+- Taught a seven module course on editing short videos for social media
+- Taught older adults what social media is, why people use it and how to use it
+- Ran content creation classes for older adults at a community homestay
 
 ## Results
 - [Real numbers or outcomes — or delete this section]

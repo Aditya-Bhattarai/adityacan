@@ -2,7 +2,7 @@
 title: "सपना / Sapana"
 order: 100
 chapter: "film"
-client: "Film school (first year final)"
+client: "First year short film, film school"
 people: []
 roles: ["Writer", "Director"]
 years: "2026"

@@ -5,7 +5,7 @@ statement: I teach what took me years to figure out.
 frame:
   kicker: MY MAIN COURSE
   title: Frame
-  text: My video editing course. 18 modules over three levels, starting in CapCut and ending in After Effects and colour grading.
+  text: My video editing course. 18 modules over three levels, starting in CapCut and ending in After Effects and colour grading. I also ran it live as Premiere Pro for creators, eight days, two hours a day, with a Q&A every day and practice footage, SFX packs, project files and presets to keep.
   curriculum_link: "[View curriculum link]"
   enrol_link: "[Enrol / waitlist link]"
   levels:
@@ -20,20 +20,10 @@ frame:
       text: Motion graphics in After Effects, and colour grading.
 
 courses:
-  - kicker: LIVE COURSE
-    title: Premiere Pro for creators
-    text: Eight days, two hours a day, for people making reels and online videos. We did a Q&A every day, and I gave out practice footage, SFX packs, project files, presets and two new shortcuts a day.
-    tags: [8 days, Premiere Pro, Reels]
-    project: premiere-pro-course
-  - kicker: CLASSROOM
-    title: Editing for social media
-    text: A classroom course in seven modules, all about editing short videos for social media.
-    tags: [7 modules, Short form]
-    project: social-media-editing-course
-  - kicker: COMMUNITY
-    title: Social media for older adults
-    text: Classes for older people who never grew up with social media. We start with what it is and why people use it, then how to use it.
-    tags: [Older adults, Community]
+  - kicker: CLASSROOM AND COMMUNITY
+    title: Social media and editing classes
+    text: A seven module classroom course on editing short videos for social media, and classes for older people who never grew up with social media, including content classes at a community homestay. We start with what it is and why people use it, then how to use it.
+    tags: [7 modules, Older adults, Community homestay]
     project: senior-digital-literacy
 
 workshops:

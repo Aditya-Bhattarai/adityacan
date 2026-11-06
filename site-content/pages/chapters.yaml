@@ -1,6 +1,8 @@
 # THE FOUR CHAPTERS, in the order they appear on the site.
 # To change the order, move a whole block up or down and save.
 # The chapter numbers (I, II, III, IV), the "next chapter" links and the menus all update by themselves.
+# home_pictures: the five small pictures on each chapter card on the homepage, as paths inside site-content.
+# Leave it out and the site picks pictures from the chapter's projects by itself.
 
 - key: film
   title: Film
@@ -9,6 +11,12 @@
   description: The short films I’ve made at film school, and Path to Prosperity, which I was assistant director on.
   tags: [Director, Writer, Assistant director]
   theme: ink
+  home_pictures:
+    - 02-film/sapana/stills/01_the-clearing.jpg
+    - 02-film/deadline/poster/01_at-the-desk.jpg
+    - 02-film/sapana/stills/04_the-lily.jpg
+    - 02-film/path-to-prosperity/stills/02_festival-group-photo.jpg
+    - 02-film/sapana/stills/05_walking-together.jpg
 
 - key: strategy-content
   title: Strategy & Content
@@ -17,6 +25,12 @@
   description: YouTube, podcasts, reels and brand content for some of Nepal’s biggest creators.
   tags: [Editor, Strategist, Thumbnails, Motion]
   theme: panel
+  home_pictures:
+    - 01-strategy-content/ideapreneur-nepal/covers/09_fonepay-student-ambassadors.jpg
+    - 01-strategy-content/ideapreneur-nepal/thumbnails/02_buy-gold-and-silver-for-rs-100.jpg
+    - 01-strategy-content/satik-kura/covers/04_the-engine-behind-nepals-financial-system.jpg
+    - 01-strategy-content/ideapreneur-nepal/covers/05_the-hundi-scam.jpg
+    - 01-strategy-content/satik-kura/covers/08_pathao-why-so-expensive.jpg
 
 - key: teaching
   title: Teaching
@@ -25,6 +39,10 @@
   description: Editing courses for creators, and classes that show older people how social media works.
   tags: [Courses, Workshops, Curriculum]
   theme: panel
+  home_pictures:
+    - 04-teaching/frame-course/poster/01_editing-setup.jpg
+    - 04-teaching/frame-course/photos/01_the-timeline.jpg
+    - 04-teaching/frame-course/photos/02_green-screen.jpg
 
 - key: trekking-guide
   title: Trekking Guide
@@ -33,3 +51,9 @@
   description: I’m a licensed trekking guide. I film in the mountains, take a lot of photos, and have taught content classes at a community homestay.
   tags: [Licensed guide, Filmmaker, Photographer]
   theme: panel
+  home_pictures:
+    - 03-trekking-guide/langtang-diaries/stills/02_langtang-village.jpg
+    - 03-trekking-guide/trekking-guide/poster/01_at-kyangjin.jpg
+    - 03-trekking-guide/photography/photos/03_boudhanath-dusk.jpg
+    - 03-trekking-guide/langtang-diaries/stills/03_prayer-flags.jpg
+    - 03-trekking-guide/photography/photos/28_snow-range-from-the-hills.jpg

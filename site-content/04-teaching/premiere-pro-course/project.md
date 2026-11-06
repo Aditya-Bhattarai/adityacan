@@ -9,7 +9,7 @@ years: "[YEAR]"
 format: "8 days × 2 h, live"
 formats: ["8 days", "Premiere Pro", "Reels"]
 featured: false
-permission: "yes"
+permission: "no" # Merged into Frame (frame-course) at Aditya's request, 6 Nov 2026.
 links: {"featured_video": "", "more": []}
 stats: []
 ---

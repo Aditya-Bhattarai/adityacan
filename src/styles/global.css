@@ -193,17 +193,13 @@ a:hover { color: var(--label); }
 .frame--contain { background: var(--paper); border: 1px solid var(--hairline); }
 .frame--contain img { object-fit: contain; padding: 12%; }
 
-/* Rows that scroll sideways. Phones swipe, computers get a thin scrollbar and can drag. */
-.scroll-row { -webkit-overflow-scrolling: touch; }
-@media (hover: none) {
-  .scroll-row { scrollbar-width: none; }
-  .scroll-row::-webkit-scrollbar { display: none; }
+/* Rows that scroll sideways never show a grey scroll bar. People swipe, use a trackpad or the arrows. */
+.scroll-row, .index__scroll, .brand__strip, .langtang__stills, .media__tabs {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
-@media (hover: hover) {
-  .scroll-row { scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
-  [data-row] { cursor: grab; }
-  [data-row]:active { cursor: grabbing; }
-}
+.scroll-row::-webkit-scrollbar, .index__scroll::-webkit-scrollbar, .brand__strip::-webkit-scrollbar,
+.langtang__stills::-webkit-scrollbar, .media__tabs::-webkit-scrollbar { display: none; }
 
 /* ---------- Chapter title card (Wes Anderson framing) ---------- */
 .title-card-section { padding: 80px var(--gutter); }

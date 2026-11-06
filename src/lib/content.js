@@ -281,6 +281,15 @@ export async function getWorkProjects() {
 
 /** Up to `count` images for a chapter card, drawn evenly across its projects. */
 export async function getChapterThumbs(chapterKey, count = 5) {
+  // Pictures picked by hand in chapters.yaml (home_pictures) come first, so nothing repeats.
+  const chosen = (getChapters().find((chapter) => chapter.key === chapterKey)?.home_pictures ?? [])
+    .map((path) => {
+      const key = `/site-content/${path}`;
+      return allImages[key] ? { image: allImages[key], caption: captionFromFile(key), path: key } : null;
+    })
+    .filter(Boolean);
+  if (chosen.length) return chosen.slice(0, count);
+
   const projects = (await getProjects()).filter((project) => project.chapterKey === chapterKey);
   const pools = projects.map((project) => [
     ...imagesIn(`${project.folder}/covers`),

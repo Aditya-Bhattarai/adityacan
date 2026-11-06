@@ -9,7 +9,7 @@ years: "[YEAR]"
 format: ""
 formats: []
 featured: false
-permission: "yes"
+permission: "no" # Merged into Social media and editing classes (senior-digital-literacy), 6 Nov 2026.
 links: {"featured_video": "", "more": []}
 stats: []
 ---

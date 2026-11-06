@@ -16,9 +16,24 @@ const project = piece.project ? await getProject(piece.project) : null;
 const typeName = { screenplay: 'SCREENPLAY', 'short-fiction': 'SHORT FICTION', essay: 'ESSAY' }[piece.type] ?? 'WRITING';
 const meta = [typeName, piece.year, piece.minutes ? `${piece.minutes} MIN READ` : piece.pages ? `${piece.pages} PAGES` : ''].filter(Boolean).join(' · ');
 const next = pieces[(pieces.indexOf(piece) + 1) % pieces.length];
+
+// Screenplays are written in piece.md in a simple form (see the note at the top of each file):
+// "@NAME" starts a speech, "(...)" lines are directions, "> TEXT" is a transition, INT. or EXT. starts a scene.
+const isScript = piece.type === 'screenplay' && piece.paragraphs.length > 0;
+const blocks = isScript ? piece.paragraphs.map((text) => {
+  if (text.startsWith('@')) {
+    const [name, ...rest] = text.split(/\r?\n/);
+    const lines = rest.map((line) => line.trim()).filter(Boolean)
+      .map((line) => ({ kind: line.startsWith('(') ? 'direction' : 'line', text: line }));
+    return { kind: 'speech', name: name.slice(1).trim(), lines };
+  }
+  if (text.startsWith('>')) return { kind: 'transition', text: text.slice(1).trim() };
+  if (/^(INT|EXT)[.\s]/.test(text)) return { kind: 'scene', text };
+  return { kind: 'action', text };
+}) : [];
 ---
 
-<Base title={piece.type === 'screenplay' ? `${piece.title}, screenplay` : piece.title} current="writing" theme={piece.type === 'screenplay' ? 'dark' : 'light'} description={piece.description || `${piece.title}, by Aditya Bhattarai.`}>
+<Base title={piece.type === 'screenplay' ? `${piece.title}, screenplay` : piece.title} current="writing" theme="light" description={piece.description || `${piece.title}, by Aditya Bhattarai.`}>
   <article class="wrap piece">
     <a class="meta piece__back" href="/writing">← WRITING</a>
     <header class="piece__head">
@@ -28,7 +43,23 @@ const next = pieces[(pieces.indexOf(piece) + 1) % pieces.length];
       {piece.contentNote && <p class="piece__note">{piece.contentNote}</p>}
     </header>
 
-    {piece.paragraphs.length > 0 && (
+    {isScript && (
+      <div class="script">
+        {blocks.map((block) => (
+          block.kind === 'scene' ? <p class="script__scene">{block.text}</p>
+          : block.kind === 'speech' ? (
+            <div class="script__speech">
+              <p class="script__name">{block.name}</p>
+              {block.lines.map((line) => <p class={line.kind === 'direction' ? 'script__direction' : 'script__line'}>{line.text}</p>)}
+            </div>
+          )
+          : block.kind === 'transition' ? <p class="script__transition">{block.text}</p>
+          : <p class="script__action">{block.text}</p>
+        ))}
+      </div>
+    )}
+
+    {!isScript && piece.paragraphs.length > 0 && (
       <div class="piece__text">
         {piece.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
       </div>
@@ -63,6 +94,17 @@ const next = pieces[(pieces.indexOf(piece) + 1) % pieces.length];
   .piece__description { max-width: 780px; font-size: clamp(22px, 2.4vw, 32px); line-height: 1.25; }
   .piece__note { font: 500 12px/1.6 var(--font-mono); letter-spacing: 0.04em; color: var(--label); }
   .piece__text { max-width: 680px; margin-inline: auto; padding-top: 56px; display: flex; flex-direction: column; gap: 24px; font-family: var(--font-serif); font-size: clamp(21px, 2vw, 24px); line-height: 1.45; color: var(--statement); }
+  /* Screenplays: the usual screenplay layout, set in the same type as the short stories */
+  .script { max-width: 680px; margin-inline: auto; padding-top: 56px; display: flex; flex-direction: column; gap: 22px; color: var(--statement); }
+  .script p { margin: 0; }
+  .script__scene { margin-top: 18px; font: 500 13px/1.5 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg); }
+  .script__scene:first-child { margin-top: 0; }
+  .script__action { font-family: var(--font-serif); font-size: clamp(20px, 1.9vw, 23px); line-height: 1.45; }
+  .script__speech { width: min(100%, 440px); margin-inline: auto; display: flex; flex-direction: column; gap: 4px; text-align: center; }
+  .script__name { font: 500 12px/1.5 var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg); }
+  .script__direction { font-family: var(--font-serif); font-style: italic; font-size: 18px; line-height: 1.35; color: var(--label); }
+  .script__line { font-family: var(--font-serif); font-size: clamp(20px, 1.9vw, 23px); line-height: 1.4; }
+  .script__transition { align-self: flex-end; font: 500 12px/1.5 var(--font-mono); letter-spacing: 0.14em; color: var(--fg); }
   .piece__pdf { padding-top: 40px; display: flex; flex-direction: column; align-items: flex-start; gap: 28px; }
   .piece__preview { display: block; width: min(360px, 70vw); border: 1px solid var(--hairline); border-radius: var(--radius-thumb); overflow: hidden; transition: opacity 200ms ease; }
   .piece__preview:hover { opacity: 0.85; }

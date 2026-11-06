@@ -10,7 +10,8 @@ const chapter = getChapter('trekking-guide');
 const settings = getSettings();
 const projects = await getProjects();
 const langtang = projects.find((project) => project.slug === 'langtang-diaries');
-const homestay = projects.find((project) => project.slug === 'community-homestay-classes');
+// The homestay classes are part of the Social media and editing classes project in Teaching.
+const homestay = projects.find((project) => project.slug === 'senior-digital-literacy');
 const photography = projects.find((project) => project.slug === 'photography');
 
 const cover = getImages('03-trekking-guide/_chapter-cover')[0];
@@ -92,6 +93,7 @@ const langtangText = clean(page.langtang.text);
           <span class="label">{chapter.number}.2 · {page.homestay.kicker}</span>
           <h2 class="homestay__title">{page.homestay.title}</h2>
           <p class="body-text">{page.homestay.text}</p>
+          <a class="homestay__link" href={homestay.href}>See the classes →</a>
         </div>
         {classPhotos.length > 0 && (
           <div class="homestay__photos">
@@ -173,6 +175,7 @@ const langtangText = clean(page.langtang.text);
   .homestay { padding-block: 96px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; }
   .homestay__text { flex: 1 1 360px; display: flex; flex-direction: column; gap: 16px; }
   .homestay__title { max-width: 760px; font-weight: 600; font-size: clamp(34px, 4vw, 56px); line-height: 0.98; letter-spacing: -0.04em; }
+  .homestay__link { align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; font-weight: 500; }
   .homestay__photos { flex: 1.2 1 420px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 
   .photos { padding-block: 96px; }

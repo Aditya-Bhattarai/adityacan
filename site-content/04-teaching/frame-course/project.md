@@ -6,8 +6,8 @@ client: "Own course"
 people: []
 roles: ["Course creator", "Teacher"]
 years: "[YEAR]"
-format: "3 levels · 18 modules: CapCut, Premiere Pro, After Effects, colour grading"
-formats: []
+format: "3 levels · 18 modules, plus a live 8 day Premiere Pro edition"
+formats: ["18 modules", "Premiere Pro", "Live classes"]
 featured: false
 permission: "yes"
 links: {"featured_video": "", "more": []}
@@ -22,7 +22,7 @@ stats: []
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-My video editing course. 18 modules over three levels, starting in CapCut and ending in After Effects and colour grading.
+My video editing course. 18 modules over three levels, starting in CapCut and ending in After Effects and colour grading. I also ran it live as Premiere Pro for creators: eight days, two hours a day, for people making reels and online videos.
 
 ## The brief
 [What the client needed / why the project existed.]
@@ -30,6 +30,8 @@ My video editing course. 18 modules over three levels, starting in CapCut and en
 ## What I did
 - Planned the course
 - Taught the course
+- Ran the live Premiere Pro edition, with a Q&A every day
+- Shared practice footage, SFX packs, project files and presets
 
 ## Results
 - [Real numbers or outcomes — or delete this section]
