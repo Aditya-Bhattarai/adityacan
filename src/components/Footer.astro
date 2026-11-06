@@ -36,7 +36,7 @@ const columns = [
     items: [
       { text: 'Book a call (Calendly)', href: '/contact#book' },
       settings.email && { text: settings.email, href: `mailto:${settings.email}` },
-      settings.whatsapp && { text: `WhatsApp ${settings.whatsapp}`, href: `https://wa.me/${settings.whatsapp.replace(/\D/g, '')}` },
+      settings.whatsapp && { text: `WhatsApp ${settings.whatsapp}`, href: settings.whatsappHref },
     ].filter(Boolean),
   },
 ];

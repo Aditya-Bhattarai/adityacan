@@ -38,6 +38,7 @@ const credits = page.credits.map((credit) => (
       {settings.bio.map((paragraph) => <p class="intro__paragraph">{paragraph}</p>)}
       <div class="btn-row">
         <a class="btn btn--primary" href="/contact#book">Book a call</a>
+        {settings.whatsappHref && <a class="btn btn--ghost" href={settings.whatsappHref} target="_blank" rel="noopener">Message me on WhatsApp</a>}
         {cv && <a class="btn btn--ghost" href={cv}>Download CV</a>}
       </div>
     </div>

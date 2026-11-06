@@ -2,7 +2,7 @@
 name: "Aditya Bhattarai"
 location_public: "Kathmandu, Nepal"
 email_public: "contact@adityacan.com"
-whatsapp: "[+977 …]"
+whatsapp: "+977 9800903829"
 linkedin: "[url]"
 instagram: "https://www.instagram.com/awwdityabhattarai"
 instagram_photos: "https://www.instagram.com/anorigix"

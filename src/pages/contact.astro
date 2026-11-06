@@ -12,7 +12,7 @@ const short = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''
 
 const channels = [
   settings.email && { label: 'EMAIL', value: settings.email, href: `mailto:${settings.email}` },
-  settings.whatsapp && { label: 'WHATSAPP', value: settings.whatsapp, href: `https://wa.me/${settings.whatsapp.replace(/\D/g, '')}` },
+  settings.whatsapp && { label: 'WHATSAPP', value: settings.whatsapp, href: settings.whatsappHref },
   settings.linkedin && { label: 'LINKEDIN', value: short(settings.linkedin), href: settings.linkedin },
   settings.instagram && { label: 'INSTAGRAM', value: handleFrom(settings.instagram), href: settings.instagram },
   settings.instagramPhotos && { label: 'MY PHOTOGRAPHS', value: handleFrom(settings.instagramPhotos), href: settings.instagramPhotos },

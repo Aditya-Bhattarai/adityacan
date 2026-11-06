@@ -97,6 +97,8 @@ export function getSettings() {
     location: clean(data.location_public),
     email: clean(data.email_public),
     whatsapp: clean(data.whatsapp),
+    // Opens a WhatsApp chat with you, with a first line already typed for them
+    whatsappHref: clean(data.whatsapp) ? `https://wa.me/${clean(data.whatsapp).replace(/\D/g, '')}?text=${encodeURIComponent('Hi Aditya, I found you on adityacan.com.')}` : '',
     linkedin: clean(data.linkedin),
     instagram: clean(data.instagram),
     instagramPhotos: clean(data.instagram_photos),
