@@ -54,7 +54,7 @@ In its `project.md`, change `permission: "yes"` to `permission: "ask"`.
 ### Add your portrait
 Put the photo in `site-content/about/portrait/`. The first one by file name is the big photo on the About page.
 
-Two more photos are used elsewhere: `site-content/about/avatar/` is the small round face on the Contact page (use a square photo), and `site-content/about/more-photos/` is the photo in the "Why work with me" band on the homepage, now your edit desk. Replace a file to change it.
+Two more photos are used elsewhere: `site-content/about/avatar/` is the small round face on the Contact page (use a square photo), and `site-content/about/more-photos/` is the photo in the "Why work with me" band on the homepage, now your home editing setup. Any shape of photo works there. Replace a file to change it.
 
 ### Show the 15M+ number
 In `site-content/pages/home.yaml`, under `stats`, change `show: false` to `show: true` for 15M+.
