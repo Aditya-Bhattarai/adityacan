@@ -18,7 +18,7 @@ const logos = getImages('clients/logos');
 const logoFor = (slug) => logos.find((item) => item.path.split('/').pop().replace(/\.[^.]+$/, '') === slug);
 const clients = await Promise.all(home.clients.map(async (client) => ({ ...client, logo: logoFor(client.project), href: (await getProject(client.project))?.href ?? '/clients' })));
 const initials = (name) => name.split(' ').map((word) => word[0]).join('').slice(0, 2);
-// The photo of you in the "Why work with me" band. Comes from site-content/about/more-photos/
+// The photo in the "Why work with me" band. Comes from site-content/about/more-photos/
 const whyPhoto = getImages('about/more-photos')[0];
 const selected = (home.selected_work ?? []).map((slug) => work.find((project) => project.slug === slug)).filter(Boolean);
 
@@ -183,7 +183,7 @@ const heroSizes = '(max-width: 700px) 100vw, 460px';
     <div class="wrap why">
       <div class="why__left">
         <div class="label">{home.why.kicker}</div>
-        {whyPhoto && <div class="frame why__photo" style="aspect-ratio:4/5;border-radius:6px"><Picture image={whyPhoto.image} alt="Aditya Bhattarai" widths={[240, 480]} sizes="220px" /></div>}
+        {whyPhoto && <div class="frame why__photo" style="aspect-ratio:4/5;border-radius:6px"><Picture image={whyPhoto.image} alt="A video edit open in Premiere Pro on Aditya's desk" widths={[240, 480]} sizes="220px" /></div>}
       </div>
       <div class="why__right">
         <p class="statement why__text">{home.why.text}</p>
