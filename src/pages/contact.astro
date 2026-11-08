@@ -8,12 +8,11 @@ const page = await getPage('contact');
 // Small round photo of you next to the reply line. Comes from site-content/about/avatar/
 const face = getImages('about/avatar')[0];
 const settings = getSettings();
-const short = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
 
 const channels = [
   settings.email && { label: 'EMAIL', value: settings.email, href: `mailto:${settings.email}` },
   settings.whatsapp && { label: 'WHATSAPP', value: settings.whatsapp, href: settings.whatsappHref },
-  settings.linkedin && { label: 'LINKEDIN', value: short(settings.linkedin), href: settings.linkedin },
+  settings.linkedin && { label: 'LINKEDIN', value: settings.name, href: settings.linkedin },
   settings.instagram && { label: 'INSTAGRAM', value: handleFrom(settings.instagram), href: settings.instagram },
   settings.instagramPhotos && { label: 'MY PHOTOGRAPHS', value: handleFrom(settings.instagramPhotos), href: settings.instagramPhotos },
   settings.calendly && { label: 'CALENDLY', value: 'Book 30 minutes', href: settings.calendly },
