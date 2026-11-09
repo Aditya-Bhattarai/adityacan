@@ -26,9 +26,9 @@ people:
     brands: [viewfinders, the-doers]
     made:
       - label: eSewa brand content
-        project: esewa
+        project: viewfinders
       - label: Global IME brand content
-        project: global-ime
+        project: viewfinders
       - label: Podcast edits
         project: the-doers
       - label: Production

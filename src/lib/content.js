@@ -208,7 +208,7 @@ function buildProject(entry) {
   const reelCovers = imagesIn(`${folder}/reel-covers`);
   const tableReels = tableRows.filter((row) => row.reel).map((row) => ({
     ...row,
-    poster: reelCovers.find((item) => item.path.split('/').pop().replace(/\.[^.]+$/, '') === row.reel)?.image ?? null,
+    poster: reelCovers.find((item) => item.path.split('/').pop().replace(/\.[^.]+$/, '').replace(/^plain_/, '') === row.reel)?.image ?? null,
   }));
   const featuredVideo = videos[0] ?? tableVideos[0] ?? null;
 

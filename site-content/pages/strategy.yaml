@@ -7,6 +7,8 @@ intro: I’ve worked with some of Nepal’s most watched creators on finance exp
 stats:
   - number: 750M+
     label: IMPRESSIONS ACROSS ALL PLATFORMS AND CLIENTS
+  - number: 400+
+    label: VIDEOS EDITED, LONG AND SHORT
   - number: 28 days
     label: HOW LONG A NEW VIDEO STRUCTURE TOOK TO LIFT WATCH TIME AND SUBSCRIBERS ON IDEAPRENEUR NEPAL
   - number: auto
@@ -31,7 +33,7 @@ groups:
     kicker: ANUP GHIMIRE
     title: Viewfinders & The Doers
     roles: [EDITOR, STRATEGIST, PRODUCTION]
-    brands: [viewfinders, esewa, global-ime, the-doers]
+    brands: [viewfinders, the-doers]
   - id: other
     short: More
     kicker: MORE CLIENT WORK

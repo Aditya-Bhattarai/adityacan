@@ -16,7 +16,7 @@ const stats = home.stats.filter((stat) => stat.show).map((stat) => ({ ...stat, n
 // Client logos come from site-content/clients/logos/, named after each project folder.
 const logos = getImages('clients/logos');
 const logoFor = (slug) => logos.find((item) => item.path.split('/').pop().replace(/\.[^.]+$/, '') === slug);
-const clients = await Promise.all(home.clients.map(async (client) => ({ ...client, logo: logoFor(client.project), href: (await getProject(client.project))?.href ?? '/clients' })));
+const clients = await Promise.all(home.clients.map(async (client) => ({ ...client, logo: logoFor(client.project), href: (await getProject(client.link ?? client.project))?.href ?? '/clients' })));
 const initials = (name) => name.split(' ').map((word) => word[0]).join('').slice(0, 2);
 // The photo in the "Why work with me" band. Comes from site-content/about/more-photos/
 const whyPhoto = getImages('about/more-photos')[0];

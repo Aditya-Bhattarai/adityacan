@@ -39,8 +39,15 @@ const groups = page.groups
 // The wall: every thumbnail and cover from this chapter, shuffled evenly between shapes.
 const wall = projects
   .filter((project) => project.chapterKey === 'strategy-content')
-  .flatMap((project) => ['thumbnails', 'covers'].flatMap((name) => getImages(`${project.folder}/${name}`).map((item) => ({ ...item, href: project.href, project: project.title }))))
-  .sort((a, b) => a.path.split('/').pop().localeCompare(b.path.split('/').pop()));
+  .flatMap((project) => {
+    const files = ['thumbnails', 'covers'].flatMap((name) => getImages(`${project.folder}/${name}`).map((item) => ({ ...item, key: item.path.split('/').pop() })));
+    // Reel covers, in link order. Plain video frames (reel-covers/plain_...) are left off the wall.
+    const reels = (project.tabs.find((tab) => tab.key === 'reels')?.links ?? [])
+      .filter((link) => link.poster && !/\/plain_/.test(link.poster.src))
+      .map((link, index) => ({ image: link.poster, caption: link.title, key: `${String(index + 1).padStart(2, '0')}_reel` }));
+    return [...files, ...reels].map((item) => ({ ...item, href: project.href, project: project.title }));
+  })
+  .sort((a, b) => a.key.localeCompare(b.key));
 ---
 
 <Base title={`Chapter ${chapter.number}: ${chapter.title}`} current="work" description="YouTube, podcasts, reels and brand content for some of Nepal’s biggest creators.">

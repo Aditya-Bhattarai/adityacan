@@ -55,6 +55,6 @@ Permission must be `yes` for the video to show.
 | satik-kura | Credit card EMI with Fonepay | https://www.instagram.com/reel/DSUoF0qk8WM/ | Editor | yes |
 | satik-kura | 5 rules of credit cards | https://www.instagram.com/reel/DSH5BEfk5JZ/ | Editor | yes |
 | satik-kura | Do false insurance claims really happen? | https://www.instagram.com/reel/DRSDxKLkzZP/ | Editor | yes |
+| satik-kura | Is cashless insurance possible in Nepal? | https://www.instagram.com/reel/DRKC4r9konW/ | Editor | yes |
 | satik-kura | How much does insurance actually cover? | https://www.instagram.com/reel/DQ_1I2Ok8Q6/ | Editor | yes |
 | satik-kura | What to check before buying insurance stocks | https://www.instagram.com/reel/DRCZptcEw2Y/ | Editor | yes |
-| satik-kura | Is cashless insurance possible in Nepal? | https://www.instagram.com/reel/DRKC4r9konW/ | Editor | yes |

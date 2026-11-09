@@ -3,6 +3,7 @@
 ticker:
   - Filmmaker & content strategist
   - 750M+ impressions across every platform and client I’ve worked with
+  - 400+ videos edited, long and short
   - Directing · Editing · Strategy · Production
   - Licensed trekking guide
 
@@ -18,6 +19,9 @@ hero:
 stats:
   - number: 750M+
     label: Impressions across every platform and client I’ve worked with
+    show: true
+  - number: 400+
+    label: Videos edited, long and short
     show: true
   - number: 15M+
     label: Views from strategic growth, without going viral
@@ -75,9 +79,11 @@ clients:
   - name: eSewa
     note: DIGITAL WALLET · WITH VIEWFINDERS
     project: esewa
+    link: viewfinders # Made through Viewfinders, so it opens that project.
   - name: Global IME
     note: BANK · WITH VIEWFINDERS
     project: global-ime
+    link: viewfinders
   - name: Nava Kundali
     note: ASTROLOGY APP
     project: nava-kundali

@@ -10,7 +10,7 @@ years: "[YEAR]"
 format: "Brand content"
 formats: ["Brand content"]
 featured: false
-permission: "yes"
+permission: "no" # Shown inside the Viewfinders project instead (Aditya, 9 Nov 2026).
 links: {"featured_video": "", "more": []}
 stats: []
 ---
