@@ -25,6 +25,9 @@ const selectionStills = selection ? getImages(`${selection.folder}/stills`) : []
 const selectionPhotos = (page.selection?.photos ?? []).map((name) => selectionStills.find((still) => still.path.includes(name))).filter(Boolean);
 
 const films = work.filter((project) => project.chapterKey === 'film');
+// The Instagram short: words in film.yaml (reel), cover in site-content/02-film/_instagram-reel/
+const reelCover = getImages('02-film/_instagram-reel')[0];
+const reel = page.reel?.link ? { provider: 'external', url: page.reel.link, title: page.reel.title } : null;
 ---
 
 <Base title={`Chapter ${chapter.number}: ${chapter.title}`} current="work" theme="dark" description="Short films written and directed by Aditya Bhattarai at film school, with their scripts.">
@@ -99,6 +102,18 @@ const films = work.filter((project) => project.chapterKey === 'film');
     </section>
   )}
 
+  {reel && (
+    <section class="wrap reel">
+      <div class="reel__video"><VideoFacade video={reel} poster={reelCover?.image} ratio="9/16" widths={[320, 640]} sizes="(max-width: 700px) 70vw, 320px" /></div>
+      <div class="reel__text">
+        <span class="label">{page.reel.kicker}</span>
+        <h2 class="selection__title">{page.reel.title}</h2>
+        <p class="body-text">{page.reel.text}</p>
+        <a class="btn btn--ghost selection__button" href={page.reel.link} target="_blank" rel="noopener">{page.reel.button}</a>
+      </div>
+    </section>
+  )}
+
   <section class="wrap filmography">
     <div class="filmography__head">
       <h2 class="h2 h2--small">{page.filmography.title}</h2>
@@ -107,9 +122,9 @@ const films = work.filter((project) => project.chapterKey === 'film');
     <div class="filmography__grid">
       {films.map((film) => (
         <a class="film" href={film.href}>
-          {film.cover
-            ? <div class="frame" style="aspect-ratio:2/3"><Picture image={film.cover.image} alt={film.title} widths={[320, 640]} sizes="(max-width: 700px) 50vw, 25vw" /></div>
-            : <TitleTile title={film.title} ratio="2/3" dark />}
+          {(film.wideImage ?? film.cover)
+            ? <div class="frame" style="aspect-ratio:16/9;border-radius:4px"><Picture image={(film.wideImage ?? film.cover).image} alt={film.title} widths={[480, 960]} sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw" /></div>
+            : <TitleTile title={film.title} ratio="16/9" dark />}
           <div class="film__row"><span class="film__title">{film.title}</span>{film.years && <span class="meta">{film.years}</span>}</div>
           <span class="meta">{film.shortRoles.join(' · ').toUpperCase()}</span>
           {film.oneLiner && <span class="film__log">{film.oneLiner}</span>}
@@ -148,9 +163,15 @@ const films = work.filter((project) => project.chapterKey === 'film');
   .selection__button { margin-top: 8px; }
   .selection__photos { flex: 1.4 1 min(520px, 100%); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 
+  /* The Instagram short: tall video on the left, words on the right. Stacks on a phone. */
+  .reel { padding-bottom: 96px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; }
+  .reel__video { flex: 0 0 min(320px, 70vw); }
+  .reel__text { flex: 1 1 320px; display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+
   .filmography { padding-bottom: 96px; }
   .filmography__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 20px; }
-  .filmography__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 46%), 1fr)); gap: 32px 16px; }
+  /* Landscape pictures: three across on a computer, two on a tablet, one on a phone. */
+  .filmography__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 36px 20px; }
   .film { display: flex; flex-direction: column; gap: 10px; color: var(--fg); text-decoration: none; }
   .film:hover { color: var(--fg); }
   .film__row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
@@ -159,6 +180,7 @@ const films = work.filter((project) => project.chapterKey === 'film');
 
   @media (max-width: 700px) {
     .film-title { padding-block: 32px 48px; }
-    .featured, .filmography, .selection { padding-bottom: 64px; }
+    .featured, .filmography, .selection, .reel { padding-bottom: 64px; }
+    .reel__video { margin-inline: auto; }
   }
 </style>

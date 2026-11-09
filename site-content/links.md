@@ -58,3 +58,6 @@ Permission must be `yes` for the video to show.
 | satik-kura | Is cashless insurance possible in Nepal? | https://www.instagram.com/reel/DRKC4r9konW/ | Editor | yes |
 | satik-kura | How much does insurance actually cover? | https://www.instagram.com/reel/DQ_1I2Ok8Q6/ | Editor | yes |
 | satik-kura | What to check before buying insurance stocks | https://www.instagram.com/reel/DRCZptcEw2Y/ | Editor | yes |
+| langtang-diaries | Subtitles that make my videos feel like movie frames | https://www.instagram.com/p/DfKK9t5JUsQ/ | Filmmaker | yes |
+| langtang-diaries | Home calling | https://www.instagram.com/p/DX_jxU9iWG3/ | Filmmaker | yes |
+| langtang-diaries | Maybe silence is just a perspective away? | https://www.instagram.com/p/DfQ3cV4ovkD/ | Filmmaker | yes |

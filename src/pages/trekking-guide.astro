@@ -61,7 +61,7 @@ const langtangText = clean(page.langtang.text);
           <span class="label">{chapter.number}.1 · {page.langtang.kicker}</span>
           <h2 class="h2"><a class="plain-link" href={langtang.href}>{page.langtang.title}</a></h2>
         </div>
-        <div class="tag-row">{langtang.roles.map((role) => <span class="tag tag--solid">{role}</span>)}</div>
+        <div class="tag-row">{langtang.roles.map((role) => <><span class="tag tag--solid">{role}</span>{" "}</>)}</div>
       </div>
       <div class="langtang__media">
         <div class="langtang__main">

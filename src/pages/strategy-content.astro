@@ -8,7 +8,7 @@ import { getChapter, getImages, getPage, getProjects } from '../lib/content.js';
 const page = await getPage('strategy');
 const home = await getPage('home');
 const chapter = getChapter('strategy-content');
-const stats = page.stats.map((stat) => ({ ...stat, number: stat.number === 'auto' ? home.clients.length : stat.number }));
+const stats = page.stats.map((stat) => ({ ...stat, number: String(stat.number).startsWith('auto') ? `${home.clients.length}${String(stat.number).slice(4)}` : stat.number }));
 const projects = await getProjects();
 const bySlug = Object.fromEntries(projects.map((project) => [project.slug, project]));
 
@@ -83,14 +83,14 @@ const wall = projects
           <span class="label">{group.number} · {group.kicker}</span>
           <h2 class="h2">{group.title}</h2>
         </div>
-        <div class="tag-row">{group.roles.map((role) => <span class="tag tag--solid">{role}</span>)}</div>
+        <div class="tag-row">{group.roles.map((role) => <><span class="tag tag--solid">{role}</span>{" "}</>)}</div>
       </div>
       {group.brands.map((brand) => (
         <article class="brand">
           <div class="brand__text">
             <h3 class="brand__name"><a href={brand.href}>{brand.title}</a></h3>
             {brand.oneLiner && <p class="brand__desc">{brand.oneLiner}</p>}
-            {brand.formats.length > 0 && <div class="tag-row">{brand.formats.map((format) => <span class="tag">{format}</span>)}</div>}
+            {brand.formats.length > 0 && <div class="tag-row">{brand.formats.map((format) => <><span class="tag">{format}</span>{" "}</>)}</div>}
             <a class="brand__link" href={brand.href}>Open project <span aria-hidden="true">→</span></a>
           </div>
           {brand.strip.length > 0 && (

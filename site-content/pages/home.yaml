@@ -15,7 +15,7 @@ hero:
   reel_label: REEL 2026
 
 # The big numbers. Set show to false to hide one, or true to show it.
-# "number: auto" counts the clients listed further down this file.
+# "number: auto" counts the clients listed further down this file. "auto+" adds a plus sign.
 stats:
   - number: 750M+
     label: Impressions across every platform and client I’ve worked with
@@ -29,11 +29,11 @@ stats:
   - number: 28 days
     label: How long a new video structure took to lift watch time and subscribers on Ideapreneur Nepal
     show: false # Hidden at Aditya's request, 9 Nov 2026.
+  - number: auto+
+    label: Brands and creators, including Ideapreneur Nepal, Satik Kura, The Doers Podcast and Viewfinders
+    show: true
   - number: EUFF
     label: Path to Prosperity, which I was assistant director on, got into the European Union Film Festival Nepal
-    show: true
-  - number: auto
-    label: Brands and creators, including Ideapreneur Nepal, Satik Kura, The Doers Podcast and Viewfinders
     show: true
 
 # The "Selected work" row, in this order. Use project folder names.

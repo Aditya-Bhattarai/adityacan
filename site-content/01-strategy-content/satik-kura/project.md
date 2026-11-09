@@ -11,7 +11,7 @@ format: "Video podcast: episodes, trailers, reels"
 formats: ["Episodes", "Trailers", "Reels", "Covers"]
 featured: true
 permission: "yes"
-links: {"featured_video": "https://www.youtube.com/watch?v=3-CGYoLWVko", "more": []}
+links: {"featured_video": "https://www.youtube.com/watch?v=T1wxWdD7V_Y", "more": []}
 stats: []
 title_nepali: "सटीक कुरा"
 tagline: "Less noise, more value."

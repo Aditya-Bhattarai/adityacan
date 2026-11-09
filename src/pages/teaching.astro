@@ -60,7 +60,7 @@ const courses = page.courses.map((course, index) => {
         </div>
         <div class="course__detail">
           <p class="body-text">{course.text}</p>
-          <div class="tag-row">{course.tags.map((tag) => <span class="tag">{tag}</span>)}</div>
+          <div class="tag-row">{course.tags.map((tag) => <><span class="tag">{tag}</span>{" "}</>)}</div>
           {course.photos.length > 0 && (
             <div class="course__photos">
               {course.photos.map((photo) => (

@@ -11,7 +11,7 @@ const settings = getSettings();
 const chapters = getChapters();
 const work = await getWorkProjects();
 const testimonials = getTestimonials();
-const stats = home.stats.filter((stat) => stat.show).map((stat) => ({ ...stat, number: stat.number === 'auto' ? home.clients.length : stat.number }));
+const stats = home.stats.filter((stat) => stat.show).map((stat) => ({ ...stat, number: String(stat.number).startsWith('auto') ? `${home.clients.length}${String(stat.number).slice(4)}` : stat.number }));
 
 // Client logos come from site-content/clients/logos/, named after each project folder.
 const logos = getImages('clients/logos');
@@ -51,8 +51,8 @@ const heroSizes = '(max-width: 700px) 100vw, 460px';
   <!-- Statement ticker -->
   <div class="ticker" aria-label="About Aditya">
     <div class="ticker__track">
-      {home.ticker.map((line) => <span>{line}</span>)}
-      {home.ticker.map((line) => <span aria-hidden="true">{line}</span>)}
+      {home.ticker.map((line) => <><span>{line}</span>{" "}</>)}
+      {home.ticker.map((line) => <><span aria-hidden="true">{line}</span>{" "}</>)}
     </div>
   </div>
 
@@ -116,7 +116,7 @@ const heroSizes = '(max-width: 700px) 100vw, 460px';
           <div class="chapter-card__top"><span>CHAPTER {chapter.number}</span><span>{chapter.count} {chapter.count === 1 ? 'PROJECT' : 'PROJECTS'}</span></div>
           <div class="chapter-card__title">{chapter.title}</div>
           <div class="chapter-card__text">{chapter.description}</div>
-          <div class="tag-row">{chapter.tags.map((tag) => <span class="chapter-card__tag">{tag}</span>)}</div>
+          <div class="tag-row">{chapter.tags.map((tag) => <><span class="chapter-card__tag">{tag}</span>{" "}</>)}</div>
           {chapter.thumbs.length > 0 && (
             <div class="chapter-card__thumbs">
               {chapter.thumbs.map((thumb) => (
@@ -150,7 +150,7 @@ const heroSizes = '(max-width: 700px) 100vw, 460px';
               <TitleTile kicker={`CHAPTER ${project.chapter?.number}`} title={project.title} dark={project.chapterKey === 'film'} />
             )}
             <span class="work-card__name">{project.title}</span>
-            <span class="work-card__roles">{project.shortRoles.slice(0, 2).map((role) => <span>{role}</span>)}</span>
+            <span class="work-card__roles">{project.shortRoles.slice(0, 2).map((role) => <><span>{role}</span>{" "}</>)}</span>
           </div>
           <div class="work-card__meta"><span>{project.client}{project.format && project.client !== project.format ? ` · ${project.format.split(':')[0].split(',')[0]}` : ''}</span><span class="work-card__year">{project.years}</span></div>
         </a>

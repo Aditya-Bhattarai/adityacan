@@ -24,7 +24,7 @@ const line = project.what || project.client;
   </div>
   {line && line !== project.title && <div class="card__client">{line}</div>}
   <div class="tag-row">
-    {project.shortRoles.map((role) => <span class="tag card__tag">{role}</span>)}
+    {project.shortRoles.map((role) => <><span class="tag card__tag">{role}</span>{" "}</>)}
   </div>
 </a>
 

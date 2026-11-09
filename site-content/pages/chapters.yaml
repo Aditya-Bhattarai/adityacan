@@ -32,18 +32,6 @@
     - 01-strategy-content/ideapreneur-nepal/reel-covers/De8cN6FtyQc.jpg
     - 01-strategy-content/creators-headquarters/reel-covers/DfHsza7pwNU.jpg
 
-- key: teaching
-  title: Teaching
-  short: Teaching
-  href: /teaching
-  description: Editing courses for creators, and classes that show older people how social media works.
-  tags: [Courses, Workshops, Curriculum]
-  theme: panel
-  home_pictures:
-    - 04-teaching/frame-course/poster/01_editing-setup.jpg
-    - 04-teaching/frame-course/photos/01_the-timeline.jpg
-    - 04-teaching/frame-course/photos/02_green-screen.jpg
-
 - key: trekking-guide
   title: Trekking Guide
   short: Trekking guide
@@ -57,3 +45,15 @@
     - 03-trekking-guide/photography/photos/03_boudhanath-dusk.jpg
     - 03-trekking-guide/langtang-diaries/stills/03_prayer-flags.jpg
     - 03-trekking-guide/photography/photos/28_snow-range-from-the-hills.jpg
+
+- key: teaching
+  title: Teaching
+  short: Teaching
+  href: /teaching
+  description: Editing courses for creators, and classes that show older people how social media works.
+  tags: [Courses, Workshops, Curriculum]
+  theme: panel
+  home_pictures:
+    - 04-teaching/frame-course/poster/01_editing-setup.jpg
+    - 04-teaching/frame-course/photos/01_the-timeline.jpg
+    - 04-teaching/frame-course/photos/02_green-screen.jpg

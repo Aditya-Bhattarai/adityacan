@@ -6,7 +6,7 @@ client: "First year short film, film school"
 people: []
 roles: ["Writer", "Director"]
 years: "2026"
-format: "Short film, Nepali, ~2 min, 2.39:1"
+format: "Short film, Nepali, 2.39:1"
 formats: []
 featured: true
 permission: "yes"
@@ -26,7 +26,7 @@ screenplay: "sapana"
 A daughter walks through the pines with a white lily in her hand. Her mother has something to say about everything.
 
 ## The brief
-First year final: static shots, natural light, live sound, no music, about two minutes long.
+First year final: static shots, natural light, live sound and no music.
 
 ## What I did
 - Wrote and directed the film

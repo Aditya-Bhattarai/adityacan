@@ -9,7 +9,7 @@ stats:
     label: IMPRESSIONS ACROSS ALL PLATFORMS AND CLIENTS
   - number: 400+
     label: VIDEOS EDITED, LONG AND SHORT
-  - number: auto
+  - number: auto+
     label: BRANDS AND CREATORS, INCLUDING IDEAPRENEUR NEPAL, SATIK KURA, THE DOERS PODCAST AND VIEWFINDERS
 
 # Groups are people. "brands" are project folder names, shown in this order.

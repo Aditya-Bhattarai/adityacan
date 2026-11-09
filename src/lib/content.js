@@ -223,6 +223,9 @@ function buildProject(entry) {
     const links = tab.key === 'episodes' ? tableVideos : tab.key === 'reels' ? tableReels : [];
     return { ...tab, items, links };
   }).filter((tab) => tab.items.length + tab.links.length > 0);
+  // tabs_first in project.md moves those tabs to the front, e.g. tabs_first: ["stills"].
+  const first = data.tabs_first ?? [];
+  tabs.sort((a, b) => (first.includes(a.key) ? first.indexOf(a.key) : first.length) - (first.includes(b.key) ? first.indexOf(b.key) : first.length));
 
   const documents = pdfsIn(`${folder}/documents`);
   const roles = (data.roles ?? []).filter((role) => !isBlank(role));

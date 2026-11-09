@@ -50,7 +50,7 @@ const number = (index) => String(index + 1).padStart(2, '0');
           <div class="service__title"><span class="meta">{number(index)}</span><span>{service.title}</span></div>
           <span class="service__text">{service.text}</span>
           <div class="tag-row service__outputs">
-            {service.outputs.map((output) => <span class="service__output">{output}</span>)}
+            {service.outputs.map((output) => <><span class="service__output">{output}</span>{" "}</>)}
           </div>
         </div>
       ))}

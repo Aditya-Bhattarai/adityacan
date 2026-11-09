@@ -8,7 +8,7 @@ featured:
   meta_right: WRITER · DIRECTOR · 2026
   nepali: सपना
   english: Sapana
-  meta: SHORT FILM · ABOUT 2 MIN · NEPALI · FILM SCHOOL FIRST YEAR FINAL
+  meta: SHORT FILM · NEPALI · FILM SCHOOL FIRST YEAR FINAL
   logline: A daughter walks through the pines with a white lily in her hand. Her mother has something to say about everything.
   note: The brief for our first year final was no camera moves, natural light, live sound and no music.
 
@@ -21,6 +21,15 @@ selection:
   button: About the film
   # File names (without the number) of the two pictures to show here.
   photos: [presenting-the-film, festival-group-photo]
+
+# A short vertical film from Instagram, shown beside the festival band.
+# The cover picture lives in site-content/02-film/_instagram-reel/
+reel:
+  kicker: ON INSTAGRAM · 2025
+  title: Made for the phone
+  text: A short vertical film I shot and cut for Instagram. Same eye, smaller screen.
+  link: https://www.instagram.com/p/DQ9ygQOkuu4/
+  button: Watch on Instagram
 
 filmography:
   title: Filmography

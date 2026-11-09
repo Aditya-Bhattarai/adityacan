@@ -12,6 +12,7 @@ featured: true
 permission: "yes"
 links: {"featured_video": "", "more": []}
 stats: []
+tabs_first: ["stills"] # These tabs come first on the page, in this order.
 ---
 
 <!-- HOW TO EDIT

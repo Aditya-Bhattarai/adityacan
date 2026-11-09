@@ -11,7 +11,7 @@ format: "YouTube: financial and economic explainers, course modules"
 formats: ["Long form", "Course modules", "Thumbnails", "Motion graphics"]
 featured: true
 permission: "yes"
-links: {"featured_video": "https://www.youtube.com/watch?v=BebkVq802zk", "more": []}
+links: {"featured_video": "", "more": []}
 stats: []
 ---
 
