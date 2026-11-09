@@ -67,26 +67,15 @@ clients:
   - name: Ideapreneur Nepal
     note: YOUTUBE · SANJOG KOIRALA
     project: ideapreneur-nepal
-  - name: Satik Kura
-    note: PODCAST · SANJOG KOIRALA
-    project: satik-kura
-  - name: Money Mitra
-    note: PERSONAL FINANCE
-    project: money-mitra
   - name: Creators HQ
     note: CREATOR COMPANY · SANJOG KOIRALA
     project: creators-headquarters
-  - name: Explainer Nepali
-    note: INSTAGRAM · MANISH ADHIKARI
-    project: explainer-nepali
-    link: manish-adhikari # Both of Manish’s brands share one page.
-  - name: Hamro Motors
-    note: AUTOMOTIVE · MANISH ADHIKARI
-    project: hamro-motors
-    link: manish-adhikari
   - name: The Doers
     note: PODCAST · ANUP GHIMIRE
     project: the-doers
+  - name: Satik Kura
+    note: PODCAST · SANJOG KOIRALA
+    project: satik-kura
   - name: Viewfinders
     note: PRODUCTION HOUSE · ANUP GHIMIRE
     project: viewfinders
@@ -98,6 +87,17 @@ clients:
     note: BANK · WITH VIEWFINDERS
     project: global-ime
     link: viewfinders
+  - name: Explainer Nepali
+    note: INSTAGRAM · MANISH ADHIKARI
+    project: explainer-nepali
+    link: manish-adhikari # Both of Manish’s brands share one page.
+  - name: Hamro Motors
+    note: AUTOMOTIVE · MANISH ADHIKARI
+    project: hamro-motors
+    link: manish-adhikari
+  - name: Money Mitra
+    note: PERSONAL FINANCE
+    project: money-mitra
   - name: Nava Kundali
     note: ASTROLOGY APP
     project: nava-kundali
