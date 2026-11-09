@@ -8,15 +8,11 @@ if (video) {
   // Data saver and very slow connections keep the still picture instead of the video.
   const saving = navigator.connection?.saveData || /2g/.test(navigator.connection?.effectiveType ?? '');
 
-  // On phones the loop starts at 3.3 seconds, the first face shot, to match the phone still.
-  // The opening mountain shot is mostly sky and looks empty under the title card. It still plays later in the loop.
-  const phoneStart = window.matchMedia('(max-width: 700px)').matches ? 3.3 : 0;
-  if (phoneStart) video.addEventListener('loadedmetadata', () => { video.currentTime = phoneStart; }, { once: true });
-
   function addSources() {
     if (video.querySelector('source')) return;
     // The poster is the still the page already picked for this screen, so nothing changes until the video plays.
-    if (still?.currentSrc) video.poster = still.currentSrc;
+    const stillSrc = still?.currentSrc || still?.src;
+    if (stillSrc) video.poster = stillSrc;
     for (const [format, type] of [['webm', 'video/webm'], ['mp4', 'video/mp4']]) {
       const source = document.createElement('source');
       source.src = video.dataset[format];

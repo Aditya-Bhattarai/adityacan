@@ -40,17 +40,12 @@ const heroFiles = import.meta.glob('/site-content/00-home/hero-reel/hero-tall.{m
 const heroUrl = (name) => heroFiles[`/site-content/00-home/hero-reel/${name}`];
 const posterTall = getImages('00-home/hero-reel').find((item) => item.path.includes('poster-tall')).image;
 const tall = await getImage({ src: posterTall, format: 'webp', widths: [540, 720, 1080], quality: 72 });
-// Phones show a different still: the video's opening mountain shot is mostly sky, which looks empty
-// under the title card. The phone still is the frame where the phone video starts (see hero.js).
-const posterPhoneFile = getImages('00-home/hero-reel').find((item) => item.path.includes('poster-phone')).image;
-const phone = await getImage({ src: posterPhoneFile, format: 'webp', widths: [540, 720, 1080], quality: 72 });
 const heroSizes = '(max-width: 700px) 100vw, 460px';
 ---
 
 <Base current="home">
   <Fragment slot="head">
-    <link rel="preload" as="image" type="image/webp" media="(max-width: 700px)" imagesrcset={phone.srcSet.attribute} imagesizes="100vw" fetchpriority="high" />
-    <link rel="preload" as="image" type="image/webp" media="(min-width: 701px)" imagesrcset={tall.srcSet.attribute} imagesizes="460px" fetchpriority="high" />
+    <link rel="preload" as="image" type="image/webp" imagesrcset={tall.srcSet.attribute} imagesizes={heroSizes} fetchpriority="high" />
   </Fragment>
 
   <!-- Statement ticker -->
@@ -76,7 +71,6 @@ const heroSizes = '(max-width: 700px) 100vw, 460px';
 
     <div class="hero__reel">
       <picture>
-        <source type="image/webp" media="(max-width: 700px)" srcset={phone.srcSet.attribute} sizes="100vw" />
         <source type="image/webp" srcset={tall.srcSet.attribute} sizes={heroSizes} />
         <img class="hero__poster" src={tall.src} alt="A still from a reel of my edits" fetchpriority="high" decoding="async" width="1080" height="1920" />
       </picture>
