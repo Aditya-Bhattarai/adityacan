@@ -35,14 +35,14 @@ people:
         project: viewfinders
   - name: Manish Adhikari
     title: Founder, Hamro Motors · Explainer Nepali
-    brands: [explainer-nepali, hamro-motors]
+    brands: [manish-adhikari]
     made:
       - label: Explainer edits
-        project: explainer-nepali
+        project: manish-adhikari
       - label: Instagram strategy, 3.8M views in 2024
-        project: explainer-nepali
+        project: manish-adhikari
       - label: Automotive content
-        project: hamro-motors
+        project: manish-adhikari
 
 cta:
   text: Want to work together?

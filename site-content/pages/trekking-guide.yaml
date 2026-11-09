@@ -11,7 +11,7 @@ credentials:
   - label: REGIONS
     value: "[Langtang · Gorkha · …]"
   - label: FILMED IN
-    value: Langtang Valley
+    value: Langtang Valley · Bhairavkunda
   - label: BASED IN
     value: Kathmandu Valley
 
@@ -19,6 +19,11 @@ langtang:
   kicker: TRAVEL FILM
   title: Langtang Diaries
   text: "[Two lines on the trip: route, days, what you wanted to capture.]"
+
+bhairavkunda:
+  kicker: HIGH LAKE TREK
+  title: Bhairavkunda
+  text: A winter trek to the frozen lake at Bhairavkunda, about 4,100 metres up in Sindhupalchok. Snow, prayer flags and a sea of cloud below.
 
 homestay:
   kicker: COMMUNITY

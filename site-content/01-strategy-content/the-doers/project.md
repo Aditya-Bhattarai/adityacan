@@ -8,10 +8,11 @@ people: ["Anup Ghimire"]
 roles: ["Editor", "Content Strategist"]
 years: "[YEAR]"
 format: "Podcast"
-formats: ["Podcast", "Reels"]
+formats: ["Podcast", "YouTube", "Shorts"]
 featured: false
 permission: "yes"
-links: {"featured_video": "", "more": []}
+links: {"featured_video": "https://www.youtube.com/watch?v=KaVh4rMFjlQ", "more": []}
+tab_names: {episodes: "Episodes"} # Renames a tab on this page only.
 stats: []
 ---
 
@@ -29,7 +30,7 @@ Podcast hosted by Anup Ghimire.
 [What the client needed / why the project existed.]
 
 ## What I did
-- Edited the podcast
+- Edited the podcast, long episodes and shorts
 - Helped plan what to make next
 
 ## Results

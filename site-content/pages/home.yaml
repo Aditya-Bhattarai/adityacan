@@ -41,7 +41,7 @@ selected_work:
   - satik-kura
   - sapana
   - path-to-prosperity
-  - explainer-nepali
+  - manish-adhikari
   - langtang-diaries
   - ideapreneur-nepal
 
@@ -79,9 +79,11 @@ clients:
   - name: Explainer Nepali
     note: INSTAGRAM · MANISH ADHIKARI
     project: explainer-nepali
+    link: manish-adhikari # Both of Manish’s brands share one page.
   - name: Hamro Motors
     note: AUTOMOTIVE · MANISH ADHIKARI
     project: hamro-motors
+    link: manish-adhikari
   - name: The Doers
     note: PODCAST · ANUP GHIMIRE
     project: the-doers

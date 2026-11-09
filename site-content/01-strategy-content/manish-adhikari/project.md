@@ -1,18 +1,20 @@
 ---
-title: "Explainer Nepali"
+title: "Manish Adhikari and his brands"
 order: 60
 chapter: "strategy-content"
-client: "Explainer Nepali"
-what: "Explainer content by Manish Adhikari"
+client: "Manish Adhikari"
+what: "Explainer Nepali and Hamro Motors, Manish Adhikari’s own brands"
 people: ["Manish Adhikari"]
 roles: ["Editor", "Content Strategist"]
 years: "2024"
-format: "Instagram & social explainers"
-formats: ["Vertical", "Instagram", "Covers"]
+format: "Explainers and automotive videos"
+formats: ["TikTok", "Instagram", "YouTube", "Shorts"]
 featured: true
 permission: "yes"
-links: {"featured_video": "", "more": []}
+links: {"featured_video": "none", "more": []}
+tab_names: {episodes: "Hamro Motors videos"} # Renames a tab on this page only.
 stats: ["3.8M views in 2024"]
+tabs_first: ["reels"] # These tabs come first on the page, in this order.
 ---
 
 <!-- HOW TO EDIT
@@ -23,7 +25,7 @@ stats: ["3.8M views in 2024"]
      stats: short proof lines with real numbers only, e.g. "1.2M views across episodes". -->
 
 ## One-liner
-3.8 million views on Instagram in 2024, after we changed how the videos were structured.
+Manish Adhikari’s own two brands. Explainer Nepali reached 3.8 million views on Instagram in 2024 after we changed how the videos were structured, and Hamro Motors reviews cars and bikes for Nepal.
 
 ## The brief
 [What the client needed / why the project existed.]
@@ -33,6 +35,7 @@ stats: ["3.8M views in 2024"]
 - Gave the Instagram page a look people could recognise
 - Wrote the hooks and kept the videos feeling like one show
 - Changed the edits to get more people clicking
+- Edited reviews and shorts for Hamro Motors
 
 ## Results
 - [Real numbers or outcomes — or delete this section]

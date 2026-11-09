@@ -27,6 +27,8 @@ const screenplay = writing.find((piece) => piece.slug === project.screenplay);
 const wideIsTall = project.wideImage && project.wideImage.image.height > project.wideImage.image.width;
 const hasFeature = project.video || (project.wideImage && !wideIsTall);
 const dark = project.chapterKey === 'film';
+// With no wide picture, the tall cover sits beside the brief instead of on its own.
+const posterMode = !hasFeature && project.cover;
 
 // Results that start with a number become big stats; anything else stays a sentence.
 const results = project.results.map((line) => {
@@ -89,7 +91,7 @@ const jsonLd = {
         ))}
       </dl>
     )}
-    {project.oneLiner && <p class="statement head__oneliner">{project.oneLiner}</p>}
+    {project.oneLiner && !posterMode && <p class="statement head__oneliner">{project.oneLiner}</p>}
   </section>
 
   {hasFeature ? (
@@ -98,11 +100,7 @@ const jsonLd = {
         ? <VideoFacade video={project.video} poster={project.wideImage?.image} large widths={[800, 1600]} sizes="(max-width: 1320px) 100vw, 1272px" eager />
         : <div class="frame" style={`aspect-ratio:${Math.max(project.wideImage.image.width / project.wideImage.image.height, 16 / 9)};border-radius:6px`}><Picture image={project.wideImage.image} alt={project.title} widths={[800, 1600]} sizes="(max-width: 1320px) 100vw, 1272px" eager /></div>}
     </section>
-  ) : project.cover ? (
-    <section class="wrap feature feature--poster">
-      <div class="frame" style={`aspect-ratio:${project.cover.image.width}/${project.cover.image.height};border-radius:6px`}><Picture image={project.cover.image} alt={project.title} widths={[400, 800]} sizes="400px" eager /></div>
-    </section>
-  ) : project.logo ? (
+  ) : posterMode ? null : project.logo ? (
     <section class="wrap feature">
       <div class="frame frame--contain" style="aspect-ratio:21/9;border-radius:6px"><Picture image={project.logo.image} alt={`${project.title} logo`} widths={[480, 960]} sizes="(max-width: 700px) 100vw, 640px" eager /></div>
     </section>
@@ -120,8 +118,13 @@ const jsonLd = {
     {project.credits.length === 0 && <Missing label="Credits, in project.md" />}
   </div>
 
-  {(project.brief || project.did.length > 0 || results.length > 0) && (
-    <section class="wrap story">
+  {(posterMode || project.brief || project.did.length > 0 || results.length > 0) && (
+    <section class:list={['wrap story', { 'story--poster': posterMode }]}>
+      {posterMode && (
+        <div class="frame story__cover" style={`aspect-ratio:${project.cover.image.width}/${project.cover.image.height};border-radius:6px`}><Picture image={project.cover.image} alt={project.title} widths={[400, 800]} sizes="(max-width: 700px) 80vw, 420px" eager /></div>
+      )}
+      <div class="story__parts">
+      {posterMode && project.oneLiner && <p class="statement story__oneliner">{project.oneLiner}</p>}
       {project.brief && (
         <div class="story__part">
           <div class="label label--small">THE BRIEF</div>
@@ -144,6 +147,7 @@ const jsonLd = {
           </div>
         </div>
       )}
+      </div>
     </section>
   )}
 
@@ -233,7 +237,10 @@ const jsonLd = {
   .head__meta dd { display: flex; flex-direction: column; font-size: 17px; line-height: 1.4; }
   .head__oneliner { max-width: 880px; padding-bottom: 40px; font-size: clamp(24px, 2.6vw, 36px); line-height: 1.2; }
 
-  .feature--poster { max-width: 460px; }
+  .story__parts { display: contents; }
+  .story.story--poster { grid-template-columns: minmax(0, 420px) minmax(0, 1fr); align-items: center; gap: clamp(40px, 6vw, 96px); padding-top: 40px; }
+  .story__oneliner { font-size: clamp(24px, 2.4vw, 34px); line-height: 1.25; }
+  .story--poster .story__parts { display: flex; flex-direction: column; gap: 40px; }
 
   .story { padding-block: 80px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 40px; }
   .story__part { display: flex; flex-direction: column; gap: 14px; font-size: 18px; line-height: 1.55; }
@@ -290,6 +297,8 @@ const jsonLd = {
     .crumbs { font-size: 10px; }
     .head__row { padding-block: 20px 24px; }
     .story { padding-block: 56px; }
+    .story.story--poster { grid-template-columns: 1fr; padding-top: 24px; gap: 40px; }
+    .story__cover { width: min(100%, 340px); margin-inline: auto; }
     .media__panel { grid-template-columns: repeat(auto-fill, minmax(min(var(--min), 46%), 1fr)); gap: 10px; }
     .media__panel--natural:not([hidden]) { columns: 2; column-gap: 10px; }
     .media__panel--natural .media__item { margin-bottom: 10px; }

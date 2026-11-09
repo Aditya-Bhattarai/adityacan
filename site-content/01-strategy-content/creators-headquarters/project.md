@@ -8,7 +8,7 @@ people: ["Sanjog Koirala"]
 roles: ["Content Strategist"]
 years: "[YEAR]"
 format: ""
-formats: ["Strategy"]
+formats: ["Instagram", "Reels", "Strategy"]
 featured: false
 permission: "yes"
 links: {"featured_video": "", "more": []}
@@ -29,7 +29,8 @@ Sanjog Koirala's new creator company.
 [What the client needed / why the project existed.]
 
 ## What I did
-- [Your role, in plain words]
+- Content strategy for the Instagram page
+- Edited the video editing workshop announcement
 
 ## Results
 - [Real numbers or outcomes — or delete this section]

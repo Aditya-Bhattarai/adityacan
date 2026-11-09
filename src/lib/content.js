@@ -127,13 +127,18 @@ export function parseVideo(url, title = '') {
   const youtube = link.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{6,})/);
   if (youtube) {
     const id = youtube[1];
-    return { provider: 'youtube', id, url: link, title, thumbnail: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`, embed: `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0` };
+    // A YouTube Short goes in the Reels tab (cover: reel-covers/<id>.jpg) but still plays on the page.
+    const reel = /\/shorts\//.test(link) ? id : undefined;
+    return { provider: 'youtube', id, reel, url: link, title, thumbnail: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`, embed: `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0` };
   }
   const vimeo = link.match(/vimeo\.com\/(?:video\/)?(\d+)/);
   if (vimeo) return { provider: 'vimeo', id: vimeo[1], url: link, title, embed: `https://player.vimeo.com/video/${vimeo[1]}?autoplay=1&dnt=1` };
   // Instagram reels open on Instagram. Their cover comes from the project's reel-covers/ folder (named after the reel id).
   const reel = link.match(/instagram\.com\/(?:[\w.]+\/)?(?:reel|reels|p)\/([\w-]+)/);
   if (reel) return { provider: 'external', reel: reel[1], url: link, title };
+  // TikTok videos open on TikTok, with their cover from reel-covers/<video id>.jpg.
+  const tiktok = link.match(/tiktok\.com\/@[\w.]+\/video\/(\d+)/);
+  if (tiktok) return { provider: 'external', reel: tiktok[1], url: link, title };
   return { provider: 'external', url: link, title };
 }
 
@@ -203,8 +208,10 @@ function buildProject(entry) {
   const slug = folder.split('/').pop();
   const sections = readSections(entry.body);
 
+  // featured_video: "none" shows the big picture at the top with no play button.
+  const noFeaturedVideo = clean(data.links?.featured_video).toLowerCase() === 'none';
   const videos = [
-    parseVideo(data.links?.featured_video, clean(data.title)),
+    noFeaturedVideo ? null : parseVideo(data.links?.featured_video, clean(data.title)),
     ...(data.links?.more ?? []).map((url) => parseVideo(url)),
   ].filter(Boolean);
   const tableRows = getLinkTable().filter((row) => row.folder === slug);
@@ -215,13 +222,14 @@ function buildProject(entry) {
     ...row,
     poster: reelCovers.find((item) => item.path.split('/').pop().replace(/\.[^.]+$/, '').replace(/^plain_/, '') === row.reel)?.image ?? null,
   }));
-  const featuredVideo = videos[0] ?? tableVideos[0] ?? null;
+  const featuredVideo = noFeaturedVideo ? null : videos[0] ?? tableVideos[0] ?? null;
 
   const tabs = TABS.map((tab) => {
     // A logo on its own is not worth a tab. It still shows in the page banner when there's no other picture.
     const items = imagesIn(`${folder}/${tab.folder}`).filter((item) => !(tab.key === 'assets' && /logo/.test(item.path)));
     const links = tab.key === 'episodes' ? tableVideos : tab.key === 'reels' ? tableReels : [];
-    return { ...tab, items, links };
+    // tab_names in project.md renames a tab on this page only, e.g. tab_names: {episodes: "Long videos"}.
+    return { ...tab, label: data.tab_names?.[tab.key] ?? tab.label, items, links };
   }).filter((tab) => tab.items.length + tab.links.length > 0);
   // tabs_first in project.md moves those tabs to the front, e.g. tabs_first: ["stills"].
   const first = data.tabs_first ?? [];

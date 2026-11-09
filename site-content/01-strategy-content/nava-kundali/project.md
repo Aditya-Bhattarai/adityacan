@@ -8,11 +8,13 @@ people: ["Sanjog Koirala"]
 roles: ["Production assets"]
 years: "[YEAR]"
 format: "Astrology app: promo concepts, mascot, print"
-formats: ["Promo", "Print", "Mascot"]
+formats: ["Promo", "TikTok", "YouTube", "Print", "Mascot"]
 featured: false
 permission: "yes"
-links: {"featured_video": "", "more": []}
+links: {"featured_video": "https://www.youtube.com/watch?v=raX5QrLYASo", "more": []}
+tab_names: {episodes: "Long videos"} # Renames a tab on this page only.
 stats: []
+tabs_first: ["reels"] # These tabs come first on the page, in this order.
 ---
 
 <!-- HOW TO EDIT

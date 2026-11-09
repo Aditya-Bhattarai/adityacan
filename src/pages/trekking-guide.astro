@@ -9,14 +9,28 @@ const page = await getPage('trekking-guide');
 const chapter = getChapter('trekking-guide');
 const settings = getSettings();
 const projects = await getProjects();
-const langtang = projects.find((project) => project.slug === 'langtang-diaries');
+// The trips, in this order. Each has its words in trekking-guide.yaml and its pictures in its project folder.
+const trips = [['langtang-diaries', page.langtang], ['bhairavkunda', page.bhairavkunda]]
+  .map(([slug, words]) => {
+    const project = projects.find((item) => item.slug === slug);
+    if (!project || !words) return null;
+    // The tall picture beside the big one: a vertical video still, or else the first reel's cover (which opens the reel).
+    const reelLink = (project.tabs.find((tab) => tab.key === 'reels')?.links ?? []).find((link) => link.poster);
+    const reelStill = getImages(`${project.folder}/vertical-videos`)[0];
+    return {
+      project,
+      words,
+      text: clean(words.text),
+      stills: getImages(`${project.folder}/stills`),
+      reel: reelStill ? { image: reelStill.image } : reelLink ? { image: reelLink.poster, url: reelLink.url } : null,
+    };
+  })
+  .filter(Boolean);
 // The homestay classes are part of the Social media and editing classes project in Teaching.
 const homestay = projects.find((project) => project.slug === 'senior-digital-literacy');
 const photography = projects.find((project) => project.slug === 'photography');
 
 const cover = getImages('03-trekking-guide/_chapter-cover')[0];
-const stills = langtang ? getImages(`${langtang.folder}/stills`) : [];
-const reels = langtang ? getImages(`${langtang.folder}/vertical-videos`) : [];
 const classPhotos = homestay ? getImages(`${homestay.folder}/photos`) : [];
 const photos = photography ? getImages(`${photography.folder}/photos`) : [];
 
@@ -25,7 +39,6 @@ const LANGTANG_ROW = 8;
 const PHOTOS_SHOWN = 18;
 
 const credentials = page.credentials.filter((item) => clean(item.value));
-const langtangText = clean(page.langtang.text);
 ---
 
 <Base title={`Chapter ${chapter.number}: ${chapter.title}`} current="work" description="Licensed trekking guide in Nepal. Travel films from the Himalaya, photographs from the road and content classes in community homestays." image={cover?.image}>
@@ -54,43 +67,45 @@ const langtangText = clean(page.langtang.text);
     ))}
   </section>
 
-  {langtang && (
+  {trips.map((trip, index) => (
     <section class="wrap langtang">
       <div class="section-head">
         <div class="section-head__titles">
-          <span class="label">{chapter.number}.1 · {page.langtang.kicker}</span>
-          <h2 class="h2"><a class="plain-link" href={langtang.href}>{page.langtang.title}</a></h2>
+          <span class="label">{chapter.number}.{index + 1} · {trip.words.kicker}</span>
+          <h2 class="h2"><a class="plain-link" href={trip.project.href}>{trip.words.title}</a></h2>
         </div>
-        <div class="tag-row">{langtang.roles.map((role) => <><span class="tag tag--solid">{role}</span>{" "}</>)}</div>
+        <div class="tag-row">{trip.project.roles.map((role) => <><span class="tag tag--solid">{role}</span>{" "}</>)}</div>
       </div>
       <div class="langtang__media">
         <div class="langtang__main">
-          {langtang.video
-            ? <VideoFacade video={langtang.video} poster={stills[0]?.image} large widths={[800, 1400]} sizes="(max-width: 800px) 100vw, 66vw" />
-            : stills[0] && <div class="frame" style="aspect-ratio:16/9;border-radius:6px"><Picture image={stills[0].image} alt="Langtang Diaries" widths={[800, 1400]} sizes="(max-width: 800px) 100vw, 66vw" /></div>}
+          {trip.project.video
+            ? <VideoFacade video={trip.project.video} poster={trip.stills[0]?.image} large widths={[800, 1400]} sizes="(max-width: 800px) 100vw, 66vw" />
+            : trip.stills[0] && <a class="frame langtang__link" href={trip.project.href} style="aspect-ratio:16/9;border-radius:6px"><Picture image={trip.stills[0].image} alt={trip.words.title} widths={[800, 1400]} sizes="(max-width: 800px) 100vw, 66vw" /></a>}
         </div>
-        {reels[0] && (
+        {trip.reel && (
           <div class="langtang__reel">
-            <div class="frame" style="aspect-ratio:9/16;border-radius:6px"><Picture image={reels[0].image} alt="Langtang reel" widths={[320, 640]} sizes="(max-width: 800px) 60vw, 25vw" /></div>
+            {trip.reel.url
+              ? <a class="frame langtang__link" href={trip.reel.url} target="_blank" rel="noopener" aria-label={`${trip.words.title} reel on Instagram`} style="aspect-ratio:9/16;border-radius:6px"><Picture image={trip.reel.image} alt="" widths={[320, 640]} sizes="(max-width: 800px) 60vw, 25vw" /></a>
+              : <div class="frame" style="aspect-ratio:9/16;border-radius:6px"><Picture image={trip.reel.image} alt={`${trip.words.title} reel`} widths={[320, 640]} sizes="(max-width: 800px) 60vw, 25vw" /></div>}
           </div>
         )}
       </div>
-      {stills.length > 1 && (
+      {trip.stills.length > 1 && (
         <div class="langtang__stills scroll-row" data-row>
-          {stills.slice(1, LANGTANG_ROW + 1).map((still) => (
+          {trip.stills.slice(1, LANGTANG_ROW + 1).map((still) => (
             <div class="frame langtang__still" style={`aspect-ratio:${still.image.width}/${still.image.height}`}><Picture image={still.image} alt={still.caption} widths={[320, 640]} sizes="(max-width: 700px) 60vw, 25vw" /></div>
           ))}
         </div>
       )}
-      {langtangText && <p class="body-text">{langtangText}</p>}
+      {trip.text && <p class="body-text">{trip.text}</p>}
     </section>
-  )}
+  ))}
 
   {homestay && (
     <section class="band-panel">
       <div class="wrap homestay">
         <div class="homestay__text">
-          <span class="label">{chapter.number}.2 · {page.homestay.kicker}</span>
+          <span class="label">{chapter.number}.{trips.length + 1} · {page.homestay.kicker}</span>
           <h2 class="homestay__title">{page.homestay.title}</h2>
           <p class="body-text">{page.homestay.text}</p>
           <a class="homestay__link" href={homestay.href}>See the classes →</a>
@@ -110,7 +125,7 @@ const langtangText = clean(page.langtang.text);
     <section class="wrap photos">
       <div class="section-head">
         <div class="section-head__titles">
-          <span class="label">{chapter.number}.3 · {page.photos.kicker}</span>
+          <span class="label">{chapter.number}.{trips.length + (homestay ? 2 : 1)} · {page.photos.kicker}</span>
           <h2 class="h2">{page.photos.title}</h2>
           {settings.instagramPhotos && <a class="photos__more" href={settings.instagramPhotos} target="_blank" rel="noopener">More of my photographs on Instagram: {handleFrom(settings.instagramPhotos)}</a>}
         </div>
@@ -169,6 +184,8 @@ const langtangText = clean(page.langtang.text);
   .langtang__media { display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch; }
   .langtang__main { flex: 3 1 min(560px, 100%); min-width: 0; }
   .langtang__reel { flex: 0 1 280px; min-width: 200px; }
+  .langtang__link { display: block; transition: opacity 200ms ease; }
+  .langtang__link:hover { opacity: 0.88; }
   .langtang__stills { display: flex; gap: 12px; overflow-x: auto; }
   .langtang__still { flex: 0 0 auto; height: clamp(220px, 24vw, 320px); width: auto; }
 

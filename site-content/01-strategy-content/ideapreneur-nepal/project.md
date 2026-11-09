@@ -11,7 +11,7 @@ format: "YouTube: financial and economic explainers, course modules"
 formats: ["Long form", "Course modules", "Thumbnails", "Motion graphics"]
 featured: true
 permission: "yes"
-links: {"featured_video": "", "more": []}
+links: {"featured_video": "none", "more": []}
 stats: []
 ---
 
