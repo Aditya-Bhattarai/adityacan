@@ -28,12 +28,12 @@ stats:
     show: false # Hidden until you confirm this number is real, not expected.
   - number: 28 days
     label: How long a new video structure took to lift watch time and subscribers on Ideapreneur Nepal
-    show: true
+    show: false # Hidden at Aditya's request, 9 Nov 2026.
   - number: EUFF
     label: Path to Prosperity, which I was assistant director on, got into the European Union Film Festival Nepal
     show: true
   - number: auto
-    label: Brands and creators, including eSewa and Global IME
+    label: Brands and creators, including Ideapreneur Nepal, Satik Kura, The Doers Podcast and Viewfinders
     show: true
 
 # The "Selected work" row, in this order. Use project folder names.
@@ -44,6 +44,18 @@ selected_work:
   - explainer-nepali
   - langtang-diaries
   - ideapreneur-nepal
+
+# A different picture for a "Selected work" card, on this page only.
+# Leave a project out to use its usual cover. The path starts inside site-content.
+# "focus" moves the crop sideways: 0% keeps the left edge, 50% the middle, 100% the right edge.
+selected_pictures:
+  satik-kura:
+    picture: 01-strategy-content/satik-kura/thumbnails/05_harsh-reality-of-yeti-airlines.jpg
+  sapana:
+    picture: 02-film/sapana/stills/06_in-the-light.jpg
+    focus: 20%
+  path-to-prosperity:
+    picture: 02-film/path-to-prosperity/stills/02_festival-group-photo.jpg
 
 chapters_heading:
   kicker: FOUR CHAPTERS

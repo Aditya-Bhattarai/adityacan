@@ -4,7 +4,7 @@ import { getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Picture from '../components/Picture.astro';
 import TitleTile from '../components/TitleTile.astro';
-import { getChapters, getChapterThumbs, getImages, getPage, getProject, getSettings, getTestimonials, getWorkProjects } from '../lib/content.js';
+import { getChapters, getChapterThumbs, getImageAt, getImages, getPage, getProject, getSettings, getTestimonials, getWorkProjects } from '../lib/content.js';
 
 const home = await getPage('home');
 const settings = getSettings();
@@ -20,7 +20,13 @@ const clients = await Promise.all(home.clients.map(async (client) => ({ ...clien
 const initials = (name) => name.split(' ').map((word) => word[0]).join('').slice(0, 2);
 // The photo in the "Why work with me" band. Comes from site-content/about/more-photos/
 const whyPhoto = getImages('about/more-photos')[0];
-const selected = (home.selected_work ?? []).map((slug) => work.find((project) => project.slug === slug)).filter(Boolean);
+const selected = (home.selected_work ?? []).map((slug) => work.find((project) => project.slug === slug)).filter(Boolean)
+  .map((project) => {
+    // A picture chosen in home.yaml (selected_pictures) replaces the usual cover on this page only.
+    const pick = home.selected_pictures?.[project.slug];
+    const image = pick?.picture ? getImageAt(pick.picture) : null;
+    return { ...project, cardImage: image ?? project.cover?.image ?? null, cardFocus: image && pick.focus ? `${pick.focus} 50%` : undefined };
+  });
 
 const chapterCards = await Promise.all(chapters.map(async (chapter) => ({
   ...chapter,
@@ -138,8 +144,8 @@ const heroSizes = '(max-width: 700px) 100vw, 460px';
       {selected.map((project) => (
         <a class="work-card" href={project.href}>
           <div class="work-card__image">
-            {project.cover ? (
-              <div class="frame" style="aspect-ratio:16/10;border-radius:6px"><Picture image={project.cover.image} alt={project.title} widths={[420, 720, 1120]} sizes="(max-width: 700px) 86vw, 560px" /></div>
+            {project.cardImage ? (
+              <div class="frame" style="aspect-ratio:16/10;border-radius:6px"><Picture image={project.cardImage} alt={project.title} widths={[420, 720, 1120]} sizes="(max-width: 700px) 86vw, 560px" style={project.cardFocus ? `object-position:${project.cardFocus}` : undefined} /></div>
             ) : (
               <TitleTile kicker={`CHAPTER ${project.chapter?.number}`} title={project.title} dark={project.chapterKey === 'film'} />
             )}

@@ -47,6 +47,11 @@ function imagesIn(folder) {
 /** All images directly inside a site-content folder, in file-name order. */
 export const getImages = imagesIn;
 
+/** One image by its path inside site-content, e.g. "02-film/sapana/stills/01_the-clearing.jpg". */
+export function getImageAt(path) {
+  return allImages[`/site-content/${path}`] ?? null;
+}
+
 function pdfsIn(folder) {
   const prefix = `/site-content/${folder}/`;
   return Object.entries(allPdfs)
