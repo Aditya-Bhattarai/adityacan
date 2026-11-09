@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "prebuild": "node scripts/check-private.mjs",
+    "prebuild": "node scripts/check-private.mjs && node scripts/clear-content-cache.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "check-private": "node scripts/check-private.mjs",
