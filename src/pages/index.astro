@@ -40,12 +40,17 @@ const heroFiles = import.meta.glob('/site-content/00-home/hero-reel/hero-tall.{m
 const heroUrl = (name) => heroFiles[`/site-content/00-home/hero-reel/${name}`];
 const posterTall = getImages('00-home/hero-reel').find((item) => item.path.includes('poster-tall')).image;
 const tall = await getImage({ src: posterTall, format: 'webp', widths: [540, 720, 1080], quality: 72 });
+// Phones show a different still: the video's opening mountain shot is mostly sky, which looks empty
+// under the title card. The phone still is the frame where the phone video starts (see hero.js).
+const posterPhoneFile = getImages('00-home/hero-reel').find((item) => item.path.includes('poster-phone')).image;
+const phone = await getImage({ src: posterPhoneFile, format: 'webp', widths: [540, 720, 1080], quality: 72 });
 const heroSizes = '(max-width: 700px) 100vw, 460px';
 ---
 
 <Base current="home">
   <Fragment slot="head">
-    <link rel="preload" as="image" type="image/webp" imagesrcset={tall.srcSet.attribute} imagesizes={heroSizes} fetchpriority="high" />
+    <link rel="preload" as="image" type="image/webp" media="(max-width: 700px)" imagesrcset={phone.srcSet.attribute} imagesizes="100vw" fetchpriority="high" />
+    <link rel="preload" as="image" type="image/webp" media="(min-width: 701px)" imagesrcset={tall.srcSet.attribute} imagesizes="460px" fetchpriority="high" />
   </Fragment>
 
   <!-- Statement ticker -->
@@ -71,8 +76,9 @@ const heroSizes = '(max-width: 700px) 100vw, 460px';
 
     <div class="hero__reel">
       <picture>
+        <source type="image/webp" media="(max-width: 700px)" srcset={phone.srcSet.attribute} sizes="100vw" />
         <source type="image/webp" srcset={tall.srcSet.attribute} sizes={heroSizes} />
-        <img class="hero__poster" src={tall.src} alt="Snow peaks above the Langtang Valley, the opening shot of a reel of my edits" fetchpriority="high" decoding="async" width="1080" height="1920" />
+        <img class="hero__poster" src={tall.src} alt="A still from a reel of my edits" fetchpriority="high" decoding="async" width="1080" height="1920" />
       </picture>
       <video
         class="hero__video"
@@ -452,10 +458,17 @@ const heroSizes = '(max-width: 700px) 100vw, 460px';
   /* Phone layout */
   @media (max-width: 700px) {
     .ticker__track { font-size: 11px; }
-    /* On a phone the title card comes first, then the whole tall video in its own frame below it.
-       Nothing sits on top of the video. The frame is never taller than about 70% of the screen. */
-    .hero { display: flex; flex-direction: column; gap: 16px; padding: 20px var(--gutter) 8px; }
-    .hero__reel { width: min(100%, calc(70vh * 9 / 16)); width: min(100%, calc(70svh * 9 / 16)); margin-inline: auto; border-radius: 6px; }
+    /* On a phone the title card comes first, then the tall video in its own frame below it.
+       The frame is always as wide as the card, so there is no empty space beside it.
+       On short screens it stops at 85% of the screen height and trims a little off the sides,
+       but never more than down to a 4:5 shape (that only happens on a phone held sideways). */
+    .hero { display: flex; flex-direction: column; gap: 12px; padding: 20px var(--gutter) 8px; }
+    .hero__reel {
+      width: min(100%, 85vh * 4 / 5); width: min(100%, 85svh * 4 / 5);
+      max-height: 85vh; max-height: 85svh;
+      margin-inline: auto;
+      border-radius: 6px;
+    }
     .hero__card { padding: 24px 18px; gap: 10px; }
     .hero__name { font-size: 9px; letter-spacing: 0.2em; }
     .hero__roles { display: none; }

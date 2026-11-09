@@ -20,6 +20,11 @@ if (video) {
 
   video.addEventListener('playing', () => video.classList.add('is-playing'));
 
+  // On phones the loop starts at 3.3 seconds, the first face shot, to match the phone still.
+  // The opening mountain shot is mostly sky and looks empty under the title card. It still plays later in the loop.
+  const phoneStart = window.matchMedia('(max-width: 700px)').matches ? 3.3 : 0;
+  if (phoneStart) video.addEventListener('loadedmetadata', () => { video.currentTime = phoneStart; }, { once: true });
+
   function start() {
     addSources();
     video.play().catch(() => {});
