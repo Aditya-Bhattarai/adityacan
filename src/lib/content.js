@@ -126,6 +126,9 @@ export function parseVideo(url, title = '') {
   }
   const vimeo = link.match(/vimeo\.com\/(?:video\/)?(\d+)/);
   if (vimeo) return { provider: 'vimeo', id: vimeo[1], url: link, title, embed: `https://player.vimeo.com/video/${vimeo[1]}?autoplay=1&dnt=1` };
+  // Instagram reels open on Instagram. Their cover comes from the project's reel-covers/ folder (named after the reel id).
+  const reel = link.match(/instagram\.com\/(?:[\w.]+\/)?(?:reel|reels|p)\/([\w-]+)/);
+  if (reel) return { provider: 'external', reel: reel[1], url: link, title };
   return { provider: 'external', url: link, title };
 }
 
@@ -199,13 +202,21 @@ function buildProject(entry) {
     parseVideo(data.links?.featured_video, clean(data.title)),
     ...(data.links?.more ?? []).map((url) => parseVideo(url)),
   ].filter(Boolean);
-  const tableVideos = getLinkTable().filter((row) => row.folder === slug);
+  const tableRows = getLinkTable().filter((row) => row.folder === slug);
+  const tableVideos = tableRows.filter((row) => !row.reel);
+  // Instagram reels go in the Reels tab, each with its own cover (reel-covers/<reel id>.jpg).
+  const reelCovers = imagesIn(`${folder}/reel-covers`);
+  const tableReels = tableRows.filter((row) => row.reel).map((row) => ({
+    ...row,
+    poster: reelCovers.find((item) => item.path.split('/').pop().replace(/\.[^.]+$/, '') === row.reel)?.image ?? null,
+  }));
   const featuredVideo = videos[0] ?? tableVideos[0] ?? null;
 
   const tabs = TABS.map((tab) => {
     // A logo on its own is not worth a tab. It still shows in the page banner when there's no other picture.
     const items = imagesIn(`${folder}/${tab.folder}`).filter((item) => !(tab.key === 'assets' && /logo/.test(item.path)));
-    return { ...tab, items, links: tab.key === 'episodes' ? tableVideos : [] };
+    const links = tab.key === 'episodes' ? tableVideos : tab.key === 'reels' ? tableReels : [];
+    return { ...tab, items, links };
   }).filter((tab) => tab.items.length + tab.links.length > 0);
 
   const documents = pdfsIn(`${folder}/documents`);
@@ -250,8 +261,9 @@ function buildProject(entry) {
     tabs,
     documents,
     // A wide image for cards and sharing. Logos are left out on purpose.
-    cover: find('poster', 'thumbnails', 'stills', 'horizontal-videos', 'photos', 'motion-graphics', 'covers', 'vertical-videos'),
-    wideImage: find('stills', 'thumbnails', 'horizontal-videos', 'photos', 'motion-graphics'),
+    cover: find('poster', 'thumbnails', 'stills', 'horizontal-videos', 'photos', 'motion-graphics', 'covers', 'vertical-videos', 'reel-covers'),
+    // feature/ holds the picture for the big video at the top of the project page, if one is chosen by hand.
+    wideImage: find('feature', 'stills', 'thumbnails', 'horizontal-videos', 'photos', 'motion-graphics'),
     logo: find('assets'),
     // Logos don't count as work.
     mediaCount: tabs.filter((tab) => tab.key !== 'assets').reduce((total, tab) => total + tab.items.length + tab.links.length, 0) + documents.length,

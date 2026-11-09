@@ -2,8 +2,7 @@
 
 ticker:
   - Filmmaker & content strategist
-  - 320M+ impressions across the channels I’ve worked on
-  - Assistant director on Path to Prosperity, selected for the European Union Film Festival Nepal
+  - 750M+ impressions across every platform and client I’ve worked with
   - Directing · Editing · Strategy · Production
   - Licensed trekking guide
 
@@ -17,8 +16,8 @@ hero:
 # The big numbers. Set show to false to hide one, or true to show it.
 # "number: auto" counts the clients listed further down this file.
 stats:
-  - number: 320M+
-    label: Impressions for the channels I’ve worked on
+  - number: 750M+
+    label: Impressions across every platform and client I’ve worked with
     show: true
   - number: 15M+
     label: Views from strategic growth, without going viral

@@ -160,7 +160,7 @@ const jsonLd = {
         <div class:list={['media__panel', { 'media__panel--natural': tab.natural }]} role="tabpanel" id={`panel-${tab.key}`} aria-labelledby={`tab-${tab.key}`} hidden={position !== 0} style={`--min:${tab.min}`}>
           {tab.links.map((video) => (
             <div class="media__item">
-              <VideoFacade video={video} sizes={tab.sizes} />
+              <VideoFacade video={video} poster={video.poster} ratio={tab.ratio} sizes={tab.sizes} widths={[240, 480]} />
               <span class="media__caption">{video.title}</span>
             </div>
           ))}
