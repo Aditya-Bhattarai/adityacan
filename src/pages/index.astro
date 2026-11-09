@@ -452,19 +452,11 @@ const heroSizes = '(max-width: 700px) 100vw, 460px';
   /* Phone layout */
   @media (max-width: 700px) {
     .ticker__track { font-size: 11px; }
-    /* On a phone the video fills the screen width and the title card sits in the middle of it. */
-    .hero { position: relative; display: block; height: 430px; padding: 0; overflow: hidden; }
-    .hero__reel { position: absolute; inset: 0; aspect-ratio: auto; }
-    .hero__card {
-      position: absolute;
-      z-index: 1;
-      left: 16px;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      padding: 22px 18px;
-      gap: 10px;
-    }
+    /* On a phone the title card comes first, then the whole tall video in its own frame below it.
+       Nothing sits on top of the video. The frame is never taller than about 70% of the screen. */
+    .hero { display: flex; flex-direction: column; gap: 16px; padding: 20px var(--gutter) 8px; }
+    .hero__reel { width: min(100%, calc(70vh * 9 / 16)); width: min(100%, calc(70svh * 9 / 16)); margin-inline: auto; border-radius: 6px; }
+    .hero__card { padding: 24px 18px; gap: 10px; }
     .hero__name { font-size: 9px; letter-spacing: 0.2em; }
     .hero__roles { display: none; }
     .hero__buttons { flex-wrap: nowrap; gap: 8px; margin-top: 4px; }
