@@ -1,4 +1,4 @@
-// Homepage hero: starts the muted loop as soon as the page opens, and adds opt-in sound.
+// Homepage hero: starts the muted loop as soon as the page has loaded, and adds opt-in sound.
 const video = document.querySelector('[data-hero-video]');
 const soundButton = document.querySelector('[data-hero-sound]');
 const still = document.querySelector('.hero__poster');
@@ -13,7 +13,9 @@ if (video) {
     // The poster is the still the page already picked for this screen, so nothing changes until the video plays.
     const stillSrc = still?.currentSrc || still?.src;
     if (stillSrc) video.poster = stillSrc;
-    for (const [format, type] of [['webm', 'video/webm'], ['mp4', 'video/mp4']]) {
+    // All three are the same 1080p video. Browsers take the first one they can play:
+    // WebM (Chrome, Android, Firefox), then HEVC (iPhone and Mac Safari, half the size), then plain MP4.
+    for (const [format, type] of [['webm', 'video/webm'], ['hevc', 'video/mp4; codecs="hvc1"'], ['mp4', 'video/mp4']]) {
       const source = document.createElement('source');
       source.src = video.dataset[format];
       source.type = type;
@@ -29,7 +31,9 @@ if (video) {
   }
 
   if (!calm && !saving) {
-    start();
+    // Start once the words, fonts and first pictures are in, so the video never slows the page itself.
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start, { once: true });
 
     // Some phones hold back a muted video until enough of it is on screen. Try again whenever it comes into view.
     if ('IntersectionObserver' in window) {

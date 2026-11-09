@@ -36,7 +36,7 @@ const chapterCards = await Promise.all(chapters.map(async (chapter) => ({
 
 // Hero files live in site-content/00-home/hero-reel/
 // The video is tall, so every screen uses the tall files. It stays sharp because it is never stretched.
-const heroFiles = import.meta.glob('/site-content/00-home/hero-reel/hero-tall.{mp4,webm}', { eager: true, query: '?url', import: 'default' });
+const heroFiles = import.meta.glob('/site-content/00-home/hero-reel/{hero-tall.mp4,hero-tall.webm,hero-tall-hevc.mp4}', { eager: true, query: '?url', import: 'default' });
 const heroUrl = (name) => heroFiles[`/site-content/00-home/hero-reel/${name}`];
 const posterTall = getImages('00-home/hero-reel').find((item) => item.path.includes('poster-tall')).image;
 const tall = await getImage({ src: posterTall, format: 'webp', widths: [540, 720, 1080], quality: 72 });
@@ -79,6 +79,7 @@ const heroSizes = '(max-width: 700px) 100vw, 460px';
         data-hero-video
         data-mp4={heroUrl('hero-tall.mp4')}
         data-webm={heroUrl('hero-tall.webm')}
+        data-hevc={heroUrl('hero-tall-hevc.mp4')}
         muted
         loop
         playsinline
