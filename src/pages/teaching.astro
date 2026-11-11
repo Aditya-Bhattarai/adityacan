@@ -1,112 +1,196 @@
 ---
-// TEACHING CHAPTER. Words are in site-content/pages/teaching.yaml
+// CLASSES: Frame as a building with three floors (scene 4, afternoon). Pick a floor and its window lights up.
 import Base from '../layouts/Base.astro';
-import NextChapter from '../components/NextChapter.astro';
 import Picture from '../components/Picture.astro';
-import { clean, getChapter, getImages, getPage, getProjects } from '../lib/content.js';
+import { getProject, getSettings } from '../lib/content.js';
+import { day } from '../lib/day.js';
 
-const page = await getPage('teaching');
-const chapter = getChapter('teaching');
-const projects = await getProjects();
-const bySlug = Object.fromEntries(projects.map((project) => [project.slug, project]));
-const curriculum = clean(page.frame.curriculum_link);
-const enrol = clean(page.frame.enrol_link);
+const settings = getSettings();
+const frame = await getProject('frame-course');
+const seniors = await getProject('senior-digital-literacy');
 
-const courses = page.courses.map((course, index) => {
-  const project = bySlug[course.project];
-  const photos = project ? ['stills', 'photos'].flatMap((name) => getImages(`${project.folder}/${name}`)) : [];
-  return { ...course, number: `${chapter.number}.${index + 2}`, href: project?.href, photos: photos.slice(0, 3) };
-});
+// ---------- WORDS: change the text between the quotes and save ----------
+const words = {
+  title: 'Frame.',
+  intro: 'My video editing course. 18 modules over three levels, from CapCut to After Effects.',
+  introShort: 'My video editing course. 18 modules over three levels.',
+  button: 'Join the next batch',
+  also: 'I also teach social media to older people who never grew up with it.',
+};
+// The three floors, top floor first.
+const floors = [
+  { id: 'f3', k: 'k3', number: '03', title: 'Advanced', text: 'Motion graphics in After Effects, and colour grading.', image: 'u/teach-timeline.jpg', alt: 'A timeline on screen, mid edit.', bg: '#ECE9E1' },
+  { id: 'f2', k: 'k2', number: '02', title: 'Professional', text: 'Moving to Premiere Pro, working with sound and cutting a story.', image: 'u/teach-setup.jpg', alt: 'An editing setup ready for class.', bg: '#E4E1D8' },
+  { id: 'f1', k: 'k1', number: '01', title: 'Foundations', text: 'Cutting in CapCut, with pacing, hooks and captions.', image: 'u/rc-7.jpg', alt: 'An editing class, mid lesson.', bg: '#DCD8CC' },
+];
+
+// The button opens WhatsApp with a first line already typed.
+const joinHref = settings.whatsapp
+  ? `https://wa.me/${settings.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent('Hi Aditya, I’d like to join the next Frame batch.')}`
+  : settings.calendly;
 ---
 
-<Base title={`Chapter ${chapter.number}: ${chapter.title}`} current="work" description="Editing courses for creators, and classes that show older people how social media works.">
-  <section class="title-card-section">
-    <div class="title-card">
-      <div class="title-card__kicker">CHAPTER {chapter.number}</div>
-      <h1 class="title-card__title teaching-word">Teaching</h1>
-      <p class="title-card__statement">{page.statement}</p>
-    </div>
-  </section>
+<Base
+  title="Classes"
+  description="Frame, Aditya Bhattarai’s video editing course: 18 modules over three levels, from CapCut to After Effects. Plus social media classes for older people."
+  current="teaching" scene="4" slug="INT. CLASSROOM. AFTERNOON." grain
+  sky="linear-gradient(180deg, #9DC2E2 0px, #C9DDEC 200px, #F1F0EC 480px)"
+>
+  <div class="bld">
+    <input type="radio" name="floor" id="f1" checked aria-label="Floor 1, Foundations" />
+    <input type="radio" name="floor" id="f2" aria-label="Floor 2, Professional" />
+    <input type="radio" name="floor" id="f3" aria-label="Floor 3, Advanced" />
 
-  <section class="wrap teaching">
-    <div class="course course--frame">
-      <div class="course__text">
-        <span class="label">{chapter.number}.1 · {page.frame.kicker}</span>
-        <h2 class="frame-title">{page.frame.title}</h2>
-        <p class="body-text">{page.frame.text}</p>
-        {(curriculum || enrol) && (
-          <div class="btn-row">
-            {curriculum && <a class="btn btn--primary" href={curriculum}>View curriculum</a>}
-            {enrol && <a class="btn btn--ghost" href={enrol}>Join the waitlist</a>}
-          </div>
-        )}
+    <Picture image={day('moon_disc.jpg')} alt="The moon, faint in the afternoon sky. My own photograph." widths={[120]} sizes="60px" class="moon d-only" />
+
+    <!-- The name and the lift dial -->
+    <div class="left">
+      <h1>{words.title}</h1>
+      <p class="intro d-only">{words.intro}</p>
+      <p class="intro m-only">{words.introShort}</p>
+      <div class="lift d-only" aria-hidden="true">
+        <div class="lift__face"></div>
+        <span class="num" style="left: 28px; top: 54px">1</span>
+        <span class="num" style="left: 92px; top: 18px">2</span>
+        <span class="num" style="right: 24px; top: 54px">3</span>
+        <span class="needle"></span>
+        <span class="lift__pin"></span>
       </div>
-      <div class="levels">
-        {page.frame.levels.map((level) => (
-          <div class="levels__item">
-            <span class="label label--small">LEVEL {level.number}</span>
-            <span class="levels__title">{level.title}</span>
-            <span class="levels__text">{level.text}</span>
-          </div>
+      <a class="join d-only" href={joinHref} target="_blank" rel="noopener">{words.button}</a>
+      {frame && <a class="more d-only" href={frame.href}>About the course →</a>}
+    </div>
+
+    <!-- The one crooked thing -->
+    <figure class="crooked d-only">
+      <Picture image={day('u/teach-green.jpg')} alt="A class in front of a green screen." widths={[240, 480]} sizes="16vw" style="aspect-ratio: 1 / 1" />
+    </figure>
+
+    <!-- The building -->
+    <div class="tower">
+      <div class="sign-row"><div class="sign" aria-hidden="true">{'FRAME'.split('').map((letter) => <span>{letter}</span>)}</div></div>
+      <div class="floors">
+        {floors.map((floor) => (
+          <label class={`fl ${floor.k}`} for={floor.id} style={`background:${floor.bg}`}>
+            <div class="win">
+              {floor.k === 'k3' && <svg viewBox="0 0 300 160" width="100%" height="100%" aria-hidden="true"><rect x="40" y="26" width="220" height="64" fill="none" stroke="#121212" stroke-width="2"></rect><path d="M60 70 L110 44 L150 62 L200 34 L240 52" fill="none" stroke="#121212" stroke-width="2"></path><circle cx="110" cy="128" r="9" fill="none" stroke="#121212" stroke-width="2"></circle><circle cx="190" cy="128" r="9" fill="none" stroke="#121212" stroke-width="2"></circle><path d="M110 118 L110 98 M190 118 L190 98" stroke="#121212" stroke-width="1.5" stroke-dasharray="2 4"></path></svg>}
+              {floor.k === 'k2' && <svg viewBox="0 0 300 160" width="100%" height="100%" aria-hidden="true"><rect x="40" y="30" width="220" height="56" fill="none" stroke="#121212" stroke-width="2"></rect><path d="M52 58 h30 M90 58 h52 M150 58 h20 M178 58 h70" stroke="#121212" stroke-width="8"></path><path d="M52 76 q20 -12 40 0 t40 0 t40 0 t40 0 t40 0" fill="none" stroke="#121212" stroke-width="1.5"></path><circle cx="150" cy="128" r="9" fill="none" stroke="#121212" stroke-width="2"></circle><path d="M150 118 L150 96" stroke="#121212" stroke-width="1.5" stroke-dasharray="2 4"></path></svg>}
+              {floor.k === 'k1' && <svg viewBox="0 0 300 160" width="100%" height="100%" aria-hidden="true"><rect x="118" y="18" width="64" height="110" rx="8" fill="none" stroke="#121212" stroke-width="2"></rect><path d="M130 100 h40 M130 108 h28" stroke="#121212" stroke-width="3"></path><circle cx="70" cy="128" r="9" fill="none" stroke="#121212" stroke-width="2"></circle><circle cx="230" cy="128" r="9" fill="none" stroke="#121212" stroke-width="2"></circle><path d="M78 122 L116 90 M222 122 L184 90" stroke="#121212" stroke-width="1.5" stroke-dasharray="2 4"></path></svg>}
+              <Picture image={day(floor.image)} alt={floor.alt} widths={[320, 640]} sizes="(max-width: 700px) 90vw, 21vw" />
+            </div>
+            <div class="info">
+              <span class="num">{floor.number}</span>
+              <span class="ttl">{floor.title}</span>
+              <span class="tags">{floor.text}</span>
+            </div>
+            <span class="lamp"></span>
+          </label>
         ))}
       </div>
+      <div class="ground d-only"></div>
     </div>
 
-    {courses.map((course) => (
-      <div class="course">
-        <div class="course__text">
-          <span class="label">{course.number} · {course.kicker}</span>
-          <h2 class="h2 h2--small">{course.title}</h2>
-        </div>
-        <div class="course__detail">
-          <p class="body-text">{course.text}</p>
-          <div class="tag-row">{course.tags.map((tag) => <><span class="tag">{tag}</span>{" "}</>)}</div>
-          {course.photos.length > 0 && (
-            <div class="course__photos">
-              {course.photos.map((photo) => (
-                <div class="frame" style="aspect-ratio:4/5;border-radius:6px"><Picture image={photo.image} alt={photo.caption} widths={[240, 480]} sizes="(max-width: 700px) 33vw, 16vw" /></div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    ))}
-  </section>
+    <!-- Next door: the other classes -->
+    <p class="house">
+      {seniors ? <a href={seniors.href}>{words.also}</a> : words.also}
+    </p>
 
-  <section class="band-ink">
-    <div class="wrap workshops">
-      <div class="workshops__text">
-        <span class="label">{page.workshops.kicker}</span>
-        <p class="statement workshops__line">{page.workshops.text}</p>
-      </div>
-      <a class="btn btn--primary btn--large" href="/contact#book">{page.workshops.button}</a>
+    <div class="mcta m-only">
+      <a class="join" href={joinHref} target="_blank" rel="noopener">{words.button}</a>
+      {frame && <a class="more" href={frame.href}>About the course →</a>}
     </div>
-  </section>
-
-  <NextChapter current="teaching" />
+    <div class="mcard m-only">
+      <Picture image={day('best/greenscreen.jpg')} alt="A green screen studio with the lights set." widths={[480, 840]} sizes="100vw" style="aspect-ratio: 4 / 5" />
+      <span class="vf"></span>
+      <span class="mcard__t"><b>The studio</b><small>lights set</small></span>
+    </div>
+  </div>
 </Base>
 
 <style>
-  .teaching-word { font-size: clamp(60px, 10vw, 150px); line-height: 0.88; }
-  .teaching { padding-bottom: 72px; }
-  .course { display: flex; flex-wrap: wrap; gap: 40px; padding-block: 48px; border-top: 1px solid var(--line); }
-  .course--frame { border-top-color: var(--ink); }
-  .course__text { flex: 1 1 360px; display: flex; flex-direction: column; gap: 16px; }
-  .course__detail { flex: 1.4 1 min(480px, 100%); display: flex; flex-direction: column; gap: 16px; }
-  .course__photos { margin-top: 8px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-  .frame-title { font-weight: 600; font-size: clamp(48px, 6vw, 88px); line-height: 0.9; letter-spacing: -0.045em; }
-  .levels { flex: 1.4 1 min(480px, 100%); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 12px; }
-  .levels__item { min-height: 240px; padding: 24px; background: var(--panel); border-radius: var(--radius-card); display: flex; flex-direction: column; gap: 12px; }
-  .levels__title { font-weight: 600; font-size: 26px; line-height: 1.1; letter-spacing: -0.02em; }
-  .levels__text { font-size: 15px; line-height: 1.5; color: var(--body); }
+  .bld { position: relative; }
+  .bld input { position: absolute; opacity: 0; pointer-events: none; }
+  h1 { margin: 0; font-weight: 600; line-height: 0.86; letter-spacing: -0.05em; }
+  .intro { margin: 0; font-family: var(--font-serif); line-height: 1.2; }
+  .num { font: 500 15px/1 var(--font-mono); letter-spacing: 0.3em; }
+  .join { align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 999px; background: var(--ink); color: var(--paper); text-decoration: none; font-size: 14px; font-weight: 500; }
+  .more { align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; font: 400 11px/1 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); text-underline-offset: 5px; }
+  .house { margin: 0; font: 400 10px/1.7 var(--font-mono); letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+  .house a { color: inherit; text-underline-offset: 4px; }
 
-  .workshops { padding-block: 96px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 28px; }
-  .workshops__text { display: flex; flex-direction: column; gap: 12px; max-width: 760px; }
-  .workshops__line { font-size: clamp(30px, 3.6vw, 52px); line-height: 1.1; }
+  .sign-row { display: flex; justify-content: center; margin-bottom: -2px; }
+  .sign { border: 2px solid var(--ink); border-bottom: none; background: #ece9e1; font-weight: 600; }
+  .sign span { transition: color 0.3s, text-shadow 0.3s; }
+  .sign:hover span { color: #a86a12; text-shadow: 0 0 10px rgba(232, 178, 58, 0.9); }
+  .sign span:nth-child(2) { transition-delay: 0.12s; } .sign span:nth-child(3) { transition-delay: 0.24s; } .sign span:nth-child(4) { transition-delay: 0.36s; } .sign span:nth-child(5) { transition-delay: 0.48s; }
+  .floors { border: 2px solid var(--ink); border-bottom: none; background: var(--paper); }
+  .fl { position: relative; display: flex; border-bottom: 2px solid var(--ink); }
+  .win { position: relative; border: 2px solid var(--ink); background: #f7f5ef; overflow: hidden; }
+  .win :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.8s ease; }
+  .win svg { position: absolute; inset: 0; transition: opacity 0.5s; }
+  .info { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+  .ttl { font-weight: 600; letter-spacing: -0.04em; line-height: 1; }
+  .tags { font: 400 19px/1.25 var(--font-serif); opacity: 0; transform: translateY(6px); transition: opacity 0.5s, transform 0.5s; }
+  .lamp { position: absolute; right: 22px; top: 22px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--ink); background: transparent; transition: background 0.4s; }
+  #f1:checked ~ .tower .k1 .win :global(img), #f2:checked ~ .tower .k2 .win :global(img), #f3:checked ~ .tower .k3 .win :global(img) { opacity: 1; }
+  #f1:checked ~ .tower .k1 svg, #f2:checked ~ .tower .k2 svg, #f3:checked ~ .tower .k3 svg { opacity: 0; }
+  #f1:checked ~ .tower .k1 .tags, #f2:checked ~ .tower .k2 .tags, #f3:checked ~ .tower .k3 .tags { opacity: 1; transform: none; }
+  #f1:checked ~ .tower .k1 .lamp, #f2:checked ~ .tower .k2 .lamp, #f3:checked ~ .tower .k3 .lamp { background: var(--gold); }
+  .bld input:focus-visible ~ .tower { outline: 1px dashed var(--muted); outline-offset: 8px; }
 
-  @media (max-width: 700px) {
-    .title-card-section { padding-block: 32px 48px; }
-    .levels__item { min-height: 0; }
-    .workshops { padding-block: 64px; }
+  @media (min-width: 700px) {
+    .bld { height: calc(1100 * var(--u)); min-height: 760px; overflow: hidden; }
+    .bld :global(.moon) { position: absolute; left: calc(1326 * var(--u)); top: max(96px, calc(84 * var(--u))); width: 60px; height: 60px; border-radius: 50%; mix-blend-mode: screen; opacity: 0.9; pointer-events: none; }
+    .left { position: absolute; left: 28px; top: max(130px, calc(130 * var(--u))); width: calc(520 * var(--u)); display: flex; flex-direction: column; gap: calc(22 * var(--u)); }
+    h1 { font-size: calc(168 * var(--u)); }
+    .intro { font-size: max(19px, calc(32 * var(--u))); }
+    .lift { position: relative; width: 200px; height: 112px; margin-top: calc(26 * var(--u)); }
+    .lift__face { position: absolute; inset: 0; border: 2px solid var(--ink); border-bottom: none; border-radius: 100px 100px 0 0; background: #f7f5ef; }
+    .lift .num { position: absolute; }
+    .needle { position: absolute; left: 50%; bottom: 0; width: 2px; height: 74px; margin-left: -1px; background: var(--ink); transform-origin: 50% 100%; transform: rotate(-55deg); transition: transform 1.1s cubic-bezier(0.5, -0.4, 0.3, 1.4); }
+    #f2:checked ~ .left .needle { transform: rotate(0deg); }
+    #f3:checked ~ .left .needle { transform: rotate(55deg); }
+    .lift__pin { position: absolute; left: 50%; bottom: -7px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: var(--ink); }
+    .join { margin-top: calc(18 * var(--u)); }
+    .more { margin-top: calc(-14 * var(--u)); }
+    .crooked { position: absolute; left: calc(330 * var(--u)); top: calc(760 * var(--u)); width: calc(230 * var(--u)); margin: 0; rotate: -4deg; background: #fff; padding: calc(10 * var(--u)) calc(10 * var(--u)) calc(34 * var(--u)); box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.5); }
+    .crooked :global(img) { display: block; width: 100%; height: auto; object-fit: cover; }
+    .tower { position: absolute; left: calc(640 * var(--u)); top: max(104px, calc(96 * var(--u))); width: calc(620 * var(--u)); }
+    .sign { padding: 10px 30px 8px calc(30px + 0.6em); font-size: max(15px, calc(22 * var(--u))); letter-spacing: 0.6em; }
+    .fl { height: calc(206 * var(--u)); }
+    .win { width: calc(300 * var(--u)); margin: calc(22 * var(--u)) 0 calc(22 * var(--u)) calc(22 * var(--u)); }
+    .info { padding: 0 calc(26 * var(--u)); }
+    .ttl { font-size: max(22px, calc(34 * var(--u))); }
+    .tags { font-size: max(14px, calc(19 * var(--u))); }
+    .ground { height: 2px; background: var(--ink); margin: 0 -400px 0 -60px; }
+    .house { position: absolute; left: calc(1290 * var(--u)); top: calc(580 * var(--u)); width: calc(128 * var(--u)); font-size: max(8px, calc(10 * var(--u))); }
+  }
+
+  @media (max-width: 699.98px) {
+    .bld { padding: 116px 22px 44px; display: flex; flex-direction: column; gap: 22px; }
+    .left { display: flex; flex-direction: column; gap: 10px; }
+    h1 { font-size: 84px; }
+    .intro { font-size: 20px; }
+    .sign { padding: 6px 16px 6px calc(16px + 0.5em); font-size: 13px; letter-spacing: 0.5em; }
+    .floors { border-bottom: 0; }
+    .fl { flex-direction: column; gap: 10px; padding: 14px 16px; }
+    .info { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 6px 14px; order: -1; padding-right: 26px; }
+    .info .num { font: 600 12px/1 var(--font-sans); }
+    .ttl { font-size: 22px; }
+    .tags { flex-basis: 100%; font-size: 17px; display: none; }
+    .win { aspect-ratio: 16 / 9; display: none; }
+    .win svg { display: none; }
+    .lamp { right: 16px; top: 18px; width: 12px; height: 12px; }
+    #f1:checked ~ .tower .k1 .win, #f2:checked ~ .tower .k2 .win, #f3:checked ~ .tower .k3 .win { display: block; }
+    #f1:checked ~ .tower .k1 .tags, #f2:checked ~ .tower .k2 .tags, #f3:checked ~ .tower .k3 .tags { display: block; }
+    .house { font: 400 15px/1.5 var(--font-sans); letter-spacing: 0; text-transform: none; color: var(--ink); }
+    .house a { display: inline-block; padding: 8px 0; }
+    .mcta { display: flex; flex-direction: column; gap: 4px; }
+    .join { font-size: 15px; }
+    .mcard { position: relative; margin: 0 -22px; color: #f4efe6; overflow: hidden; background: #0a0a09; }
+    .mcard :global(img) { display: block; width: 100%; height: auto; object-fit: cover; }
+    .mcard::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.72)); pointer-events: none; }
+    .mcard__t { position: absolute; left: 30px; right: 30px; bottom: 28px; z-index: 3; display: flex; flex-direction: column; gap: 7px; }
+    .mcard__t b { font-weight: 600; font-size: 40px; line-height: 0.94; letter-spacing: -0.05em; }
+    .mcard__t small { font: 400 9px/1.5 var(--font-mono); letter-spacing: 0.16em; text-transform: uppercase; }
   }
 </style>
