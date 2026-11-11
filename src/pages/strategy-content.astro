@@ -1,181 +1,350 @@
 ---
-// STRATEGY & CONTENT CHAPTER. Words are in site-content/pages/strategy.yaml. Media fills in from each project's folders.
+// FOR CREATORS: the edit bay (scene 2, morning). Click a clip on the timeline and it plays in the monitor.
+// Below it: the work, grouped by person, then brand. Those words are in site-content/pages/strategy.yaml
 import Base from '../layouts/Base.astro';
-import NextChapter from '../components/NextChapter.astro';
 import Picture from '../components/Picture.astro';
-import { getChapter, getImages, getPage, getProjects } from '../lib/content.js';
+import { getImages, getPage, getProjects } from '../lib/content.js';
+import { clip, day } from '../lib/day.js';
 
 const page = await getPage('strategy');
-const home = await getPage('home');
-const chapter = getChapter('strategy-content');
-const stats = page.stats.map((stat) => ({ ...stat, number: String(stat.number).startsWith('auto') ? `${home.clients.length}${String(stat.number).slice(4)}` : stat.number }));
 const projects = await getProjects();
 const bySlug = Object.fromEntries(projects.map((project) => [project.slug, project]));
 
-// A short strip for each brand: a mix of formats, in folder order.
+// ---------- WORDS for the edit bay: change the text between the quotes and save ----------
+const says = {
+  s1: ['LANGTANG · REEL', 'From my Langtang trek. I filmed and edited them.'],
+  s2: ['LANGTANG · REEL', 'Cut for Instagram, so people keep watching.'],
+  s3: ['IDEAPRENEUR NEPAL', 'Animated charts, so a video full of numbers is still easy to follow.'],
+  s7: ['THUMBNAILS', 'I do the title and thumbnail together, because that’s what decides if anyone clicks.'],
+  s8: ['STRATEGY', 'I plan what gets made and when it goes out.'],
+};
+// The editor's notes that show when you point at a gold marker on the timeline.
+const markers = [[186, 'cut on the breath'], [380, 'music drops here'], [560, 'hold two frames longer'], [870, 'the chart lands on the beat'], [1180, 'end on a question']];
+
+// The six videos in the thumbnails clip. Each opens on YouTube.
+const videos = [
+  { img: 'yt/sk1.webp', alt: 'Satik Kura thumbnail about the Rasuwa flood.', title: 'Rasuwa flood: the reality of insurance', channel: 'Satik Kura', tag: 'SK', href: 'https://www.youtube.com/watch?v=3-CGYoLWVko' },
+  { img: 'yt/ip1.webp', alt: 'Ideapreneur thumbnail: ten problems, ten reforms.', title: '10 changes the Nepal stock market needs', channel: 'Ideapreneur Nepal', tag: 'IN', href: 'https://www.youtube.com/watch?v=gSUiU-hIgoQ' },
+  { img: 'yt/sk2.webp', alt: 'Satik Kura thumbnail about Yeti Airlines.', title: 'Episode 04: Unfiltered reality of Yeti Airlines', channel: 'Satik Kura', tag: 'SK', href: 'https://www.youtube.com/watch?v=T1wxWdD7V_Y' },
+  { img: 'yt/ip2.webp', alt: 'Ideapreneur thumbnail about a sovereign wealth fund.', title: 'Sovereign Wealth Fund: plan or fancy word?', channel: 'Ideapreneur Nepal', tag: 'IN', href: 'https://www.youtube.com/watch?v=dIpT2v2_geA' },
+  { img: 'yt/sk3.webp', alt: 'Satik Kura thumbnail about Himalayan Java.', title: 'Episode 06: Reality of Himalayan Java', channel: 'Satik Kura', tag: 'SK', href: 'https://www.youtube.com/watch?v=2ju2PtXWpRs' },
+  { img: 'yt/ip3.webp', alt: 'Ideapreneur thumbnail about margin trading.', title: 'Margin trading: is leverage worth it?', channel: 'Ideapreneur Nepal', tag: 'IN', href: 'https://www.youtube.com/watch?v=uHrm39pG2-w' },
+];
+
+// The timeline is 1294 wide in the design. Each clip: which monitor picture it shows, where it sits, its frames.
+const W = 1294;
+const pct = (n) => `${((n / W) * 100).toFixed(3)}%`;
+const tracks = [
+  { label: 'MOTION', clips: [
+    { id: 'c3', left: 380, width: 240, frames: ['u/mg-donut.jpg', 'u/mg-donut.jpg'], chaos: [-40, -90, -14], name: 'animated chart' },
+    { id: 'c4', left: 626, width: 240, frames: ['u/mg-world.jpg', 'u/mg-world.jpg'], chaos: [30, 60, 9], name: 'bar chart' },
+    { id: 'c5', left: 872, width: 240, frames: ['u/mg-seven.jpg', 'u/mg-seven.jpg'], chaos: [-20, -140, 22], name: 'explainer frame' },
+    { id: 'c6', left: 1118, width: 176, frames: ['u/mg-xirr.jpg', 'u/mg-xirr.jpg'], chaos: [60, 40, -30], name: 'explainer frame' },
+  ] },
+  { label: 'EDIT', filler: true, clips: [
+    { id: 'c1', left: 0, width: 180, frames: ['best/v_waterfall_flags.jpg', 'u/lt-peaks.jpg', 'u/lt-valley.jpg'], chaos: [-30, 80, 12], name: 'Langtang reel' },
+    { id: 'c2', left: 186, width: 180, frames: ['u/lt-flags2.jpg', 'u/lt-flags.jpg', 'u/lt-flags2.jpg'], chaos: [50, -60, -18], name: 'prayer flags reel' },
+  ] },
+  { label: 'THUMBNAILS', clips: [
+    { id: 'c7', left: 380, width: 914, frames: ['u/th-yeti.jpg', 'u/th-chaudhary.jpg', 'u/th-engine.jpg', 'u/th-sorry.jpg', 'u/th-sip.jpg'], chaos: [10, 34, 4], name: 'thumbnails' },
+  ] },
+  { label: 'STRATEGY', thin: true, clips: [
+    { id: 'c8', left: 0, width: 1294, frames: [], chaos: [0, -22, -2], name: 'strategy' },
+  ] },
+];
+const order = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8'];
+const digits = ['7', '5', '0', ',', '0', '0', '0', ',', '0', '0', '0', '+'];
+
+// ---------- The work, grouped by person then brand ----------
 function stripFor(project) {
-  // Reel covers (from the Instagram links) come in link order. When there are some, the separate covers are skipped so nothing shows twice.
   const reels = (project.tabs.find((tab) => tab.key === 'reels')?.links ?? []).filter((link) => link.poster).map((link) => ({ image: link.poster, caption: link.title }));
   const folders = ['horizontal-videos', 'thumbnails', 'vertical-videos', ...(reels.length ? [] : ['covers']), 'motion-graphics', 'assets'];
-  const pools = [{ name: 'reels', items: reels }, ...folders.map((name) => ({ name, items: getImages(`${project.folder}/${name}`) }))]
-    .filter((pool) => pool.items.length);
+  const pools = [{ name: 'reels', items: reels }, ...folders.map((name) => ({ name, items: getImages(`${project.folder}/${name}`) }))].filter((pool) => pool.items.length);
   const picked = [];
   for (let round = 0; picked.length < 6 && pools.some((pool) => pool.items[round]); round += 1) {
-    for (const pool of pools) {
-      if (pool.items[round] && picked.length < 6) picked.push({ ...pool.items[round], kind: pool.name });
-    }
+    for (const pool of pools) if (pool.items[round] && picked.length < 6) picked.push({ ...pool.items[round], kind: pool.name });
   }
   return picked;
 }
-
 const groups = page.groups
-  .map((group) => ({
-    ...group,
-    brands: group.brands.map((slug) => bySlug[slug]).filter(Boolean).map((project) => ({ ...project, strip: stripFor(project) })),
-  }))
-  .filter((group) => group.brands.length > 0)
-  .map((group, index) => ({ ...group, number: `${chapter.number}.${index + 1}` }));
-
-// The wall: every thumbnail and cover from this chapter, shuffled evenly between shapes.
-const wall = projects
-  .filter((project) => project.chapterKey === 'strategy-content')
-  .flatMap((project) => {
-    const files = ['thumbnails', 'covers'].flatMap((name) => getImages(`${project.folder}/${name}`).map((item) => ({ ...item, key: item.path.split('/').pop() })));
-    // Reel covers, in link order. Plain video frames (reel-covers/plain_...) are left off the wall.
-    const reels = (project.tabs.find((tab) => tab.key === 'reels')?.links ?? [])
-      .filter((link) => link.poster && !/\/plain_/.test(link.poster.src))
-      .map((link, index) => ({ image: link.poster, caption: link.title, key: `${String(index + 1).padStart(2, '0')}_reel` }));
-    return [...files, ...reels].map((item) => ({ ...item, href: project.href, project: project.title }));
-  })
-  .sort((a, b) => a.key.localeCompare(b.key));
+  .map((group) => ({ ...group, brands: group.brands.map((slug) => bySlug[slug]).filter(Boolean).map((project) => ({ ...project, strip: stripFor(project) })) }))
+  .filter((group) => group.brands.length > 0);
 ---
 
-<Base title={`Chapter ${chapter.number}: ${chapter.title}`} current="work" description="YouTube, podcasts, reels and brand content for some of Nepal’s biggest creators.">
-  <section class="title-card-section">
-    <div class="title-card">
-      <div class="title-card__kicker">CHAPTER {chapter.number}</div>
-      <h1 class="title-card__title">Strategy &amp; Content</h1>
-      <p class="title-card__statement">{page.statement}</p>
-      <div class="title-card__rule"></div>
-      <p class="title-card__intro">{page.intro}</p>
-    </div>
-  </section>
+<Base
+  title="For creators"
+  description="Content strategy, editing, motion graphics and thumbnails for some of Nepal’s most watched creators. 400+ videos edited, 750M+ impressions."
+  current="strategy" scene="2" slug="INT. EDIT BAY. MORNING." grain
+  sky="linear-gradient(180deg, #D3E2EE 0px, #E8EDEC 160px, #F1F0EC 340px)"
+>
+  <div class="bay">
+    {order.map((id, index) => <input type="radio" name="clip" id={id} checked={index === 0} aria-label={`Show clip ${index + 1} in the monitor`} />)}
+    <input type="checkbox" id="chaos" aria-label="Don’t press this" />
+    <span class="sunspot d-only" aria-hidden="true"></span>
+    <h1 class="visually-hidden">For creators</h1>
 
-  <section class="wrap numbers">
-    {stats.map((stat) => (
-      <div class="numbers__item">
-        <span class="stat-number numbers__value">{stat.number}</span>
-        <span class="label label--small">{stat.label}</span>
+    <!-- Program monitor -->
+    <div class="viewer">
+      <div class="v v1">
+        <Picture image={day('best/v_waterfall_flags.jpg')} alt="Prayer flags over a waterfall on the way to Langtang, from a vertical reel." widths={[300, 540]} sizes="(max-width: 700px) 100vw, 20vw" eager class="tall" />
+        <video class="tall loop d-only" data-loop data-src={clip('best/loop_waterfall.mp4')} muted loop playsinline preload="none" aria-label="Prayer flags over a waterfall on the way to Langtang, a vertical reel, silent."></video>
       </div>
-    ))}
-  </section>
-
-  <nav class="wrap jump" aria-label="Chapter sections">
-    <span class="label label--small jump__label">JUMP TO</span>
-    {groups.map((group) => <a class="jump__link" href={`#${group.id}`}>{group.number} {group.short}</a>)}
-    <a class="jump__link" href="#wall">The wall</a>
-  </nav>
-
-  {groups.map((group) => (
-    <section id={group.id} class="wrap group">
-      <div class="group__head">
-        <div class="group__titles">
-          <span class="label">{group.number} · {group.kicker}</span>
-          <h2 class="h2">{group.title}</h2>
+      <div class="v v2 d-only"><Picture image={day('u/lt-flags2.jpg')} alt="Prayer flags, a vertical reel." widths={[300, 359]} sizes="20vw" class="tall" /></div>
+      <div class="v v3 d-only"><Picture image={day('u/mg-donut.jpg')} alt="An animated chart." widths={[640, 1280]} sizes="64vw" class="fill" /></div>
+      <div class="v v4 d-only"><Picture image={day('u/mg-world.jpg')} alt="A bar chart rising." widths={[640, 1280]} sizes="64vw" class="fill" /></div>
+      <div class="v v5 d-only"><Picture image={day('u/mg-seven.jpg')} alt="An animated explainer frame." widths={[640, 1280]} sizes="64vw" class="fill" /></div>
+      <div class="v v6 d-only"><Picture image={day('u/mg-xirr.jpg')} alt="An animated explainer frame." widths={[640, 1280]} sizes="64vw" class="fill" /></div>
+      <div class="v v7 d-only">
+        <div class="yt">
+          {videos.map((video) => (
+            <a href={video.href} target="_blank" rel="noopener">
+              <span class="th"><Picture image={day(video.img)} alt={video.alt} widths={[400]} sizes="20vw" /><i class="pb"></i></span>
+              <span class="meta">
+                <span class="av" style={`background:${video.tag === 'SK' ? '#E8B23A' : '#ECEBE6'}`}>{video.tag}</span>
+                <span class="tx"><span class="ytt">{video.title}</span><span class="ch">{video.channel}</span><span class="ch">edited by me</span></span>
+              </span>
+            </a>
+          ))}
         </div>
-        <div class="tag-row">{group.roles.map((role) => <><span class="tag tag--solid">{role}</span>{" "}</>)}</div>
       </div>
-      {group.brands.map((brand) => (
-        <article class="brand">
-          <div class="brand__text">
-            <h3 class="brand__name"><a href={brand.href}>{brand.title}</a></h3>
-            {brand.oneLiner && <p class="brand__desc">{brand.oneLiner}</p>}
-            {brand.formats.length > 0 && <div class="tag-row">{brand.formats.map((format) => <><span class="tag">{format}</span>{" "}</>)}</div>}
-            <a class="brand__link" href={brand.href}>Open project <span aria-hidden="true">→</span></a>
-          </div>
-          {brand.strip.length > 0 && (
-            <div class="brand__strip scroll-row" data-row>
-              {brand.strip.map((item) => (
-                <a href={brand.href} tabindex="-1" aria-hidden="true" class:list={['brand__tile', { 'brand__tile--logo': item.kind === 'assets' }]} style={`aspect-ratio:${item.image.width}/${item.image.height}`}>
-                  <Picture image={item.image} alt="" widths={[240, 480]} sizes="220px" />
-                </a>
-              ))}
-            </div>
-          )}
-        </article>
+      <div class="v v8 d-only">
+        <span class="big"><span class="odo" aria-label="750,000,000+">{digits.map((digit, index) => /\d/.test(digit)
+          ? <span class="oc" aria-hidden="true"><span style={`animation-duration:${(1.2 + index * 0.09).toFixed(2)}s`}>0<br />1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br />9<br />{digit}</span></span>
+          : <span aria-hidden="true">{digit}</span>)}</span></span>
+        <span class="small">IMPRESSIONS · 400+ VIDEOS</span>
+      </div>
+      <span class="pgm d-only">PGM</span>
+      <div class="m-say m-only"><span>Langtang · reel</span><b>{says.s1[1]}</b></div>
+    </div>
+
+    <!-- What I did, one line for each clip -->
+    <div class="right d-only">
+      {Object.entries(says).map(([key, [kicker, line]]) => <div class={`say ${key}`}><span>{kicker}</span><p>{line}</p></div>)}
+    </div>
+    <a class="wwm-pill d-only" href="/about#work">Work with me</a>
+    <label class="dont d-only" for="chaos"><span class="bt"></span><span class="w1">don’t</span><span class="w2">ok, put it back</span></label>
+
+    <!-- The timeline: the tracks are the job -->
+    <div class="tl d-only">
+      <div class="scale">
+        {markers.map(([left, note]) => <span class="mk" style={`left:${pct(left)}`}><span class="nt">{note}</span></span>)}
+        {['00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00'].map((time) => <span>{time}</span>)}
+      </div>
+      {tracks.map((track) => (
+        <div class:list={['trk', { 'trk--thin': track.thin }]}>
+          <span class="lab">{track.label}</span>
+          {track.clips.map((item) => (
+            <label for={item.id} title={`Play: ${item.name}`} style={`--x:${item.chaos[0]}px;--y:${item.chaos[1]}px;--r:${item.chaos[2]}deg;left:${pct(item.left)};width:${pct(item.width)}`}>
+              {item.frames.map((frame) => <Picture image={day(frame)} alt="" widths={[160]} sizes="90px" />)}
+            </label>
+          ))}
+          {track.filler && <span class="filler"></span>}
+        </div>
       ))}
+      <span class="ph"></span>
+    </div>
+
+    <!-- Phones -->
+    <div class="mtl m-only" aria-hidden="true">
+      <div><span>MOTION</span><i style="width:120px;background:none"></i><Picture image={day('u/mg-donut.jpg')} alt="" widths={[180]} sizes="90px" /><Picture image={day('u/mg-world.jpg')} alt="" widths={[180]} sizes="90px" /><Picture image={day('u/mg-seven.jpg')} alt="" widths={[180]} sizes="90px" /></div>
+      <div><span>EDIT</span><Picture image={day('u/lt-valley.jpg')} alt="" widths={[120]} sizes="58px" class="on" /><Picture image={day('u/lt-flags2.jpg')} alt="" widths={[120]} sizes="58px" /><i></i></div>
+      <div class="thin"><span>STRATEGY</span><i style="background:#121212"></i></div>
+    </div>
+    <section class="mtext m-only">
+      <p class="mslug"><span>2</span><span>INT. EDIT BAY. MORNING.</span></p>
+      <h2>750M+ impressions.<br />400+ videos.</h2>
+      <p class="ms">{says.s8[1]}</p>
+      <div class="row"><small>Reels</small><b>Cut for Instagram</b><span>So people keep watching.</span></div>
+      <div class="row"><small>Motion graphics</small><b>Animated charts</b><span>So a video full of numbers is still easy to follow.</span></div>
+      <div class="row"><small>Thumbnails</small><b>Title and thumbnail together</b><span>Because that’s what decides if anyone clicks.</span></div>
+      <p class="ml">Edited by me · tap one to watch</p>
+      <div class="grid">
+        {videos.map((video) => <a href={video.href} target="_blank" rel="noopener"><Picture image={day(video.img)} alt={video.alt} widths={[400]} sizes="50vw" style="aspect-ratio: 16 / 9" /></a>)}
+      </div>
+      <div class="card"><Picture image={day('c/bts_set.jpg')} alt="A podcast set seen from behind the cameras." widths={[480, 840]} sizes="100vw" style="aspect-ratio: 4 / 5; object-position: 50% 60%" /><span class="vf"></span><span class="card__t"><b>Behind the cameras</b><small>a podcast day</small></span></div>
+      <div class="card"><Picture image={day('c/desk.jpg')} alt="My desk at night: the rope lamp, the screen, the hat on the computer." widths={[480, 840]} sizes="100vw" style="aspect-ratio: 4 / 3" /><span class="vf"></span><span class="card__t"><b>My desk</b><small>where it gets cut</small></span></div>
+      <a class="btn" href="/about#work">Work with me</a>
     </section>
-  ))}
+  </div>
 
-  <section id="wall" class="wrap wall">
-    <div class="wall__head">
-      <div class="group__titles">
-        <span class="label">{page.wall.kicker}</span>
-        <h2 class="h2">{page.wall.title}</h2>
-      </div>
-      <p class="wall__note">{page.wall.note}</p>
-    </div>
-    <div class="wall__grid">
-      {wall.map((item) => (
-        <a class="wall__tile" href={item.href} aria-label={`${item.caption}, ${item.project}`}>
-          <Picture image={item.image} alt="" widths={[300, 600]} sizes="(max-width: 700px) 50vw, 25vw" />
-        </a>
-      ))}
-    </div>
-  </section>
-
-  <NextChapter current="strategy-content" />
+  <!-- The work, grouped by person, then brand -->
+  <div class="people">
+    {groups.map((group) => (
+      <section id={group.id} class="group">
+        <div class="group__head">
+          <span class="group__kicker">{group.kicker}</span>
+          <h2>{group.title}</h2>
+          <div class="group__roles">{group.roles.map((role) => <span>{role}</span>)}</div>
+        </div>
+        {group.brands.map((brand) => (
+          <article class="brand">
+            <div class="brand__text">
+              <h3><a href={brand.href}>{brand.title}<span aria-hidden="true"> →</span></a></h3>
+              {brand.oneLiner && <p>{brand.oneLiner}</p>}
+            </div>
+            {brand.strip.length > 0 && (
+              <div class="brand__strip scroll-row">
+                {brand.strip.map((item) => (
+                  <a href={brand.href} tabindex="-1" aria-hidden="true" class:list={['brand__tile', { 'brand__tile--logo': item.kind === 'assets' }]} style={`aspect-ratio:${item.image.width}/${item.image.height}`}>
+                    <Picture image={item.image} alt="" widths={[240, 480]} sizes="200px" />
+                  </a>
+                ))}
+              </div>
+            )}
+          </article>
+        ))}
+      </section>
+    ))}
+  </div>
 </Base>
 
-<script src="../scripts/row.js"></script>
+<script src="../scripts/loops.js"></script>
 
 <style>
-  .numbers { padding-bottom: 64px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
-  .numbers__item { display: flex; flex-direction: column; gap: 8px; padding-top: 16px; border-top: 1px solid var(--ink); }
-  .numbers__value { font-size: clamp(38px, 4vw, 58px); }
+  .bay { position: relative; }
+  .bay input { position: absolute; opacity: 0; pointer-events: none; }
+  .viewer { position: relative; background: var(--ink); overflow: hidden; }
+  .v { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.5s ease; pointer-events: none; }
+  .v :global(.tall) { display: block; height: 100%; width: auto; aspect-ratio: 9 / 16; object-fit: cover; }
+  .v :global(.fill) { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .v .loop { position: absolute; left: 50%; translate: -50% 0; opacity: 0; transition: opacity 0.4s; }
+  .v .loop:global(.is-playing) { opacity: 1; }
+  #c1:checked ~ .viewer .v1, #c2:checked ~ .viewer .v2, #c3:checked ~ .viewer .v3, #c4:checked ~ .viewer .v4, #c5:checked ~ .viewer .v5, #c6:checked ~ .viewer .v6, #c7:checked ~ .viewer .v7, #c8:checked ~ .viewer .v8 { opacity: 1; }
+  #c7:checked ~ .viewer .v7 { pointer-events: auto; }
 
-  .jump { padding-block: 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border-top: 1px solid var(--line); }
-  .jump__label { margin-right: 8px; }
-  .jump__link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 1px solid var(--ink); border-radius: var(--radius-pill); text-decoration: none; font-weight: 500; font-size: 14px; transition: background-color 200ms ease, color 200ms ease; }
-  .jump__link:hover { background: var(--ink); color: var(--paper); }
+  @media (min-width: 700px) {
+    .bay { height: calc(900 * var(--u)); overflow: hidden; }
+    .sunspot { position: absolute; right: -100px; top: -120px; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 240, 200, 0.98), rgba(255, 216, 142, 0.6) 32%, rgba(255, 216, 142, 0) 100%); pointer-events: none; }
+    .viewer { position: absolute; left: 28px; top: max(100px, calc(84 * var(--u))); width: calc(920 * var(--u)); height: calc(518 * var(--u)); border-radius: 4px; }
+    .pgm { position: absolute; top: 12px; left: 14px; font: 400 10px/1 var(--font-mono); letter-spacing: 0.18em; color: var(--night-muted); }
+    .v8 { flex-direction: column; gap: 12px; color: var(--night-ink); }
+    .big { font: 400 calc(64 * var(--u)) / 1.1 var(--font-mono); letter-spacing: -0.04em; }
+    .small { font: 400 max(9px, calc(11 * var(--u))) / 1 var(--font-mono); letter-spacing: 0.2em; color: var(--night-muted); }
+    .odo { display: inline-flex; height: 1.1em; line-height: 1.1em; overflow: hidden; }
+    .oc { display: block; height: 1.1em; overflow: hidden; }
+    .oc span { display: block; transform: translateY(-11em); }
+    #c8:checked ~ .viewer .oc span { animation: odo 1.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+    @keyframes odo { from { transform: translateY(0); } to { transform: translateY(-11em); } }
 
-  .group { padding-block: 72px 24px; }
-  .group__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 20px; padding-bottom: 24px; border-bottom: 1px solid var(--ink); }
-  .group__titles { display: flex; flex-direction: column; gap: 12px; }
+    .yt { position: absolute; inset: 0; padding: calc(40 * var(--u)) calc(30 * var(--u)) 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(22 * var(--u)) calc(16 * var(--u)); align-content: start; background: #0f0f0f; }
+    .yt a { display: flex; flex-direction: column; gap: calc(10 * var(--u)); color: #f1f1f1; text-decoration: none; min-width: 0; }
+    .th { position: relative; display: block; border-radius: 8px; overflow: hidden; aspect-ratio: 16 / 9; background: #272727; transition: border-radius 0.3s; }
+    .th :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform 5s ease; }
+    .yt a:hover .th { border-radius: 0; }
+    .yt a:hover .th :global(img) { transform: scale(1.06); }
+    .pb { position: absolute; left: 0; bottom: 0; height: 3px; width: 0; background: var(--rec); }
+    .yt a:hover .pb { animation: ytp 7s linear 0.5s forwards; }
+    @keyframes ytp { to { width: 100%; } }
+    .meta { display: flex; gap: 10px; align-items: flex-start; }
+    .av { flex: 0 0 calc(30 * var(--u)); height: calc(30 * var(--u)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: calc(10 * var(--u)); font-weight: 700; color: #0f0f0f; }
+    .tx { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+    .ytt { font-size: max(10px, calc(13 * var(--u))); font-weight: 500; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .ch { font-size: max(9px, calc(12 * var(--u))); color: #aaa; }
 
-  .brand { display: flex; flex-wrap: wrap; gap: 28px; padding-block: 36px; border-bottom: 1px solid var(--line); }
-  .brand__text { flex: 1 1 300px; max-width: 400px; display: flex; flex-direction: column; gap: 12px; }
-  .brand__name { font-weight: 600; font-size: 30px; line-height: 1.1; letter-spacing: -0.025em; }
-  .brand__name a { text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 5px; text-decoration-thickness: 2px; transition: text-decoration-color 0.2s; }
-  .brand__name a:hover, .brand__name a:focus-visible { text-decoration-color: currentColor; }
-  .brand__desc { font-size: 16px; line-height: 1.55; color: var(--body); }
-  .brand__link { align-self: flex-start; margin-top: 4px; padding: 12px 22px; border: 1px solid var(--ink); border-radius: 999px; font-weight: 500; font-size: 16px; transition: background 0.2s, color 0.2s; }
-  .brand__link:hover, .brand__link:focus-visible { background: var(--ink); color: var(--paper); }
+    .right { position: absolute; left: calc(990 * var(--u)); top: max(130px, calc(120 * var(--u))); width: calc(420 * var(--u)); height: calc(420 * var(--u)); }
+    .say { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 14px; opacity: 0; transition: opacity 0.5s ease; pointer-events: none; }
+    .say span { font: 400 10px/1 var(--font-mono); letter-spacing: 0.18em; color: var(--muted); }
+    .say p { margin: 0; font: 400 max(22px, calc(40 * var(--u))) / 1.12 var(--font-serif); letter-spacing: -0.01em; }
+    #c1:checked ~ .right .s1, #c2:checked ~ .right .s2, #c3:checked ~ .right .s3, #c4:checked ~ .right .s3, #c5:checked ~ .right .s3, #c6:checked ~ .right .s3, #c7:checked ~ .right .s7, #c8:checked ~ .right .s8 { opacity: 1; }
+    .wwm-pill { position: absolute; left: calc(990 * var(--u)); top: calc(560 * var(--u)); display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; background: var(--ink); color: var(--paper); text-decoration: none; font-size: 14px; font-weight: 500; }
+    .dont { position: absolute; left: calc(1160 * var(--u)); top: calc(560 * var(--u)); display: inline-flex; align-items: center; gap: 12px; min-height: 44px; font: 400 11px/1 var(--font-mono); letter-spacing: 0.08em; color: var(--muted); user-select: none; }
+    .bt { width: 30px; height: 30px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #f06a4a, #b8321a 70%); box-shadow: 0 4px 0 #7a1e0e, 0 8px 14px -4px rgba(0, 0, 0, 0.5); transition: transform 0.08s, box-shadow 0.08s; }
+    .dont:active .bt { transform: translateY(4px); box-shadow: 0 0 0 #7a1e0e, 0 2px 4px -2px rgba(0, 0, 0, 0.5); }
+    .w2 { display: none; }
+    #chaos:checked ~ .dont .w1 { display: none; }
+    #chaos:checked ~ .dont .w2 { display: inline; }
+
+    .tl { position: absolute; left: calc(118 * var(--u)); right: 28px; top: calc(650 * var(--u)); }
+    .scale { position: relative; height: 18px; display: flex; justify-content: space-between; font: 400 9px/1 var(--font-mono); letter-spacing: 0.1em; color: var(--muted); border-bottom: 1px solid var(--line); }
+    .mk { position: absolute; top: -3px; width: 14px; height: 18px; margin-left: -7px; z-index: 4; }
+    .mk::before { content: ""; position: absolute; left: 2px; top: 2px; width: 10px; height: 12px; background: var(--gold); clip-path: polygon(0 0, 100% 0, 100% 62%, 50% 100%, 0 62%); }
+    .nt { position: absolute; bottom: 22px; left: 50%; transform: translate(-50%, 4px); white-space: nowrap; background: var(--ink); color: var(--paper); font: 400 10px/1 var(--font-mono); letter-spacing: 0.06em; padding: 7px 10px; border-radius: 4px; border-left: 3px solid var(--gold); opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none; }
+    .mk:hover .nt { opacity: 1; transform: translate(-50%, 0); }
+    .trk { position: relative; height: calc(58 * var(--u)); border-bottom: 1px solid #dad8d1; animation: nxnw 1.3s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+    .trk:nth-child(3) { animation-delay: 0.12s; } .trk:nth-child(4) { animation-delay: 0.24s; } .trk:nth-child(5) { animation-delay: 0.36s; }
+    @keyframes nxnw { from { transform: translateX(160px) skewX(-38deg); opacity: 0; } 55% { opacity: 1; } to { transform: none; opacity: 1; } }
+    .trk--thin { height: calc(34 * var(--u)); border-bottom: none; }
+    .lab { position: absolute; left: calc(-100 * var(--u)); top: 0; bottom: 0; width: calc(92 * var(--u)); display: flex; align-items: center; font: 400 max(7px, calc(9 * var(--u))) / 1 var(--font-mono); letter-spacing: 0.08em; color: var(--muted); }
+    .trk label { position: absolute; top: 4px; bottom: 4px; border-radius: 3px; overflow: hidden; display: flex; gap: 2px; background: var(--ink); outline: 2px solid transparent; outline-offset: 1px; transition: outline-color 0.3s, transform 0.9s cubic-bezier(0.3, 1.5, 0.4, 1); }
+    .trk label :global(img) { height: 100%; flex: 1; min-width: 0; object-fit: cover; opacity: 0.75; transition: opacity 0.3s; }
+    .trk label:hover :global(img) { opacity: 1; }
+    .trk label::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 2px; background: #fff; opacity: 0; pointer-events: none; }
+    .trk label:hover::after { opacity: 0.9; animation: scrub 1.6s linear infinite; }
+    @keyframes scrub { to { left: calc(100% - 2px); } }
+    .filler { position: absolute; left: 29.37%; right: 0; top: 4px; bottom: 4px; background: #dad8d1; border-radius: 3px; }
+    #c1:checked ~ .tl label[for="c1"], #c2:checked ~ .tl label[for="c2"], #c3:checked ~ .tl label[for="c3"], #c4:checked ~ .tl label[for="c4"], #c5:checked ~ .tl label[for="c5"], #c6:checked ~ .tl label[for="c6"], #c7:checked ~ .tl label[for="c7"], #c8:checked ~ .tl label[for="c8"] { outline-color: var(--ink); }
+    #c1:checked ~ .tl label[for="c1"] :global(img), #c2:checked ~ .tl label[for="c2"] :global(img), #c3:checked ~ .tl label[for="c3"] :global(img), #c4:checked ~ .tl label[for="c4"] :global(img), #c5:checked ~ .tl label[for="c5"] :global(img), #c6:checked ~ .tl label[for="c6"] :global(img), #c7:checked ~ .tl label[for="c7"] :global(img) { opacity: 1; }
+    .ph { position: absolute; top: -14px; bottom: 0; width: 1px; background: var(--ink); transition: left 0.7s cubic-bezier(0.6, 0, 0.2, 1), transform 0.9s; left: 6.96%; pointer-events: none; z-index: 3; }
+    .ph::before { content: ""; position: absolute; top: 0; left: -6px; border: 6px solid transparent; border-top: 9px solid var(--ink); }
+    #c2:checked ~ .tl .ph { left: 21.33%; } #c3:checked ~ .tl .ph { left: 38.64%; } #c4:checked ~ .tl .ph { left: 57.65%; } #c5:checked ~ .tl .ph { left: 76.66%; } #c6:checked ~ .tl .ph { left: 93.2%; } #c7:checked ~ .tl .ph { left: 64.9%; } #c8:checked ~ .tl .ph { left: 3.1%; }
+    #chaos:checked ~ .tl label { transform: translate(var(--x), var(--y)) rotate(var(--r)); }
+    #chaos:checked ~ .tl .ph { transform: rotate(24deg); }
+    #chaos:checked ~ .viewer { animation: shake 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+    @keyframes shake { 10%, 90% { transform: translateX(-2px); } 20%, 80% { transform: translateX(4px); } 30%, 50%, 70% { transform: translateX(-9px) rotate(-0.7deg); } 40%, 60% { transform: translateX(9px) rotate(0.7deg); } }
+    .bay input:focus-visible ~ .tl { outline: 1px dashed var(--muted); outline-offset: 8px; }
+  }
+
+  @media (max-width: 699.98px) {
+    .viewer { height: min(640px, 78svh); }
+    .v1 { opacity: 1 !important; }
+    .v1 :global(.tall) { width: 100%; height: 100%; aspect-ratio: auto; opacity: 0.92; }
+    .m-say { position: absolute; left: 22px; right: 22px; bottom: 26px; display: flex; flex-direction: column; gap: 8px; color: #fff; text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6); }
+    .m-say span { font: 400 9px/1 var(--font-mono); letter-spacing: 0.18em; text-transform: uppercase; color: var(--night-ink); }
+    .m-say b { font: 400 30px/1.1 var(--font-serif); }
+    .mtl { position: relative; display: flex; flex-direction: column; gap: 6px; padding: 12px 0 14px 84px; overflow: hidden; background: var(--paper); }
+    .mtl::after { content: ""; position: absolute; left: 110px; top: 4px; bottom: 10px; width: 1px; background: var(--ink); }
+    .mtl div { position: relative; display: flex; gap: 4px; height: 34px; }
+    .mtl div.thin { height: 22px; }
+    .mtl span { position: absolute; left: -76px; top: 50%; translate: 0 -50%; font: 400 9px/1 var(--font-mono); letter-spacing: 0.18em; color: var(--muted); }
+    .mtl :global(img) { width: 90px; height: 100%; object-fit: cover; border-radius: 3px; flex: none; }
+    .mtl div:nth-child(2) :global(img) { width: 58px; }
+    .mtl :global(img.on) { outline: 2px solid var(--ink); outline-offset: 1px; }
+    .mtl i { flex: 1; background: #dad8d1; border-radius: 3px; }
+    .mtext { position: relative; padding: 36px 22px; display: flex; flex-direction: column; gap: 18px; background: var(--paper); }
+    .mslug { display: flex; gap: 14px; margin: 0; font: 400 10.5px/1.4 var(--font-script); text-transform: uppercase; opacity: 0.8; }
+    .mtext h2 { margin: 0; font-weight: 600; font-size: 46px; line-height: 0.92; letter-spacing: -0.05em; }
+    .ms { margin: 0; font: italic 400 24px/1.2 var(--font-serif); }
+    .row { display: flex; flex-direction: column; gap: 5px; padding: 14px 0; border-top: 1px solid rgba(128, 128, 128, 0.4); }
+    .row small { font: 400 8.5px/1 var(--font-mono); letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.7; }
+    .row b { font-weight: 500; font-size: 20px; letter-spacing: -0.02em; line-height: 1.15; }
+    .row span { font-size: 14px; line-height: 1.45; opacity: 0.86; }
+    .ml { margin: 0; font: 400 9px/1 var(--font-mono); letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.7; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .grid :global(img) { display: block; width: 100%; height: auto; object-fit: cover; border-radius: 4px; }
+    .card { position: relative; display: block; margin: 0 -22px; color: #f4efe6; overflow: hidden; background: #0a0a09; }
+    .card :global(img) { display: block; width: 100%; height: auto; object-fit: cover; }
+    .card::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.72)); pointer-events: none; }
+    .card__t { position: absolute; left: 30px; right: 30px; bottom: 28px; z-index: 3; display: flex; flex-direction: column; gap: 7px; }
+    .card__t b { font-weight: 600; font-size: 40px; line-height: 0.94; letter-spacing: -0.05em; }
+    .card__t small { font: 400 9px/1.5 var(--font-mono); letter-spacing: 0.16em; text-transform: uppercase; }
+    .btn { align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 999px; background: var(--ink); color: var(--paper); font-size: 15px; font-weight: 500; text-decoration: none; }
+  }
+
+  /* ----- The work, by person then brand ----- */
+  .people { position: relative; background: var(--paper); padding: 24px 28px 96px; }
+  .group { max-width: 1320px; margin: 0 auto; padding-top: 64px; }
+  .group__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 24px; padding-bottom: 18px; border-bottom: 2px solid var(--ink); }
+  .group__kicker { flex-basis: 100%; font: 400 10px/1.4 var(--font-mono); letter-spacing: 0.2em; color: var(--muted); }
+  .group__head h2 { margin: 0; font-weight: 600; font-size: clamp(34px, 4.4vw, 60px); line-height: 0.95; letter-spacing: -0.045em; }
+  .group__roles { margin-left: auto; display: flex; flex-wrap: wrap; gap: 6px; }
+  .group__roles span { padding: 6px 10px; border: 1px solid var(--line-strong); border-radius: 999px; font: 400 10px/1 var(--font-mono); letter-spacing: 0.08em; }
+  .brand { display: flex; flex-wrap: wrap; gap: 20px 28px; padding-block: 28px; border-bottom: 1px solid var(--line); }
+  .brand__text { flex: 1 1 280px; max-width: 380px; display: flex; flex-direction: column; gap: 10px; }
+  .brand__text h3 { margin: 0; font-weight: 600; font-size: 28px; line-height: 1.1; letter-spacing: -0.025em; }
+  .brand__text h3 a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; }
+  .brand__text h3 a span { font: 400 18px/1 var(--font-mono); margin-left: 10px; transition: translate 0.4s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .brand__text h3 a:hover span { translate: 8px 0; }
+  .brand__text p { margin: 0; font-size: 16px; line-height: 1.55; color: var(--body); }
   .brand__strip { flex: 2 1 520px; min-width: 0; display: flex; align-items: flex-end; gap: 10px; overflow-x: auto; }
-  .brand__tile { flex: none; display: block; height: 220px; overflow: hidden; border-radius: var(--radius-thumb); background: var(--panel); }
-  .brand__tile :global(img) { transition: transform 0.4s, opacity 0.2s; }
-  .brand__tile:hover :global(img) { transform: scale(1.03); opacity: 0.9; }
+  .brand__tile { flex: none; display: block; height: 200px; overflow: hidden; border-radius: 4px; background: var(--panel); }
   .brand__tile :global(img) { width: 100%; height: 100%; object-fit: cover; }
   .brand__tile--logo { background: var(--paper); border: 1px solid var(--line); }
   .brand__tile--logo :global(img) { object-fit: contain; padding: 10%; }
-
-  .wall { padding-block: 96px; }
-  .wall__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 28px; }
-  .wall__note { max-width: 400px; font-size: 15px; line-height: 1.55; color: var(--body); }
-  .wall__grid { columns: 4 220px; column-gap: 12px; }
-  .wall__tile { display: block; margin-bottom: 12px; break-inside: avoid; overflow: hidden; border-radius: var(--radius-thumb); background: var(--panel); transition: opacity 200ms ease; }
-  .wall__tile:hover { opacity: 0.85; }
-  .wall__tile :global(img) { width: 100%; height: auto; }
-
-  @media (max-width: 700px) {
-    .title-card-section { padding-block: 32px 48px; }
-    .numbers { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-bottom: 40px; }
-    .numbers__item:last-child:nth-child(odd) { grid-column: 1 / -1; } /* An odd last number gets the full row. */
-    .group { padding-top: 56px; }
+  @media (max-width: 699.98px) {
+    .people { padding: 0 22px 64px; }
+    .group { padding-top: 44px; }
+    .group__roles { margin-left: 0; }
     .brand__strip { flex-basis: 100%; }
-    .brand__tile { height: 180px; }
-    .wall { padding-block: 64px; }
-    .wall__grid { columns: 2; column-gap: 8px; }
-    .wall__tile { margin-bottom: 8px; }
+    .brand__tile { height: 160px; }
   }
 </style>
