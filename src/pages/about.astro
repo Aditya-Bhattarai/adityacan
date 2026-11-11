@@ -300,6 +300,9 @@ const steam = 'M6 40 C 0 30, 12 22, 6 12 C 2 6, 8 3, 6 0';
 
   /* Wider screens: the booklet you page through */
   @media (min-width: 900px) {
+    .hello { flex-wrap: nowrap; gap: clamp(32px, 4.4vw, 64px); }
+    .kmr { flex: 0 1 560px; min-width: 0; }
+    .hello__text { flex: 1 1 0; min-width: 0; }
     .fl-only { display: none !important; }
     .desk { height: max(700px, calc(900 * var(--u))); overflow: hidden; }
     .slug8b { position: absolute; left: 28px; top: 22px; z-index: 3; }
@@ -387,7 +390,7 @@ const steam = 'M6 40 C 0 30, 12 22, 6 12 C 2 6, 8 3, 6 0';
     .flow__l { margin: 0; font: 400 9px/1 var(--font-mono); letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.7; }
   }
 
-  @media (max-width: 699.98px) {
+  @media (max-width: 899.98px) {
     .hello { padding: 100px 0 40px; gap: 24px; }
     .kmr { flex: 1 1 100%; }
     .kmr :global(img) { aspect-ratio: auto; height: 400px; }

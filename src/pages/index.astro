@@ -71,8 +71,8 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
 
 <Base current="home" scene="1" sky="#07080C" ink="#ECEBE6" note="golden hour at 17:21" rail={false} footerDark>
   <Fragment slot="head">
-    <link rel="preload" as="image" type="image/webp" imagesrcset={dawnWide.srcSet.attribute} imagesizes="100vw" media="(min-width: 700px)" fetchpriority="high" />
-    <link rel="preload" as="image" type="image/webp" imagesrcset={dawnTall.srcSet.attribute} imagesizes="100vw" media="(max-width: 699.98px)" fetchpriority="high" />
+    <link rel="preload" as="image" type="image/webp" imagesrcset={dawnWide.srcSet.attribute} imagesizes="100vw" media="(min-width: 900px)" fetchpriority="high" />
+    <link rel="preload" as="image" type="image/webp" imagesrcset={dawnTall.srcSet.attribute} imagesizes="100vw" media="(max-width: 899.98px)" fetchpriority="high" />
   </Fragment>
 
   <div class="day">
@@ -91,7 +91,7 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
     <!-- 1. FADE IN. His own sunrise above Bhairavkunda -->
     <section class="s1">
       <picture>
-        <source media="(max-width: 699.98px)" type="image/webp" srcset={dawnTall.srcSet.attribute} sizes="100vw" />
+        <source media="(max-width: 899.98px)" type="image/webp" srcset={dawnTall.srcSet.attribute} sizes="100vw" />
         <source type="image/webp" srcset={dawnWide.srcSet.attribute} sizes="100vw" />
         <img class="dawn" src={dawnWide.src} width="1920" height="1075" fetchpriority="high" decoding="async" alt="First light behind a line of Himalayan peaks, a sea of haze below. Filmed by Aditya above Bhairavkunda." />
       </picture>
@@ -280,7 +280,7 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
       <span class="low" aria-hidden="true"></span>
       <figure class="boat">
         <picture>
-          <source media="(max-width: 699.98px)" srcset={(await getImage({ src: day('boat_sq.jpg'), format: 'webp', width: 780, quality: 72 })).src} />
+          <source media="(max-width: 899.98px)" srcset={(await getImage({ src: day('boat_sq.jpg'), format: 'webp', width: 780, quality: 72 })).src} />
           <img src={(await getImage({ src: day('boat.jpg'), format: 'webp', width: 1284, quality: 72 })).src} loading="lazy" decoding="async" width="1284" height="538" alt="Two people on a small boat, alone on gold water. A photograph by Aditya." />
         </picture>
       </figure>
@@ -406,7 +406,7 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
   .credit { font: 400 10px/1 var(--font-mono); letter-spacing: 0.18em; text-transform: uppercase; border-bottom: 1px solid currentColor; padding: 6px 0; }
 
   /* ================= PCs and laptops: the board ================= */
-  @media (min-width: 700px) {
+  @media (min-width: 900px) {
     .day {
       height: calc(5814 * var(--u));
       background: linear-gradient(180deg, #090c15 0, #212a3b calc(90 * var(--u)), #212a3b calc(600 * var(--u)), #f1f0ec calc(760 * var(--u)), #f1f0ec calc(3840 * var(--u)), #f0e3cb calc(3940 * var(--u)), #e3c59b calc(4040 * var(--u)), #c99a69 calc(4140 * var(--u)), #a8774b calc(4330 * var(--u)), #8f623c calc(4549 * var(--u)), #5e3219 calc(4650 * var(--u)), #2e1005 calc(4770 * var(--u)), #050204 calc(5340 * var(--u)), #07080c calc(5560 * var(--u)), #07080c 100%);
@@ -446,7 +446,8 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
     .dawn { position: absolute; left: 0; top: calc(60 * var(--u)); width: 100%; height: calc(806 * var(--u)); object-fit: cover; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 15%, #000 79%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 15%, #000 79%, transparent 100%); }
     .glow { position: absolute; left: calc(230 * var(--u)); top: calc(516 * var(--u)); width: calc(330 * var(--u)); height: calc(230 * var(--u)); background: radial-gradient(closest-side, rgba(255, 206, 122, 0.6), rgba(255, 180, 90, 0.2) 55%, transparent); mix-blend-mode: screen; pointer-events: none; animation: breathe 6s ease-in-out infinite alternate; }
     @keyframes breathe { from { opacity: 0.35; scale: 0.92; } to { opacity: 1; scale: 1.06; } }
-    .opening { position: absolute; left: calc(40 * var(--u)); top: max(104px, calc(92 * var(--u))); font-size: max(11px, calc(15 * var(--u))); }
+    .opening { position: absolute; left: calc(40 * var(--u)); top: max(72px, calc(92 * var(--u))); font-size: max(10px, calc(15 * var(--u))); }
+    @media (max-width: 1099.98px) { .opening span:nth-child(3) { display: none; } }
     .opening span + span { margin-top: 1.55em; }
     .title { position: absolute; left: calc(36 * var(--u)); top: calc(218 * var(--u)); font-size: calc(116 * var(--u)); line-height: 0.9; }
     .title span { display: block; }
@@ -501,7 +502,7 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
   }
 
   /* ================= Phones ================= */
-  @media (max-width: 699.98px) {
+  @media (max-width: 899.98px) {
     .day > section { position: relative; padding: 36px 22px; display: flex; flex-direction: column; gap: 18px; }
     .slug { display: flex; gap: 14px; margin: 0; font: 400 10.5px/1.4 var(--font-script); text-transform: uppercase; opacity: 0.8; }
     .f { transition: none; }

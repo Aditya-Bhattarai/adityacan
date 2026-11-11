@@ -254,7 +254,7 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
   // Skipped when the address points at a place on the page, or when you come back to where you were.
   (function () {
     var trail = document.querySelector('[data-trail]');
-    if (!trail || location.hash || !window.matchMedia('(min-width: 700px)').matches) return;
+    if (!trail || location.hash || !window.matchMedia('(min-width: 900px)').matches) return;
     if (history.scrollRestoration) history.scrollRestoration = 'manual';
     var go = function () { window.scrollTo(0, trail.offsetTop + trail.offsetHeight - window.innerHeight); };
     go();
@@ -302,7 +302,7 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
   .film__loop { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
   /* ================= PCs and laptops: the climb ================= */
-  @media (min-width: 700px) {
+  @media (min-width: 900px) {
     .trail { height: calc(4300 * var(--u)); overflow: hidden; }
     .trail > section { display: contents; }
     .sky { position: absolute; left: 0; right: 0; top: 0; height: calc(900 * var(--u)); background: radial-gradient(1.3px 1.3px at 12% 14%, rgba(255, 255, 255, 0.7), transparent), radial-gradient(1px 1px at 28% 32%, rgba(255, 255, 255, 0.5), transparent), radial-gradient(1.5px 1.5px at 44% 9%, rgba(255, 255, 255, 0.6), transparent), radial-gradient(1px 1px at 58% 26%, rgba(255, 255, 255, 0.55), transparent), radial-gradient(1.3px 1.3px at 71% 12%, rgba(255, 255, 255, 0.45), transparent), radial-gradient(1px 1px at 86% 34%, rgba(255, 255, 255, 0.6), transparent), radial-gradient(1px 1px at 6% 40%, rgba(255, 255, 255, 0.4), transparent), radial-gradient(1.3px 1.3px at 36% 21%, rgba(255, 255, 255, 0.5), transparent), radial-gradient(1px 1px at 64% 41%, rgba(255, 255, 255, 0.35), transparent), radial-gradient(1px 1px at 93% 8%, rgba(255, 255, 255, 0.6), transparent), radial-gradient(1px 1px at 51% 18%, rgba(255, 255, 255, 0.45), transparent), radial-gradient(1.3px 1.3px at 21% 6%, rgba(255, 255, 255, 0.55), transparent), linear-gradient(180deg, #080a10 0%, #10141f 24%, #232838 46%, #6f6e6c 70%, #c9c5bb 86%, #f1f0ec 100%); }
@@ -413,7 +413,7 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
   }
 
   /* ================= Phones: the same climb, top to bottom ================= */
-  @media (max-width: 699.98px) {
+  @media (max-width: 899.98px) {
     .trail { display: flex; flex-direction: column; }
     .trail > section { position: relative; display: flex; flex-direction: column; gap: 18px; padding: 18px 22px; background: var(--paper); }
     .mslug { display: flex; gap: 14px; margin: 18px 0 0; font: 400 10.5px/1.4 var(--font-script); text-transform: uppercase; opacity: 0.8; }

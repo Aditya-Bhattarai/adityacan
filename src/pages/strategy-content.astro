@@ -212,7 +212,7 @@ const groups = page.groups
   #c1:checked ~ .viewer .v1, #c2:checked ~ .viewer .v2, #c3:checked ~ .viewer .v3, #c4:checked ~ .viewer .v4, #c5:checked ~ .viewer .v5, #c6:checked ~ .viewer .v6, #c7:checked ~ .viewer .v7, #c8:checked ~ .viewer .v8 { opacity: 1; }
   #c7:checked ~ .viewer .v7 { pointer-events: auto; }
 
-  @media (min-width: 700px) {
+  @media (min-width: 900px) {
     .bay { height: calc(900 * var(--u)); overflow: hidden; }
     .sunspot { position: absolute; right: -100px; top: -120px; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 240, 200, 0.98), rgba(255, 216, 142, 0.6) 32%, rgba(255, 216, 142, 0) 100%); pointer-events: none; }
     .viewer { position: absolute; left: 28px; top: max(100px, calc(84 * var(--u))); width: calc(920 * var(--u)); height: calc(518 * var(--u)); border-radius: 4px; }
@@ -284,7 +284,7 @@ const groups = page.groups
     .bay input:focus-visible ~ .tl { outline: 1px dashed var(--muted); outline-offset: 8px; }
   }
 
-  @media (max-width: 699.98px) {
+  @media (max-width: 899.98px) {
     .viewer { height: min(640px, 78svh); }
     .v1 { opacity: 1 !important; }
     .v1 :global(.tall) { width: 100%; height: 100%; aspect-ratio: auto; opacity: 0.92; }
@@ -340,7 +340,7 @@ const groups = page.groups
   .brand__tile :global(img) { width: 100%; height: 100%; object-fit: cover; }
   .brand__tile--logo { background: var(--paper); border: 1px solid var(--line); }
   .brand__tile--logo :global(img) { object-fit: contain; padding: 10%; }
-  @media (max-width: 699.98px) {
+  @media (max-width: 899.98px) {
     .people { padding: 0 22px 64px; }
     .group { padding-top: 44px; }
     .group__roles { margin-left: 0; }

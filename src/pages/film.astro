@@ -137,7 +137,7 @@ const story = { id: 'r4', title: 'Fireflies', role: 'short story', link: { href:
   #r1:checked ~ .pick label[for="r1"] .v, #r2:checked ~ .pick label[for="r2"] .v, #r3:checked ~ .pick label[for="r3"] .v, #r4:checked ~ .pick label[for="r4"] .v { opacity: 1; color: var(--night-muted); }
   .room input:focus-visible ~ .pick { outline: 1px dashed var(--night-muted); outline-offset: 6px; }
 
-  @media (min-width: 700px) {
+  @media (min-width: 900px) {
     .room { height: max(640px, calc(900 * var(--u))); overflow: hidden; }
     .beam { position: absolute; left: 50%; top: -200px; width: 1400px; height: 900px; transform: translateX(-50%); background: radial-gradient(ellipse at 50% 30%, rgba(236, 235, 230, 0.07), rgba(236, 235, 230, 0) 60%); pointer-events: none; }
     .room :global(.moon) { position: absolute; right: 40px; top: calc(168 * var(--u)); width: 56px; height: 56px; border-radius: 50%; mix-blend-mode: screen; -webkit-mask-image: radial-gradient(circle 27px at 21px 25px, transparent 96%, #000 100%); mask-image: radial-gradient(circle 27px at 21px 25px, transparent 96%, #000 100%); pointer-events: none; }
@@ -175,7 +175,7 @@ const story = { id: 'r4', title: 'Fireflies', role: 'short story', link: { href:
     #ambm:checked ~ .ambt .sw::after { transform: translateX(18px); background: var(--night-ink); }
   }
 
-  @media (max-width: 699.98px) {
+  @media (max-width: 899.98px) {
     .room { padding-top: 150px; }
     .screen { aspect-ratio: 2.39 / 1; width: 100%; }
     .pick { display: flex; flex-direction: column; padding: 26px 22px 20px; }
