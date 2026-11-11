@@ -105,9 +105,9 @@ const countIn = (key) => pieces.filter((piece) => piece.chapter === key).length;
                     <small>CLICK A PIECE TO HOLD IT</small>
                   </div>
                 )}
-                {column.map((piece) => (
+                {column.map((piece, place) => (
                   <div class:list={['it', { dup: copy }]} tabindex={copy ? -1 : 0} aria-hidden={copy ? 'true' : undefined} data-piece data-chapter={piece.chapter} data-roles={piece.roles}>
-                    <Picture image={piece.image} alt={copy ? '' : piece.name} widths={[200, 400]} sizes="(max-width: 900px) 33vw, 11vw" style={`aspect-ratio:${piece.image.width}/${piece.image.height}`} />
+                    <Picture image={piece.image} alt={copy ? '' : piece.name} widths={[200, 400]} sizes="(max-width: 900px) 33vw, 11vw" eager={!copy && index === 0 && place < 3} style={`aspect-ratio:${piece.image.width}/${piece.image.height}`} />
                     <span class="cap">
                       <b>{piece.name}</b>
                       {piece.sub && <small>{piece.sub}</small>}
@@ -205,8 +205,9 @@ const countIn = (key) => pieces.filter((piece) => piece.chapter === key).length;
     .filters__row { overflow-x: auto; scrollbar-width: none; padding-right: 14px; }
     .filters__row::-webkit-scrollbar { display: none; }
     .chip { flex: none; }
-    .chip--role { min-height: 44px; }
-    .mcount { margin: 0; padding: 12px 22px; font: 400 9px/1.4 var(--font-mono); letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.7; }
+    .chip--role { min-height: 44px; font-size: 12px; letter-spacing: 0.06em; }
+    .chip b { font-size: 12px; }
+    .mcount { margin: 0; padding: 12px 22px; font: 400 12px/1.4 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7; }
     .field { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 0 22px; }
     .col, .lane { display: contents; }
     .dup, .ttl { display: none !important; }
@@ -214,7 +215,7 @@ const countIn = (key) => pieces.filter((piece) => piece.chapter === key).length;
     .it :global(img) { height: 100%; aspect-ratio: auto !important; }
     .cap { opacity: 0; padding: 0; inset: 0; background: none; transform: none; }
     .cap b, .cap small { display: none; }
-    .to { position: absolute; inset: 0; pointer-events: auto; font-size: 0; }
+    .to { position: absolute; inset: 0; pointer-events: auto; font-size: 12px; text-indent: -200vw; overflow: hidden; white-space: nowrap; }
     .it.is-held { box-shadow: none; }
     .book { margin: 26px 22px 0; }
   }

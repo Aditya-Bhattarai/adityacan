@@ -110,7 +110,7 @@ const jsonLd = {
     </section>
   ) : posterMode ? null : project.logo ? (
     <section class="wrap feature">
-      <div class="frame frame--contain" style="aspect-ratio:21/9;border-radius:6px"><Picture image={project.logo.image} alt={`${project.title} logo`} widths={[480, 960]} sizes="(max-width: 700px) 100vw, 640px" eager /></div>
+      <div class="frame frame--contain" style="aspect-ratio:21/9;border-radius:6px"><Picture image={project.logo.image} alt={`${project.title} logo`} widths={[480, 960]} sizes="(max-width: 900px) 100vw, 640px" eager /></div>
     </section>
   ) : (
     <section class="wrap feature">
@@ -129,7 +129,7 @@ const jsonLd = {
   {(posterMode || project.brief || project.did.length > 0 || results.length > 0) && (
     <section class:list={['wrap story', { 'story--poster': posterMode }]}>
       {posterMode && (
-        <div class="frame story__cover" style={`aspect-ratio:${project.cover.image.width}/${project.cover.image.height};border-radius:6px`}><Picture image={project.cover.image} alt={project.title} widths={[400, 800]} sizes="(max-width: 700px) 80vw, 420px" eager /></div>
+        <div class="frame story__cover" style={`aspect-ratio:${project.cover.image.width}/${project.cover.image.height};border-radius:6px`}><Picture image={project.cover.image} alt={project.title} widths={[400, 800]} sizes="(max-width: 900px) 80vw, 420px" eager /></div>
       )}
       <div class="story__parts">
       {posterMode && project.oneLiner && <p class="statement story__oneliner">{project.oneLiner}</p>}
@@ -195,7 +195,7 @@ const jsonLd = {
       <div class="documents__grid">
         {documents.map((doc) => (
           <a class="documents__item" href={doc.url}>
-            {doc.preview && <div class="frame" style="aspect-ratio:3/4"><Picture image={doc.preview} alt="" widths={[240, 480]} sizes="(max-width: 700px) 50vw, 20vw" /></div>}
+            {doc.preview && <div class="frame" style="aspect-ratio:3/4"><Picture image={doc.preview} alt="" widths={[240, 480]} sizes="(max-width: 900px) 50vw, 20vw" /></div>}
             <span>{doc.caption} {doc.internal ? '→' : '(PDF)'}</span>
           </a>
         ))}

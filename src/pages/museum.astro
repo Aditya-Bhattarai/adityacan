@@ -74,7 +74,7 @@ const quotes = [
         {frames.map((frame, index) => (
           <figure class="mf at" style={`${at(frame.x, frame.y, 420)};--h:${frame.h};--b:${frame.bar}`}>
             <div class="fr" tabindex="0">
-              <Picture image={day(frame.img)} alt={`${frame.name}. A photograph by Aditya.`} widths={[420, 840]} sizes="(max-width: 700px) 50vw, 30vw" />
+              <Picture image={day(frame.img)} alt={`${frame.name}. A photograph by Aditya.`} widths={[420, 840]} sizes="(max-width: 900px) 50vw, 30vw" eager={[0, 1, 3, 6].includes(index)} />
               <span class="bar t"></span>
               <span class="bar b"><span class="n">{String(index + 1).padStart(2, '0')}</span><span class="rt">{frame.ratio}</span></span>
             </div>
@@ -104,7 +104,7 @@ const quotes = [
       <div class="pin crows at" tabindex="0" style={at(690, 3030, 430, -2)}>
         <span class="tape d-only"></span>
         <span class="ng" style="top: 7px"></span>
-        <Picture image={day('c/birds_lamp.jpg')} alt="Seven dark birds sitting on a street lamp against the sky. My photograph. Point at it and it turns to a negative: the birds go white." widths={[430, 860]} sizes="(max-width: 700px) 100vw, 30vw" />
+        <Picture image={day('c/birds_lamp.jpg')} alt="Seven dark birds sitting on a street lamp against the sky. My photograph. Point at it and it turns to a negative: the birds go white." widths={[430, 860]} sizes="(max-width: 900px) 100vw, 30vw" />
         <span class="ng" style="bottom: 7px"></span>
         <span class="ed" style="left: 14px">→ 12A</span><span class="ed" style="right: 14px"><em>Positive</em><em>Negative</em></span>
       </div>
@@ -120,13 +120,13 @@ const quotes = [
       {quotes.map((quote) => <blockquote class="quote at" style={quote.pos}><p>{quote.text}</p><cite>{quote.by}</cite></blockquote>)}
 
       <div class="pin jr at" style={at(600, 3535, 620, -1.2)}>
-        <div class="jr__l"><Picture image={day('u/sketch-horse.jpg')} alt="A pencil sketch of a pack horse on a mountain trail." widths={[300, 600]} sizes="(max-width: 700px) 50vw, 21vw" /></div>
+        <div class="jr__l"><Picture image={day('u/sketch-horse.jpg')} alt="A pencil sketch of a pack horse on a mountain trail." widths={[300, 600]} sizes="(max-width: 900px) 50vw, 21vw" /></div>
         <div class="jr__r"><span>It taught me men are afraid too.</span><span>And to put my morals above myself.</span></div>
       </div>
       <div class="plq at" style={at(1236, 3565, 180)}><b>Red Dead Redemption 2</b><i>Rockstar Games, 2018</i><span>Sketched from my photo of a horse on the trail</span></div>
 
       <figure class="pin snow at" style={at(70, 3740, 200, 1.6)}>
-        <Picture image={day('c/figure_snow.jpg')} alt="One small figure standing alone on a wide field of snow under dark rock. My photograph." widths={[200, 400]} sizes="(max-width: 700px) 60vw, 14vw" style="aspect-ratio: 4 / 5" />
+        <Picture image={day('c/figure_snow.jpg')} alt="One small figure standing alone on a wide field of snow under dark rock. My photograph." widths={[200, 400]} sizes="(max-width: 900px) 60vw, 14vw" style="aspect-ratio: 4 / 5" />
       </figure>
       <div class="plq at" style={at(290, 3930, 236)}><b>One small figure, a lot of land</b><span>After Kiarostami · my photograph</span></div>
 
@@ -247,15 +247,18 @@ const quotes = [
     .mus > section { display: flex; flex-direction: column; gap: 18px; padding-top: 22px; }
     h1 { font-size: 34px; line-height: 1.02; }
     .lab { opacity: 0.9; }
+    .mono { font-size: 12px; letter-spacing: 0.1em; }
+    .plq span { font-size: 12px; letter-spacing: 0.06em; }
+    .quote cite { font-size: 12px; letter-spacing: 0.08em; }
     .lead { font-size: 20px; }
     .frames { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 8px; }
     .fr { aspect-ratio: 4 / 5; }
     .bar { height: 22%; }
-    .mf figcaption { flex-direction: column; gap: 2px; padding-top: 8px; font-size: 8.5px; }
+    .mf figcaption { flex-direction: column; gap: 2px; padding-top: 8px; font-size: 12px; letter-spacing: 0.06em; }
     .mf figcaption a { padding: 6px 0; }
     .crl .mono { padding-bottom: 0; }
     .cr { grid-template-columns: 1fr 24px; grid-template-rows: auto auto; column-gap: 12px; row-gap: 5px; padding: 14px 0; }
-    .cr i { grid-row: 1; grid-column: 1; justify-self: start; text-align: left; font: 400 8.5px/1.3 var(--font-mono); letter-spacing: 0.2em; text-transform: uppercase; }
+    .cr i { grid-row: 1; grid-column: 1; justify-self: start; text-align: left; font: 400 12px/1.3 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; }
     .cr b { grid-row: 2; grid-column: 1; font-size: 20px; font-weight: 500; }
     .pl { grid-row: 1 / 3; grid-column: 2; }
     .keys { grid-template-columns: repeat(4, 1fr); gap: 8px; rotate: none; }

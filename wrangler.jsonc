@@ -4,6 +4,8 @@
   "compatibility_date": "2026-11-01",
   // A tiny script that lets iPhones play the homepage video. Only the video files go through it.
   "main": "./src/worker.js",
+  // Lets Cloudflare make a private preview address for other branches.
+  "previews": {},
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",

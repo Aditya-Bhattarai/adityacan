@@ -13,8 +13,14 @@ const {
   style,
 } = Astro.props;
 
+// Add an in-between size wherever two sizes are far apart, so a phone is not handed a picture much bigger than it needs.
+const sorted = [...widths].sort((a, b) => a - b);
+const dense = sorted.flatMap((width, index) => {
+  const next = sorted[index + 1];
+  return next && next / width >= 1.6 ? [width, Math.round((width + next) / 2 / 10) * 10] : [width];
+});
 // Never ask for a size bigger than the original file.
-const finalWidths = [...new Set(widths.map((width) => Math.min(width, image.width)))];
+const finalWidths = [...new Set(dense.map((width) => Math.min(width, image.width)))];
 ---
 
 <AstroPicture

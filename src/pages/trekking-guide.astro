@@ -67,7 +67,7 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
       <h1 class="at" style={at(28, 3660, 800)}>Near<br />Mountains.</h1>
       <p class="hand m-only">{words.amaDablam}</p>
       <figure class="p at boudha" style={at(900, 3640, 420, 1.2)}>
-        <Picture image={day('u/trek-boudha.jpg')} alt="Boudhanath at dusk, birds over the stupa." widths={[420, 788]} sizes="(max-width: 700px) 70vw, 29vw" style="aspect-ratio: 4 / 5" eager />
+        <Picture image={day('u/trek-boudha.jpg')} alt="Boudhanath at dusk, birds over the stupa." widths={[420, 788]} sizes="(max-width: 900px) 70vw, 29vw" style="aspect-ratio: 4 / 5" eager />
         <figcaption class="mono d-only">{photos ? <a href={photos} target="_blank" rel="noopener">Boudhanath at dusk · @anorigix ↗</a> : 'Boudhanath at dusk'}</figcaption>
       </figure>
       <figure class="p at print d-only" style={at(600, 3996, 280, -1.2)}>
@@ -92,10 +92,10 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
       <div class="scrap at" style={`${at(800, 3270, 460, 1.2)};--fs:28`}>{words.bhojpur}</div>
       <div class="pols">
         <div class="pol at" tabindex="0" style={at(110, 3180, 300, -3)}>
-          <span class="em"><Picture image={day('c/toddler.jpg')} alt="Me, very small, in a striped sweater and a paper crown." widths={[300, 600]} sizes="(max-width: 700px) 45vw, 20vw" /></span><b>me, small</b>
+          <span class="em"><Picture image={day('c/toddler.jpg')} alt="Me, very small, in a striped sweater and a paper crown." widths={[300, 600]} sizes="(max-width: 900px) 45vw, 20vw" /></span><b>me, small</b>
         </div>
         <div class="pol at" tabindex="0" style={at(470, 3236, 260, 2.4)}>
-          <span class="em"><Picture image={day('c/kid_lake.jpg')} alt="Me as a boy, leaning on a railing by a lake." widths={[300, 600]} sizes="(max-width: 700px) 45vw, 18vw" style="object-position: 62% 50%" /></span><b>a bit bigger</b>
+          <span class="em"><Picture image={day('c/kid_lake.jpg')} alt="Me as a boy, leaning on a railing by a lake." widths={[300, 600]} sizes="(max-width: 900px) 45vw, 18vw" style="object-position: 62% 50%" /></span><b>a bit bigger</b>
         </div>
       </div>
     </section>
@@ -112,7 +112,7 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
       </figure>
       <figure class="p at bus" style={at(340, 2580, 980)}>
         <div class="bus__in">
-          <Picture image={day('u/trek-road.jpg')} alt="A mountain road, empty." widths={[700, 1050]} sizes="(max-width: 700px) 100vw, 68vw" style="aspect-ratio: 16 / 9" />
+          <Picture image={day('u/trek-road.jpg')} alt="A mountain road, empty." widths={[700, 1050]} sizes="(max-width: 900px) 100vw, 68vw" style="aspect-ratio: 16 / 9" />
           <span class="bus__line d-only">{words.bus}</span>
           <span class="vf m-only"></span>
           <span class="card__t m-only"><b>The road out</b><small>by bus, first</small></span>
@@ -132,7 +132,7 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
         <div class="roll__row">
           {roll.map(([img, alt], index) => (
             <a class:list={['neg', { 'd-only': index === 4 }]} href={photos || '/work'} target={photos ? '_blank' : undefined} rel={photos ? 'noopener' : undefined}>
-              <Picture image={day(img)} alt={alt} widths={[300, 600]} sizes="(max-width: 700px) 50vw, 20vw" />
+              <Picture image={day(img)} alt={alt} widths={[300, 600]} sizes="(max-width: 900px) 50vw, 20vw" />
             </a>
           ))}
         </div>
@@ -162,7 +162,7 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
       <p class="mslug m-only"><span>3,870 M</span><span>KYANJIN GOMPA.</span></p>
       <div class="p at film" style={at(28, 1240, 820)}>
         <div class="film__in">
-          <Picture image={day('best/v_langtang_village.jpg')} alt="Langtang village under the snow peaks." widths={[640, 960]} sizes="(max-width: 700px) 100vw, 57vw" style="aspect-ratio: 16 / 9" />
+          <Picture image={day('best/v_langtang_village.jpg')} alt="Langtang village under the snow peaks." widths={[640, 960]} sizes="(max-width: 900px) 100vw, 57vw" style="aspect-ratio: 16 / 9" />
           <video class="film__loop" data-loop data-src={clip('best/loop_langtang.mp4')} muted loop playsinline preload="none" aria-label="Langtang village under the snow peaks, my footage, silent."></video>
           <span class="shade"></span>
           <span class="play d-only" aria-hidden="true"><svg width="22" height="24" viewBox="0 0 22 24"><path d="M2 1 L21 12 L2 23 Z" fill="#121212"></path></svg></span>
@@ -216,7 +216,7 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
         <figcaption>Bhairavkunda, 6:39</figcaption>
       </figure>
       <figure class="snap at hat" style={at(1036, 420, 262, 1.8)}>
-        <Picture image={day('best/lt_hat2.jpg')} alt="My orange hat with cartoon eyes, set down in front of the Langtang range." widths={[480, 840]} sizes="(max-width: 700px) 100vw, 18vw" style="aspect-ratio: 4 / 3" />
+        <Picture image={day('best/lt_hat2.jpg')} alt="My orange hat with cartoon eyes, set down in front of the Langtang range." widths={[480, 840]} sizes="(max-width: 900px) 100vw, 18vw" style="aspect-ratio: 4 / 3" />
         <figcaption class="d-only">The hat made it to 4,400 m.</figcaption>
         <span class="vf m-only"></span><span class="card__t m-only"><b>The hat made it.</b><small>4,400 m</small></span>
       </figure>
@@ -229,7 +229,7 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
     <!-- VII. Above Kyanjin there is only sky -->
     <section class="s-moon">
       <p class="mslug m-only"><span>384,400 KM</span><span>THE MOON.</span></p>
-      <figure class="moon"><Picture image={day('moon.jpg')} alt="A full moon, photographed by Aditya." widths={[250, 500]} sizes="(max-width: 700px) 190px, 17vw" /></figure>
+      <figure class="moon"><Picture image={day('moon.jpg')} alt="A full moon, photographed by Aditya." widths={[250, 500]} sizes="(max-width: 900px) 190px, 17vw" /></figure>
       {photos && <a class="mono moon__cap d-only" href={photos} target="_blank" rel="noopener">Full moon · @anorigix ↗</a>}
       <div class="mcard m-only">
         <Picture image={day('c/white_horse.jpg')} alt="A white horse grazing in the dark, blurred like a ghost." widths={[480, 840]} sizes="100vw" style="aspect-ratio: 4 / 5" />
@@ -421,6 +421,7 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
   @media (max-width: 899.98px) {
     .trail { display: flex; flex-direction: column; }
     .trail > section { position: relative; display: flex; flex-direction: column; gap: 18px; padding: 18px 22px; background: var(--paper); }
+    .trail > section:not(.s-ktm) { content-visibility: auto; contain-intrinsic-size: auto 900px; }
     .mslug { display: flex; gap: 14px; margin: 18px 0 0; font: 400 10.5px/1.4 var(--font-script); text-transform: uppercase; opacity: 0.8; }
     .trail :global(.slugline) { color: var(--ink); }
     .s-ktm { padding-top: 120px !important; overflow: hidden; }
@@ -443,7 +444,7 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
     .mcard::after, .bus__in::after, .hat::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.72)); pointer-events: none; }
     .card__t { position: absolute; left: 30px; right: 30px; bottom: 28px; z-index: 3; display: flex; flex-direction: column; gap: 7px; pointer-events: none; }
     .card__t b { font-weight: 600; font-size: 40px; line-height: 0.94; letter-spacing: -0.05em; }
-    .card__t small { font: 400 9px/1.5 var(--font-mono); letter-spacing: 0.16em; text-transform: uppercase; }
+    .card__t small { font: 400 12px/1.45 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; }
     .film__m { position: absolute; inset: 0; z-index: 4; }
     .roll { rotate: none; }
     .roll__row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }

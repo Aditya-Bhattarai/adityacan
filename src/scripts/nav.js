@@ -3,7 +3,9 @@
 const clocks = document.querySelectorAll('[data-timecode]');
 const dial = document.querySelector('[data-dial]');
 const pad = (number) => String(number).padStart(2, '0');
-const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Phones show the clock without the frame counter (as in the design), so it ticks once a second there.
+const small = window.matchMedia('(max-width: 899.98px)').matches;
+const calm = small || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function kathmanduNow() {
   return new Date(Date.now() + (5 * 60 + 45) * 60000); // GMT+5:45
@@ -12,7 +14,8 @@ function kathmanduNow() {
 function tick() {
   const kathmandu = kathmanduNow();
   const frames = calm ? 0 : Math.floor((Date.now() % 1000) / 40);
-  const text = `${pad(kathmandu.getUTCHours())}:${pad(kathmandu.getUTCMinutes())}:${pad(kathmandu.getUTCSeconds())}:${pad(frames)}`;
+  const clock = `${pad(kathmandu.getUTCHours())}:${pad(kathmandu.getUTCMinutes())}:${pad(kathmandu.getUTCSeconds())}`;
+  const text = small ? clock : `${clock}:${pad(frames)}`;
   clocks.forEach((clock) => { clock.textContent = text; });
 }
 

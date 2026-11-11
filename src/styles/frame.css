@@ -17,7 +17,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url('../assets/day/u/grain.png');
+  background-image: url('../assets/day/u/grain.webp');
   opacity: 0.4;
   pointer-events: none;
   z-index: 20;
@@ -70,6 +70,7 @@
 .nav a { color: inherit; text-decoration: none; }
 .nav__id { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
 .nav__name { font-weight: 600; font-size: 17px; letter-spacing: -0.03em; color: inherit; text-decoration: none; padding: 10px 0; }
+.nav__clock [data-timecode] { display: inline-block; width: calc(11ch + 0.8em); contain: strict; height: 1em; vertical-align: top; overflow: clip; }
 .nav__clock, .nav__note { font: 400 11px/1 var(--font-mono); letter-spacing: 0.06em; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .nav__note { opacity: 0.8; }
 .dial { flex: none; margin-left: -4px; }
@@ -160,7 +161,8 @@ a:hover > .ni-everything .mv, a.on > .ni-everything .mv { transform: translateX(
   .nav__name { font-size: 16px; }
   .nav__menu-btn { display: block; }
   .nav__id { flex-direction: column; align-items: flex-start; gap: 0; }
-  .nav .nav__clock { font-size: 9px; letter-spacing: 0.1em; opacity: 0.8; margin-top: -4px; }
+  .nav .nav__clock { font-size: 12px; letter-spacing: 0.04em; opacity: 0.8; margin-top: -4px; }
+  .nav__clock [data-timecode] { width: calc(8ch + 0.5em); }
 }
 /* Small laptops and tablets on their side: the links stay on one row without their drawings. */
 @media (min-width: 900px) and (max-width: 1239.98px) {
@@ -201,7 +203,7 @@ a:hover > .ni-everything .mv, a.on > .ni-everything .mv { transform: translateX(
   mask-image: linear-gradient(90deg, transparent 50%, #000 50%);
 }
 @media (max-width: 899.98px) {
-  .slugline { left: 22px; top: 84px; gap: 14px; font-size: 10.5px; white-space: normal; right: 30px; }
+  .slugline { left: 22px; top: 84px; gap: 14px; font-size: 12px; white-space: normal; right: 30px; }
   .rail { right: 0; width: 16px; opacity: 0.38; }
 }
 @media (min-width: 900px) and (max-width: 1239.98px) {
@@ -235,6 +237,7 @@ a.csh__c:hover .csh__ar { transform: translate(2px, -2px); color: var(--fg); }
 .csh__idx a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: inherit; text-decoration: none; font-size: 15px; }
 .csh__idx a b { font: 400 12px/1 var(--font-script); opacity: 0.6; }
 .csh__idx a:hover, .csh__idx a.on { color: var(--gold-text, var(--gold)); }
+.csh__idx a.on b { opacity: 1; }
 .csh:not(.dk) .csh__idx { --gold-text: #8a6410; }
 .csh__idx > span { font: 400 10px/1 var(--font-mono); letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.6; }
 .csh__wm { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; padding-top: 46px; }
@@ -250,12 +253,12 @@ a.csh__c:hover .csh__ar { transform: translate(2px, -2px); color: var(--fg); }
   .csh__c { padding: 13px 0; gap: 4px; border-right: 0; justify-content: center; }
   .csh__c::before, .csh__ar { display: none; }
   div.csh__c { display: none; }
-  .csh__k { font-size: 8.5px; }
+  .csh__k { font-size: 12px; letter-spacing: 0.12em; }
   .csh__v { font-size: 18px; }
   .csh__idx { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; padding: 18px 0 4px; }
   .csh__idx > span { display: none; }
   .csh__idx a { font-size: 16px; }
-  .csh__idx a b { font-size: 11px; min-width: 18px; }
+  .csh__idx a b { font-size: 12px; min-width: 20px; }
   .csh:not(.dk) .csh__idx { --gold-text: var(--gold); }
   .csh__wm { padding-top: 34px; }
   .csh__wm span { font-size: 56px; line-height: 0.86; max-width: 6em; }

@@ -62,7 +62,7 @@ const heroFiles = import.meta.glob('/site-content/00-home/hero-reel/{hero-tall.m
 const heroUrl = (name) => heroFiles[`/site-content/00-home/hero-reel/${name}`];
 const posterTall = getImages('00-home/hero-reel').find((item) => item.path.includes('poster-tall')).image;
 const reelPoster = await getImage({ src: posterTall, format: 'webp', widths: [280, 560], quality: 72 });
-const reelSizes = '(max-width: 700px) 112px, 280px';
+const reelSizes = '(max-width: 900px) 128px, 280px';
 
 // The sunrise behind the title: wide on PCs, tall on phones.
 const dawnWide = await getImage({ src: day('home_dawn.jpg'), format: 'webp', widths: [960, 1440, 1920], quality: 70 });
@@ -132,7 +132,7 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
 
     <!-- Call time: the slate carries the numbers -->
     <section class="s-call">
-      <a class="slate at" href="/strategy-content" style={at(40, 896, 400)} aria-label={`Slate: ${words.videosEdited} videos edited, ${words.impressions} impressions. Open For creators.`}>
+      <a class="slate at" href="/strategy-content" style={at(40, 896, 400)}>
         <span class="slate__st slate__st--up"></span><span class="slate__st"></span>
         <span class="slate__sb">
           <span class="fd" style="grid-column: span 6"><small>Prod.</small><b>adityacan.com</b></span>
@@ -160,7 +160,7 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
       <div class="thumbs">
         {thumbs.map((item, index) => (
           <a class:list={['f at', { 'd-only': index > 1 }]} href={item.href} target="_blank" rel="noopener" style={item.pos}>
-            <Picture image={day(item.img)} alt={item.alt} widths={[200, 400]} sizes="(max-width: 700px) 40vw, 14vw" style="aspect-ratio: 16 / 9; border-radius: 4px" />
+            <Picture image={day(item.img)} alt={item.alt} widths={[200, 400]} sizes="(max-width: 900px) 40vw, 14vw" style="aspect-ratio: 16 / 9; border-radius: 4px" />
             <span class="cap d-only"><span class="name">{item.name}</span><span class="verb">thumbnail ↗</span></span>
           </a>
         ))}
@@ -504,7 +504,8 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
   /* ================= Phones ================= */
   @media (max-width: 899.98px) {
     .day > section { position: relative; padding: 36px 22px; display: flex; flex-direction: column; gap: 18px; }
-    .slug { display: flex; gap: 14px; margin: 0; font: 400 10.5px/1.4 var(--font-script); text-transform: uppercase; opacity: 0.8; }
+    .day > section:not(.s1):not(.s-call) { content-visibility: auto; contain-intrinsic-size: auto 560px; }
+    .slug { display: flex; gap: 14px; margin: 0; font: 400 12px/1.4 var(--font-script); text-transform: uppercase; opacity: 0.8; }
     .f { transition: none; }
     .f:hover { scale: none; }
 
@@ -512,7 +513,7 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
     .day > .s1 { min-height: clamp(640px, 100svh, 900px); padding: 118px 22px 96px; gap: 0; background: #0b0e18; color: #f4efe6; overflow: hidden; }
     .dawn { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     .s1 > *:not(picture) { position: relative; }
-    .opening { font-size: 11px; line-height: 1.5; }
+    .opening { font-size: 12px; line-height: 1.5; }
     .title { margin-top: 14px; font-size: clamp(40px, 12vw, 52px); line-height: 0.93; }
     .msun { position: absolute !important; left: 100px; top: 366px; width: 11px; height: 11px; border-radius: 50%; background: radial-gradient(#fff3cf, #f2b13c 70%); box-shadow: 0 0 0 4px rgba(242, 177, 60, 0.18), 0 0 18px 6px rgba(242, 177, 60, 0.5); }
     .mtc { position: absolute !important; right: 22px; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.14em; white-space: nowrap; }
@@ -524,7 +525,7 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
     .reel__label .recdot { width: 6px; height: 6px; }
     .reel__label button { position: absolute; left: 146px; bottom: 26px; width: 150px; text-align: left; line-height: 1.7; color: #d8d4ca; min-height: 44px; }
     .pill--hero { position: absolute !important; left: 14px; right: 14px; bottom: 26px; width: auto; justify-content: space-between; padding: 6px 6px 6px 14px; }
-    .pill__live { font-size: 9.5px; }
+    .pill__live { font-size: 12px; letter-spacing: 0; }
 
     /* Call time */
     .s-call { background: var(--paper); padding-top: 44px !important; }
@@ -552,7 +553,7 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
     .card::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.72)); pointer-events: none; }
     .card__t { position: absolute; left: 30px; right: 30px; bottom: 28px; z-index: 3; display: flex; flex-direction: column; gap: 7px; }
     .card__t b { font-weight: 600; font-size: 40px; line-height: 0.94; letter-spacing: -0.05em; }
-    .card__t small { font: 400 9px/1.5 var(--font-mono); letter-spacing: 0.16em; text-transform: uppercase; }
+    .card__t small { font: 400 12px/1.45 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; }
 
     /* 6 and 7: golden hour into last light */
     .day > .s6 { padding: 50px 0 40px; gap: 0; color: #1b1108; background: linear-gradient(180deg, #eddcc0 0, #d9b383 18%, #b17949 36%, #9f6e44 62%, #64472d 86%, #3a1a0c 100%); }
@@ -574,7 +575,8 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
     .pill--night a { flex: 1; justify-content: center; }
     .also { display: flex; flex-direction: column; gap: 2px; }
     .also small { padding-bottom: 6px; }
+    .also small { font-size: 12px; letter-spacing: 0.16em; }
     .also a { font-size: 30px; min-height: 44px; display: inline-flex; align-items: center; align-self: flex-start; }
-    .fade-out { align-self: flex-end; font-size: 11px; }
+    .fade-out { align-self: flex-end; font-size: 12px; }
   }
 </style>

@@ -78,7 +78,7 @@ const steam = 'M6 40 C 0 30, 12 22, 6 12 C 2 6, 8 3, 6 0';
   <!-- ============ ME ============ -->
   <section class="hello">
     <div class="kmr" tabindex="0">
-      <Picture image={day('u/portrait-bw.jpg')} alt="Aditya, black and white, natural light." widths={[560, 1120]} sizes="(max-width: 700px) 100vw, 40vw" eager />
+      <Picture image={day('u/portrait-bw.jpg')} alt="Aditya, black and white, natural light." widths={[420, 560, 760, 1120]} sizes="(max-width: 900px) 100vw, 40vw" eager />
       <span class="kleaf" aria-hidden="true"></span>
       <span class="kw" aria-hidden="true">komorebi</span>
     </div>
@@ -96,7 +96,7 @@ const steam = 'M6 40 C 0 30, 12 22, 6 12 C 2 6, 8 3, 6 0';
 
   <!-- A pillow shot: a still place between scenes. Nothing happens here, on purpose. -->
   <figure class="ozu" tabindex="0">
-    <div class="still"><Picture image={day('lake.jpg')} alt="A lake under a heavy sky, small boats far out." widths={[640, 1000]} sizes="(max-width: 700px) 100vw, 640px" /></div>
+    <div class="still"><Picture image={day('lake.jpg')} alt="A lake under a heavy sky, small boats far out." widths={[640, 1000]} sizes="(max-width: 900px) 100vw, 640px" /></div>
     <figcaption><span>a pause</span><span>after Ozu</span></figcaption>
   </figure>
 
@@ -111,7 +111,7 @@ const steam = 'M6 40 C 0 30, 12 22, 6 12 C 2 6, 8 3, 6 0';
           <div class="strip__row">
             {row.map(([img, alt, focus], index) => (
               <div class="fr" tabindex="0">
-                <Picture image={day(img)} alt={alt} widths={[240, 480]} sizes="(max-width: 700px) 33vw, 15vw" style={`object-position:${focus}`} />
+                <Picture image={day(img)} alt={alt} widths={[240, 480]} sizes="(max-width: 900px) 33vw, 15vw" style={`object-position:${focus}`} />
                 <span class="n">{rowIndex * 6 + index + 1}</span>
               </div>
             ))}
@@ -240,7 +240,8 @@ const steam = 'M6 40 C 0 30, 12 22, 6 12 C 2 6, 8 3, 6 0';
   .hello { position: relative; display: flex; flex-wrap: wrap; gap: 64px; align-items: center; padding: 104px 28px 110px; }
   .kmr { position: relative; overflow: hidden; flex: 0 1 560px; min-width: 280px; outline: none; }
   .kmr :global(img) { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
-  .kleaf { position: absolute; inset: -14%; background: url('../assets/day/branches_shadow.jpg') center / cover; mix-blend-mode: multiply; opacity: 0; transition: opacity 1.8s ease; pointer-events: none; transform-origin: 30% 0; }
+  .kmr:hover .kleaf, .kmr:focus-visible .kleaf { background-image: url('../assets/day/branches_shadow.jpg'); }
+  .kleaf { position: absolute; inset: -14%; background: center / cover; mix-blend-mode: multiply; opacity: 0; transition: opacity 1.8s ease; pointer-events: none; transform-origin: 30% 0; }
   .kmr:hover .kleaf, .kmr:focus-visible .kleaf { opacity: 0.6; animation: sway 7s ease-in-out infinite alternate; }
   @keyframes sway { 0% { transform: rotate(-1.2deg) translate(-1%, 0); } 50% { transform: rotate(0.6deg) translate(1.5%, 1%); } 100% { transform: rotate(1.4deg) translate(-0.5%, -1%); } }
   .kw { position: absolute; left: 16px; bottom: 14px; font: 400 10px/1 var(--font-mono); letter-spacing: 0.18em; color: var(--paper); text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6); opacity: 0; transition: opacity 1s 1s; }

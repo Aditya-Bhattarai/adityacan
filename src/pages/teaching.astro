@@ -75,7 +75,7 @@ const joinHref = settings.whatsapp
               {floor.k === 'k3' && <svg viewBox="0 0 300 160" width="100%" height="100%" aria-hidden="true"><rect x="40" y="26" width="220" height="64" fill="none" stroke="#121212" stroke-width="2"></rect><path d="M60 70 L110 44 L150 62 L200 34 L240 52" fill="none" stroke="#121212" stroke-width="2"></path><circle cx="110" cy="128" r="9" fill="none" stroke="#121212" stroke-width="2"></circle><circle cx="190" cy="128" r="9" fill="none" stroke="#121212" stroke-width="2"></circle><path d="M110 118 L110 98 M190 118 L190 98" stroke="#121212" stroke-width="1.5" stroke-dasharray="2 4"></path></svg>}
               {floor.k === 'k2' && <svg viewBox="0 0 300 160" width="100%" height="100%" aria-hidden="true"><rect x="40" y="30" width="220" height="56" fill="none" stroke="#121212" stroke-width="2"></rect><path d="M52 58 h30 M90 58 h52 M150 58 h20 M178 58 h70" stroke="#121212" stroke-width="8"></path><path d="M52 76 q20 -12 40 0 t40 0 t40 0 t40 0 t40 0" fill="none" stroke="#121212" stroke-width="1.5"></path><circle cx="150" cy="128" r="9" fill="none" stroke="#121212" stroke-width="2"></circle><path d="M150 118 L150 96" stroke="#121212" stroke-width="1.5" stroke-dasharray="2 4"></path></svg>}
               {floor.k === 'k1' && <svg viewBox="0 0 300 160" width="100%" height="100%" aria-hidden="true"><rect x="118" y="18" width="64" height="110" rx="8" fill="none" stroke="#121212" stroke-width="2"></rect><path d="M130 100 h40 M130 108 h28" stroke="#121212" stroke-width="3"></path><circle cx="70" cy="128" r="9" fill="none" stroke="#121212" stroke-width="2"></circle><circle cx="230" cy="128" r="9" fill="none" stroke="#121212" stroke-width="2"></circle><path d="M78 122 L116 90 M222 122 L184 90" stroke="#121212" stroke-width="1.5" stroke-dasharray="2 4"></path></svg>}
-              <Picture image={day(floor.image)} alt={floor.alt} widths={[320, 640]} sizes="(max-width: 700px) 90vw, 21vw" />
+              <Picture image={day(floor.image)} alt={floor.alt} widths={[320, 640]} sizes="(max-width: 900px) 90vw, 21vw" eager={floor.k === 'k1'} />
             </div>
             <div class="info">
               <span class="num">{floor.number}</span>
@@ -191,6 +191,6 @@ const joinHref = settings.whatsapp
     .mcard::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.72)); pointer-events: none; }
     .mcard__t { position: absolute; left: 30px; right: 30px; bottom: 28px; z-index: 3; display: flex; flex-direction: column; gap: 7px; }
     .mcard__t b { font-weight: 600; font-size: 40px; line-height: 0.94; letter-spacing: -0.05em; }
-    .mcard__t small { font: 400 9px/1.5 var(--font-mono); letter-spacing: 0.16em; text-transform: uppercase; }
+    .mcard__t small { font: 400 12px/1.45 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; }
   }
 </style>
