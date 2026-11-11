@@ -1,222 +1,454 @@
 ---
-// TREKKING GUIDE CHAPTER. Words are in site-content/pages/trekking-guide.yaml
+// NEAR MOUNTAINS: the trail journal (scene 5, full moon).
+// On PCs and laptops the page opens at the bottom, in Kathmandu (1,400 m), and you scroll UP to climb to the moon.
+// On phones it reads top to bottom: Kathmandu first, the moon last.
 import Base from '../layouts/Base.astro';
 import Picture from '../components/Picture.astro';
-import VideoFacade from '../components/VideoFacade.astro';
-import { clean, getChapter, getImages, getPage, getProjects, getSettings, handleFrom } from '../lib/content.js';
+import { getProject, getSettings } from '../lib/content.js';
+import { at, clip, day } from '../lib/day.js';
 
-const page = await getPage('trekking-guide');
-const chapter = getChapter('trekking-guide');
 const settings = getSettings();
-const projects = await getProjects();
-// The trips, in this order. Each has its words in trekking-guide.yaml and its pictures in its project folder.
-const trips = [['langtang-diaries', page.langtang], ['bhairavkunda', page.bhairavkunda]]
-  .map(([slug, words]) => {
-    const project = projects.find((item) => item.slug === slug);
-    if (!project || !words) return null;
-    // The tall picture beside the big one: a vertical video still, or else the first reel's cover (which opens the reel).
-    const reelLink = (project.tabs.find((tab) => tab.key === 'reels')?.links ?? []).find((link) => link.poster);
-    const reelStill = getImages(`${project.folder}/vertical-videos`)[0];
-    return {
-      project,
-      words,
-      text: clean(words.text),
-      stills: getImages(`${project.folder}/stills`),
-      reel: reelStill ? { image: reelStill.image } : reelLink ? { image: reelLink.poster, url: reelLink.url } : null,
-    };
-  })
-  .filter(Boolean);
-// The homestay classes are part of the Social media and editing classes project in Teaching.
-const homestay = projects.find((project) => project.slug === 'senior-digital-literacy');
-const photography = projects.find((project) => project.slug === 'photography');
+const langtang = await getProject('langtang-diaries');
+const photos = settings.instagramPhotos;
+const wa = (text) => settings.whatsapp ? `https://wa.me/${settings.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(text)}` : settings.calendly;
+const trekHref = wa('Hi Aditya, I’m planning a trek in Nepal.');
 
-const cover = getImages('03-trekking-guide/_chapter-cover')[0];
-const classPhotos = homestay ? getImages(`${homestay.folder}/photos`) : [];
-const photos = photography ? getImages(`${photography.folder}/photos`) : [];
-
-// How many pictures this page shows. The rest stay on the project pages, which keeps this page fast.
-const LANGTANG_ROW = 8;
-const PHOTOS_SHOWN = 18;
-
-const credentials = page.credentials.filter((item) => clean(item.value));
+// ---------- WORDS: change the text between the quotes and save ----------
+const words = {
+  ask: 'Planning a shoot or a trek in Nepal? I can help with both.',
+  licence: 'Licensed trekking guide',
+  bhojpur: 'Bhojpur, where Mom was born. Getting there was a trek every time. I love that place.',
+  amaDablam: 'Ama Dablam. I was too young to even say it right.',
+  bus: 'Pokhara, alone on the bus. I was eleven, maybe twelve.',
+};
+// The three parts of Langtang Diaries on Instagram. "flex" is how long each part is on the bar.
+const parts = [
+  { title: 'Home calling', href: 'https://www.instagram.com/p/DX_jxU9iWG3/', img: 'archive/62.webp', flex: 34, played: true },
+  { title: 'Subtitles that make my videos feel like movie frames', href: 'https://www.instagram.com/p/DfKK9t5JUsQ/', img: 'archive/65.webp', flex: 30 },
+  { title: 'Maybe silence is just a perspective away?', href: 'https://www.instagram.com/p/DfQ3cV4ovkD/', img: 'archive/67.webp', flex: 36 },
+];
+// The strip of negatives. Point at a frame (or tap it) to print it.
+const roll = [
+  ['best/lt_bridge.jpg', 'A suspension bridge on the way to Langtang, prayer flags along the rails.'],
+  ['best/lt_chortens.jpg', 'Three small white chortens under the peaks.'],
+  ['best/lt_yak.jpg', 'A yak grazing, looking straight into the lens.'],
+  ['best/lt_flags_snow.jpg', 'Prayer flags heaped on the snow.'],
+  ['best/bk_gate.jpg', 'An orange gate opening onto stone steps, Bhairavkunda.'],
+];
+// Heights down the right edge: how far down the page, the height, and the place.
+const heights = [
+  [233, '384,400 KM', 'the moon', 'night'], [549, '4,400 M', '', 'night'], [1193, '3,870 M', 'Kyanjin Gompa'], [1642, '3,500 M', ''],
+  [2250, '3,000 M', ''], [2857, '2,500 M', ''], [3464, '2,000 M', ''], [4193, '1,400 M', 'Kathmandu'],
+];
+const road = 'M 700 4246 C 900 4250, 1150 4250, 1150 4100 C 1150 3800, 1150 3700, 1240 3560 C 1340 3420, 1380 3300, 1330 3150 C 1290 3000, 1200 2900, 980 2860 C 600 2800, 260 2620, 330 2520 C 420 2420, 1000 2520, 1100 2400 C 1200 2280, 1360 2200, 1360 2050 C 1360 1900, 980 1780, 900 1760 C 700 1740, 860 1450, 870 1300 C 875 1240, 880 1215, 880 1192';
+const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 237';
 ---
 
-<Base title={`Chapter ${chapter.number}: ${chapter.title}`} current="work" description="Licensed trekking guide in Nepal. Travel films from the Himalaya, photographs from the road and content classes in community homestays." image={cover?.image}>
-  <section class="split">
-    <div class="split__text">
-      <div class="title-card__kicker">CHAPTER {chapter.number}</div>
-      <div class="split__middle">
-        <h1 class="split__title">{chapter.title}</h1>
-        <p class="split__statement">{page.statement}</p>
-      </div>
-      <div class="split__foot">{page.footer_line}</div>
-    </div>
-    {cover && (
-      <div class="split__image">
-        <Picture image={cover.image} alt="Snow peaks above a village in the Langtang Valley" widths={[800, 1200, 1800]} sizes="(max-width: 800px) 100vw, 56vw" eager />
-      </div>
-    )}
-  </section>
-
-  <section class="wrap creds">
-    {credentials.map((item) => (
-      <div class="creds__item">
-        <span class="label label--small">{item.label}</span>
-        <span class="creds__value">{item.value}</span>
-      </div>
+<Base
+  title="Near Mountains."
+  description="Aditya Bhattarai is a licensed trekking guide in Nepal who films on the way up: Langtang, Bhairavkunda and the road out of Kathmandu."
+  current="mountains" scene="5" slug="EXT. LANGTANG. FULL MOON." navInk="#ECEBE6" sky="#F1F0EC" grain rail={false}
+>
+  <div class="trail" data-trail>
+    <span class="sky d-only" aria-hidden="true"></span>
+    <svg class="road d-only" viewBox="0 0 1440 4300" preserveAspectRatio="none" aria-hidden="true">
+      <path d={road} fill="none" stroke="#121212" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round" stroke-dasharray="0.1 9"></path>
+      <circle cx="700" cy="4246" r="4" fill="#121212"></circle>
+      <circle cx="880" cy="1192" r="4" fill="#121212"></circle>
+      <g class="car" style={`offset-path: path('${road}')`}><rect x="-6.5" y="-3" width="13" height="6" rx="2" fill="#121212"></rect><rect x="6.5" y="-2" width="3" height="4" rx="1" fill="#E8B23A" opacity=".8"></rect></g>
+    </svg>
+    <span class="ruler d-only" aria-hidden="true"></span>
+    {heights.map(([y, height, place, tone]) => (
+      <span class:list={['alt d-only', { 'alt--night': tone }]} style={`--y:${y}`}><b>{height}</b>{place && <i>{place}</i>}</span>
     ))}
-  </section>
 
-  {trips.map((trip, index) => (
-    <section class="wrap langtang">
-      <div class="section-head">
-        <div class="section-head__titles">
-          <span class="label">{chapter.number}.{index + 1} · {trip.words.kicker}</span>
-          <h2 class="h2"><a class="plain-link" href={trip.project.href}>{trip.words.title}</a></h2>
+    <!-- 0. Kathmandu, 1,400 m. The page opens here. -->
+    <section class="s-ktm">
+      <h1 class="at" style={at(28, 3660, 800)}>Near<br />Mountains.</h1>
+      <p class="hand m-only">{words.amaDablam}</p>
+      <figure class="p at boudha" style={at(900, 3640, 420, 1.2)}>
+        <Picture image={day('u/trek-boudha.jpg')} alt="Boudhanath at dusk, birds over the stupa." widths={[420, 788]} sizes="(max-width: 700px) 70vw, 29vw" style="aspect-ratio: 4 / 5" eager />
+        <figcaption class="mono d-only">{photos ? <a href={photos} target="_blank" rel="noopener">Boudhanath at dusk · @anorigix ↗</a> : 'Boudhanath at dusk'}</figcaption>
+      </figure>
+      <figure class="p at print d-only" style={at(600, 3996, 280, -1.2)}>
+        <Picture image={day('best/v_peaks_wide.jpg')} alt="A snow peak in Langtang against a clear blue sky." widths={[280, 560]} sizes="20vw" style="aspect-ratio: 16 / 9" />
+        <figcaption class="mono">Langtang, 2026</figcaption>
+      </figure>
+      <div class="scrap at d-only" style={`${at(40, 4004, 520, -1.4)};--fs:30`}>{words.amaDablam}</div>
+      <p class="mono start d-only"><span class="up">↑</span>&nbsp; The page opens here. Scroll up to climb.</p>
+      <div class="mroll m-only" aria-hidden="true">
+        <div class="sprk"></div>
+        <div class="mroll__row">
+          <span class="neg"><Picture image={day('u/trek-tree.jpg')} alt="" widths={[240]} sizes="33vw" /></span>
+          <span class="neg neg--on"><Picture image={day('u/trek-village.jpg')} alt="" widths={[240]} sizes="33vw" /></span>
+          <span class="neg"><Picture image={day('u/trek-horse.jpg')} alt="" widths={[240]} sizes="33vw" /></span>
         </div>
-        <div class="tag-row">{trip.project.roles.map((role) => <><span class="tag tag--solid">{role}</span>{" "}</>)}</div>
       </div>
-      <div class="langtang__media">
-        <div class="langtang__main">
-          {trip.project.video
-            ? <VideoFacade video={trip.project.video} poster={trip.stills[0]?.image} large widths={[800, 1400]} sizes="(max-width: 800px) 100vw, 66vw" />
-            : trip.stills[0] && <a class="frame langtang__link" href={trip.project.href} style="aspect-ratio:16/9;border-radius:6px"><Picture image={trip.stills[0].image} alt={trip.words.title} widths={[800, 1400]} sizes="(max-width: 800px) 100vw, 66vw" /></a>}
+    </section>
+
+    <!-- I. Bhojpur -->
+    <section class="s-bhojpur">
+      <p class="mslug m-only"><span>1,400 M</span><span>KATHMANDU. SCROLL DOWN TO CLIMB.</span></p>
+      <div class="scrap at" style={`${at(800, 3270, 460, 1.2)};--fs:28`}>{words.bhojpur}</div>
+      <div class="pols">
+        <div class="pol at" tabindex="0" style={at(110, 3180, 300, -3)}>
+          <span class="em"><Picture image={day('c/toddler.jpg')} alt="Me, very small, in a striped sweater and a paper crown." widths={[300, 600]} sizes="(max-width: 700px) 45vw, 20vw" /></span><b>me, small</b>
         </div>
-        {trip.reel && (
-          <div class="langtang__reel">
-            {trip.reel.url
-              ? <a class="frame langtang__link" href={trip.reel.url} target="_blank" rel="noopener" aria-label={`${trip.words.title} reel on Instagram`} style="aspect-ratio:9/16;border-radius:6px"><Picture image={trip.reel.image} alt="" widths={[320, 640]} sizes="(max-width: 800px) 60vw, 25vw" /></a>
-              : <div class="frame" style="aspect-ratio:9/16;border-radius:6px"><Picture image={trip.reel.image} alt={`${trip.words.title} reel`} widths={[320, 640]} sizes="(max-width: 800px) 60vw, 25vw" /></div>}
-          </div>
-        )}
+        <div class="pol at" tabindex="0" style={at(470, 3236, 260, 2.4)}>
+          <span class="em"><Picture image={day('c/kid_lake.jpg')} alt="Me as a boy, leaning on a railing by a lake." widths={[300, 600]} sizes="(max-width: 700px) 45vw, 18vw" style="object-position: 62% 50%" /></span><b>a bit bigger</b>
+        </div>
       </div>
-      {trip.stills.length > 1 && (
-        <div class="langtang__stills scroll-row" data-row>
-          {trip.stills.slice(1, LANGTANG_ROW + 1).map((still) => (
-            <div class="frame langtang__still" style={`aspect-ratio:${still.image.width}/${still.image.height}`}><Picture image={still.image} alt={still.caption} widths={[320, 640]} sizes="(max-width: 700px) 60vw, 25vw" /></div>
+    </section>
+
+    <!-- II. Pokhara, alone -->
+    <section class="s-pokhara">
+      <figure class="p at rain d-only" tabindex="0" style={at(40, 2654, 280, -1.6)}>
+        <div class="glass">
+          <Picture image={day('rain.jpg')} alt="Rain on a window, a white car and a red light blurred behind it." widths={[280, 560]} sizes="20vw" />
+          <Picture image={day('rain_wiped.jpg')} alt="" widths={[280, 560]} sizes="20vw" class="wiped" />
+          <span class="arm"></span>
+        </div>
+        <figcaption class="mono">after Kiarostami · hover for the wiper</figcaption>
+      </figure>
+      <figure class="p at bus" style={at(340, 2580, 980)}>
+        <div class="bus__in">
+          <Picture image={day('u/trek-road.jpg')} alt="A mountain road, empty." widths={[700, 1050]} sizes="(max-width: 700px) 100vw, 68vw" style="aspect-ratio: 16 / 9" />
+          <span class="bus__line d-only">{words.bus}</span>
+          <span class="vf m-only"></span>
+          <span class="card__t m-only"><b>The road out</b><small>by bus, first</small></span>
+        </div>
+      </figure>
+    </section>
+
+    <!-- III. The roll: touch a frame to print it -->
+    <section class="s-roll">
+      <p class="mslug m-only"><span>2,500 M</span><span>ON THE TRAIL.</span></p>
+      <div class="mcard m-only">
+        <video data-loop data-src={clip('c/flags.mp4')} poster={(await import('astro:assets').then((m) => m.getImage({ src: day('c/flags_poster.jpg'), width: 800, format: 'webp' }))).src} muted loop playsinline preload="none" aria-label="Prayer flags moving in the wind over the valley. My footage." style="aspect-ratio: 16 / 10"></video>
+        <span class="vf"></span><span class="card__t"><b>Prayer flags</b><small>my footage</small></span>
+      </div>
+      <div class="roll at" style={at(-30, 2290, 1500, -1.2)}>
+        <div class="sprk d-only"></div>
+        <div class="roll__row">
+          {roll.map(([img, alt], index) => (
+            <a class:list={['neg', { 'd-only': index === 4 }]} href={photos || '/work'} target={photos ? '_blank' : undefined} rel={photos ? 'noopener' : undefined}>
+              <Picture image={day(img)} alt={alt} widths={[300, 600]} sizes="(max-width: 700px) 50vw, 20vw" />
+            </a>
           ))}
         </div>
-      )}
-      {trip.text && <p class="body-text">{trip.text}</p>}
+        <div class="sprk d-only"></div>
+        <div class="roll__nums d-only" aria-hidden="true">{['▸ 21', '21A', '22', '22A', '23', '23A', '24', '24A', '25'].map((n) => <span>{n}</span>)}</div>
+      </div>
+      <div class="mcard m-only">
+        <video data-loop data-src={clip('c/mule.mp4')} poster={(await import('astro:assets').then((m) => m.getImage({ src: day('c/mule_poster.jpg'), width: 480, format: 'webp' }))).src} muted loop playsinline preload="none" aria-label="A mule walking the trail with its load. My footage." style="aspect-ratio: 4 / 5"></video>
+        <span class="vf"></span><span class="card__t"><b>Everyone carries something.</b><small>Langtang</small></span>
+      </div>
     </section>
-  ))}
 
-  {homestay && (
-    <section class="band-panel">
-      <div class="wrap homestay">
-        <div class="homestay__text">
-          <span class="label">{chapter.number}.{trips.length + 1} · {page.homestay.kicker}</span>
-          <h2 class="homestay__title">{page.homestay.title}</h2>
-          <p class="body-text">{page.homestay.text}</p>
-          <a class="homestay__link" href={homestay.href}>See the classes →</a>
-        </div>
-        {classPhotos.length > 0 && (
-          <div class="homestay__photos">
-            {classPhotos.slice(0, 3).map((photo) => (
-              <div class="frame" style="aspect-ratio:4/5;border-radius:6px"><Picture image={photo.image} alt={photo.caption} widths={[320, 640]} sizes="(max-width: 700px) 50vw, 25vw" /></div>
+    <!-- IV. Two of my own photographs -->
+    <section class="s-prints d-only">
+      <figure class="p at print" style={at(120, 1806, 820)}>
+        <Picture image={day('range.jpg')} alt="A Himalayan range at dusk, the last light on the snow." widths={[820, 1260]} sizes="57vw" style="aspect-ratio: 1260 / 543" />
+        <figcaption class="mono">{photos ? <a href={photos} target="_blank" rel="noopener">Last light on the range · @anorigix ↗</a> : 'Last light on the range'}</figcaption>
+      </figure>
+      <figure class="p at print" style={at(1010, 1790, 300, 1.4)}>
+        <Picture image={day('terraces.jpg')} alt="Terraced fields from above, one small house among them." widths={[300, 600]} sizes="21vw" style="aspect-ratio: 1000 / 1217" />
+        <figcaption class="mono">{photos ? <a href={photos} target="_blank" rel="noopener">Terraces · @anorigix ↗</a> : 'Terraces'}</figcaption>
+      </figure>
+    </section>
+
+    <!-- V. Langtang -->
+    <section class="s-langtang">
+      <p class="mslug m-only"><span>3,870 M</span><span>KYANJIN GOMPA.</span></p>
+      <div class="p at film" style={at(28, 1240, 820)}>
+        <div class="film__in">
+          <Picture image={day('best/v_langtang_village.jpg')} alt="Langtang village under the snow peaks." widths={[640, 960]} sizes="(max-width: 700px) 100vw, 57vw" style="aspect-ratio: 16 / 9" />
+          <video class="film__loop" data-loop data-src={clip('best/loop_langtang.mp4')} muted loop playsinline preload="none" aria-label="Langtang village under the snow peaks, my footage, silent."></video>
+          <span class="shade"></span>
+          <span class="play d-only" aria-hidden="true"><svg width="22" height="24" viewBox="0 0 22 24"><path d="M2 1 L21 12 L2 23 Z" fill="#121212"></path></svg></span>
+          <div class="chap d-only">
+            {parts.map((part, index) => (
+              <a class="seg" href={part.href} target="_blank" rel="noopener" style={`flex:${part.flex}`} aria-label={`Part ${index + 1}: ${part.title}. Opens on Instagram.`}>
+                {part.played && <i class="fill" style="width: 40%"></i>}
+                <span class="pv"><Picture image={day(part.img)} alt="" widths={[192]} sizes="96px" /><b>{part.title}</b><small>PART {index + 1}</small></span>
+              </a>
             ))}
           </div>
-        )}
-      </div>
-    </section>
-  )}
-
-  {photos.length > 0 && (
-    <section class="wrap photos">
-      <div class="section-head">
-        <div class="section-head__titles">
-          <span class="label">{chapter.number}.{trips.length + (homestay ? 2 : 1)} · {page.photos.kicker}</span>
-          <h2 class="h2">{page.photos.title}</h2>
-          {settings.instagramPhotos && <a class="photos__more" href={settings.instagramPhotos} target="_blank" rel="noopener">More of my photographs on Instagram: {handleFrom(settings.instagramPhotos)}</a>}
+          <a class="film__m m-only" href={parts[0].href} target="_blank" rel="noopener" aria-label="Langtang Diaries, three parts. Watch on Instagram."></a>
+          <span class="vf m-only"></span>
+          <span class="card__t m-only"><b>Langtang Diaries</b><small>3 parts · watch on Instagram ↗</small></span>
         </div>
-        {photos.length > PHOTOS_SHOWN && <a class="btn btn--ghost" href={photography.href}>All {photos.length} photographs</a>}
+        <span class="mono film__cap d-only">{langtang ? <a href={langtang.href}>Langtang Diaries</a> : 'Langtang Diaries'} · 3 parts · hover the bar</span>
       </div>
-      <div class="photos__grid">
-        {photos.slice(0, PHOTOS_SHOWN).map((photo) => (
-          <figure class="photos__item">
-            <div class="frame" style={`aspect-ratio:${photo.image.width}/${photo.image.height}`}><Picture image={photo.image} alt={photo.caption} widths={[320, 640, 960]} sizes="(max-width: 700px) 50vw, 33vw" /></div>
-          </figure>
-        ))}
+      <figure class="p at wc d-only" style={at(900, 1236, 360, -1.4)}>
+        <Picture image={day('u/sketch-kyanjin.jpg')} alt="A pencil sketch: a trekker, face wrapped against the wind, under the peaks." widths={[360, 720]} sizes="25vw" style="aspect-ratio: 4 / 5" />
+        <figcaption>Kyanjin, 2026</figcaption>
+      </figure>
+      <div class="mcard m-only">
+        <video data-loop data-src={clip('c/ridge_gold.mp4')} poster={(await import('astro:assets').then((m) => m.getImage({ src: day('c/ridge_gold_poster.jpg'), width: 480, format: 'webp' }))).src} muted loop playsinline preload="none" aria-label="Morning light moving down a snow ridge above Langtang village. My footage." style="aspect-ratio: 4 / 5"></video>
+        <span class="vf"></span><span class="card__t"><b>First light on the ridge</b><small>my footage</small></span>
       </div>
     </section>
-  )}
 
-  <section class="cta-line">
-    <div class="wrap cta-line__inner">
-      <p class="statement cta-line__text">{page.cta.text}</p>
-      <a class="btn btn--primary btn--large" href="/contact#book">{page.cta.button}</a>
-    </div>
-  </section>
+    <!-- VI. Kyanjin Gompa: the top of the climb -->
+    <section class="s-top">
+      <p class="mslug m-only"><span>4,400 M</span><span>LOWER KYANJIN RI.</span></p>
+      <div class="p at olive d-only" tabindex="0" style={at(28, 600, 1384)}>
+        <Picture image={day('hills.jpg')} alt="Terraced hills and a village under the Himalaya, seen from far off." widths={[1000, 1600]} sizes="96vw" />
+        <svg class="walkers" viewBox="0 0 1384 579" preserveAspectRatio="none" aria-hidden="true">
+          <path d={walk} pathLength="1"></path>
+          <rect class="fg a" x="-1.5" y="-5" width="3" height="5" rx="1.5" style={`offset-path: path('${walk}')`}></rect>
+          <rect class="fg b" x="-1.5" y="-4.6" width="3" height="4.6" rx="1.5" style={`offset-path: path('${walk}')`}></rect>
+        </svg>
+        <a class="ev" href={parts[0].href} target="_blank" rel="noopener" style="left: 2.9%"><Picture image={day('archive/66.webp')} alt="Langtang village from above." widths={[240, 480]} sizes="17vw" /><span>Langtang Diaries</span></a>
+        <div class="es">
+          <Picture image={day('u/portrait-bw.jpg')} alt="Aditya." widths={[168]} sizes="84px" />
+          <a href={wa('Hi Aditya, I found you on adityacan.com.')} target="_blank" rel="noopener">Talk to me</a>
+        </div>
+        <a class="ev r" href="/work" style="right: 2.9%"><Picture image={day('archive/58.webp')} alt="Above the clouds at Bhairavkunda." widths={[240, 480]} sizes="17vw" /><span>Everything</span></a>
+      </div>
+      <p class="mono olive__cap d-only">The top · after Through the Olive Trees · hover and they walk</p>
+      <figure class="snap at snap--clip d-only" style={at(850, 352, 150, -2.2)}>
+        <span class="snap__in">
+          <Picture image={day('best/v_sunrise_clouds.jpg')} alt="Sunrise above the clouds at Bhairavkunda." widths={[150, 300]} sizes="11vw" style="aspect-ratio: 9 / 16" />
+          <video data-loop data-src={clip('best/loop_sunrise.mp4')} muted loop playsinline preload="none" aria-label="Sunrise above the clouds at Bhairavkunda, my footage, silent."></video>
+        </span>
+        <figcaption>Bhairavkunda, 6:39</figcaption>
+      </figure>
+      <figure class="snap at hat" style={at(1036, 420, 262, 1.8)}>
+        <Picture image={day('best/lt_hat2.jpg')} alt="My orange hat with cartoon eyes, set down in front of the Langtang range." widths={[480, 840]} sizes="(max-width: 700px) 100vw, 18vw" style="aspect-ratio: 4 / 3" />
+        <figcaption class="d-only">The hat made it to 4,400 m.</figcaption>
+        <span class="vf m-only"></span><span class="card__t m-only"><b>The hat made it.</b><small>4,400 m</small></span>
+      </figure>
+      <div class="mcard m-only">
+        <Picture image={day('c/shadow_hat.jpg')} alt="My shadow on the snow, hat and all." widths={[480, 840]} sizes="100vw" style="aspect-ratio: 4 / 5; object-position: 50% 85%" />
+        <span class="vf"></span><span class="card__t"><b>So did I.</b></span>
+      </div>
+    </section>
 
+    <!-- VII. Above Kyanjin there is only sky -->
+    <section class="s-moon">
+      <p class="mslug m-only"><span>384,400 KM</span><span>THE MOON.</span></p>
+      <figure class="moon"><Picture image={day('moon.jpg')} alt="A full moon, photographed by Aditya." widths={[250, 500]} sizes="(max-width: 700px) 190px, 17vw" /></figure>
+      {photos && <a class="mono moon__cap d-only" href={photos} target="_blank" rel="noopener">Full moon · @anorigix ↗</a>}
+      <div class="mcard m-only">
+        <Picture image={day('c/white_horse.jpg')} alt="A white horse grazing in the dark, blurred like a ghost." widths={[480, 840]} sizes="100vw" style="aspect-ratio: 4 / 5" />
+        <span class="vf"></span><span class="card__t"><b>A white horse after dark</b><small>Langtang</small></span>
+      </div>
+      <div class="ask at" style={at(40, 150, 820)}>
+        <span class="mono d-only">The top of the page</span>
+        <p>{words.ask}</p>
+        <div class="ask__row">
+          <a class="pill pill--solid" href={trekHref} target="_blank" rel="noopener">Plan a trek with me</a>
+          {settings.calendly && <a class="pill pill--line" href={settings.calendly} target="_blank" rel="noopener">Book a call</a>}
+          <span class="mono">{words.licence}</span>
+        </div>
+      </div>
+    </section>
+  </div>
 </Base>
 
-<script src="../scripts/row.js"></script>
+<script src="../scripts/loops.js"></script>
+<script is:inline>
+  // PCs and laptops: the journal opens at the bottom (Kathmandu) and you scroll up to climb.
+  // Skipped when the address points at a place on the page, or when you come back to where you were.
+  (function () {
+    var trail = document.querySelector('[data-trail]');
+    if (!trail || location.hash || !window.matchMedia('(min-width: 700px)').matches) return;
+    if (history.scrollRestoration) history.scrollRestoration = 'manual';
+    var go = function () { window.scrollTo(0, trail.offsetTop + trail.offsetHeight - window.innerHeight); };
+    go();
+    window.addEventListener('load', go, { once: true });
+  })();
+</script>
 
 <style>
-  .split { display: flex; flex-wrap: wrap; min-height: 760px; border-bottom: 1px solid var(--line); }
-  .split__text {
-    flex: 1 1 420px;
-    background: var(--night-panel);
-    color: var(--night-ink);
-    --label: var(--night-muted);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 48px;
-    padding: clamp(32px, 5vw, 72px) clamp(24px, 4vw, 64px);
+  .trail { position: relative; }
+  .trail a { color: inherit; }
+  .mono { margin: 0; font: 400 10px/1.5 var(--font-mono); letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+  .mono a { text-decoration: none; border-bottom: 1px solid currentColor; }
+  h1 { margin: 0; font-weight: 600; line-height: 0.86; letter-spacing: -0.05em; }
+  .p { margin: 0; }
+  .p :global(img) { display: block; width: 100%; height: auto; object-fit: cover; box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.45); }
+  .p figcaption { padding-top: 10px; }
+  .scrap { position: relative; background: #fbf8f0; background-image: repeating-linear-gradient(180deg, transparent 0 33px, rgba(90, 120, 160, 0.22) 33px 34px); padding: 18px 24px 20px; box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.45); font: 500 28px/34px var(--font-hand); color: #2f2a24; transition: translate 0.5s ease, box-shadow 0.5s ease; }
+  .scrap::before { content: ""; position: absolute; top: -10px; left: 40%; width: 80px; height: 20px; background: rgba(236, 228, 205, 0.8); transform: rotate(-4deg); }
+  .scrap:hover { translate: 0 -6px; box-shadow: 0 26px 40px -20px rgba(0, 0, 0, 0.5); }
+  .sprk { height: 16px; background-image: repeating-linear-gradient(90deg, transparent 0 10px, #f1e3c8 10px 21px, transparent 21px 31px); background-size: 31px 9px; background-repeat: repeat-x; background-position: 0 3px; }
+  .neg { position: relative; overflow: hidden; flex: 1; display: block; }
+  .neg :global(img) { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; filter: invert(1) contrast(0.85); transition: filter 0.7s ease; }
+  .neg::after { content: ""; position: absolute; inset: 0; background: #d57a2e; mix-blend-mode: multiply; opacity: 0.62; transition: opacity 0.7s ease; pointer-events: none; }
+  .neg:hover :global(img), .neg:active :global(img), .neg:focus-visible :global(img), .neg--on :global(img) { filter: none; }
+  .neg:hover::after, .neg:active::after, .neg:focus-visible::after, .neg--on::after { opacity: 0; }
+  .pol { position: relative; background: #fbfaf6; padding: 14px 14px 60px; box-shadow: 0 18px 36px -20px rgba(0, 0, 0, 0.5); outline: none; }
+  .em { position: relative; display: block; aspect-ratio: 1; overflow: hidden; background: radial-gradient(120% 90% at 30% 25%, #4c443b 0%, #2d2823 55%, #1c1916 100%); }
+  .em :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; filter: sepia(0.18) contrast(0.96); }
+  .pol b { position: absolute; left: 18px; bottom: 14px; font: 500 26px/1 var(--font-hand); color: #2f2a24; }
+  .pol:hover, .pol:focus-visible { animation: shake 0.45s ease-in-out 3; }
+  @keyframes shake { 25% { rotate: 3deg; } 75% { rotate: -3deg; } }
+  .pill { display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px; border-radius: 999px; font-size: 14px; font-weight: 500; text-decoration: none; }
+  .pill--solid { background: var(--night-ink); color: var(--night) !important; }
+  .pill--line { border: 1px solid rgba(236, 235, 230, 0.5); color: var(--night-ink) !important; }
+  .ask { color: var(--night-ink); }
+  .ask p { margin: 0; font-family: var(--font-serif); line-height: 1.04; }
+  .ask__row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .ask .mono { color: var(--night-muted); }
+  .moon { margin: 0; mix-blend-mode: screen; }
+  .moon :global(img) { display: block; width: 100%; height: auto; border-radius: 50%; }
+  video[data-loop] { opacity: 0; transition: opacity 0.4s; }
+  video[data-loop]:global(.is-playing), video[data-loop][poster] { opacity: 1; }
+  .shade { position: absolute; left: 0; right: 0; bottom: 0; height: 110px; background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)); pointer-events: none; }
+  .film__in, .bus__in { position: relative; overflow: hidden; }
+  .film__loop { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+  /* ================= PCs and laptops: the climb ================= */
+  @media (min-width: 700px) {
+    .trail { height: calc(4300 * var(--u)); overflow: hidden; }
+    .trail > section { display: contents; }
+    .sky { position: absolute; left: 0; right: 0; top: 0; height: calc(900 * var(--u)); background: radial-gradient(1.3px 1.3px at 12% 14%, rgba(255, 255, 255, 0.7), transparent), radial-gradient(1px 1px at 28% 32%, rgba(255, 255, 255, 0.5), transparent), radial-gradient(1.5px 1.5px at 44% 9%, rgba(255, 255, 255, 0.6), transparent), radial-gradient(1px 1px at 58% 26%, rgba(255, 255, 255, 0.55), transparent), radial-gradient(1.3px 1.3px at 71% 12%, rgba(255, 255, 255, 0.45), transparent), radial-gradient(1px 1px at 86% 34%, rgba(255, 255, 255, 0.6), transparent), radial-gradient(1px 1px at 6% 40%, rgba(255, 255, 255, 0.4), transparent), radial-gradient(1.3px 1.3px at 36% 21%, rgba(255, 255, 255, 0.5), transparent), radial-gradient(1px 1px at 64% 41%, rgba(255, 255, 255, 0.35), transparent), radial-gradient(1px 1px at 93% 8%, rgba(255, 255, 255, 0.6), transparent), radial-gradient(1px 1px at 51% 18%, rgba(255, 255, 255, 0.45), transparent), radial-gradient(1.3px 1.3px at 21% 6%, rgba(255, 255, 255, 0.55), transparent), linear-gradient(180deg, #080a10 0%, #10141f 24%, #232838 46%, #6f6e6c 70%, #c9c5bb 86%, #f1f0ec 100%); }
+    .road { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+    .car { display: none; }
+    @supports (offset-path: path('M 0 0 L 1 1')) {
+      .car { display: inline; offset-rotate: auto; offset-distance: 0%; animation: drive 80s cubic-bezier(0.45, 0, 0.6, 1) 0.8s both; }
+    }
+    @keyframes drive { to { offset-distance: 100%; } }
+    .ruler { position: absolute; right: 8px; top: calc(552 * var(--u)); bottom: calc(100 * var(--u)); width: 14px; pointer-events: none; opacity: 0.5; background: repeating-linear-gradient(180deg, var(--ink) 0 1px, transparent 1px calc(24.3 * var(--u))); -webkit-mask-image: linear-gradient(90deg, transparent 50%, #000 50%); mask-image: linear-gradient(90deg, transparent 50%, #000 50%); }
+    .alt { position: absolute; right: 52px; top: calc(var(--y) * var(--u)); display: flex; flex-direction: column; align-items: flex-end; gap: 3px; font-family: var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; pointer-events: none; color: var(--ink); }
+    .alt b { font-weight: 500; font-size: 10.5px; }
+    .alt i { font-style: normal; font-size: 9px; letter-spacing: 0.2em; color: var(--muted); }
+    .alt--night { color: var(--night-ink); } .alt--night i { color: var(--night-muted); }
+
+    h1 { font-size: calc(164 * var(--u)); }
+    .scrap { font-size: max(18px, calc(var(--fs) * var(--u))); position: absolute; }
+    .start { position: absolute; left: calc(40 * var(--u)); top: calc(4196 * var(--u)); color: var(--ink); }
+    .up { display: inline-block; animation: bob 1.6s ease-in-out infinite; }
+    @keyframes bob { 50% { translate: 0 -5px; } }
+    .print { transition: translate 0.5s ease; }
+    .print:hover { translate: 0 -5px; }
+    .pols { display: contents; }
+    .pol { position: absolute; padding: calc(14 * var(--u)) calc(14 * var(--u)) calc(60 * var(--u)); }
+    .pol b { font-size: calc(26 * var(--u)); left: calc(18 * var(--u)); bottom: calc(14 * var(--u)); }
+
+    .rain { outline: none; }
+    .glass { position: relative; overflow: hidden; box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.45); }
+    .glass :global(img) { aspect-ratio: 760 / 804; box-shadow: none; }
+    .glass :global(.wiped) { position: absolute; inset: 0; height: 100%; opacity: 0; -webkit-mask: conic-gradient(from -90deg at 50% 104%, #000 var(--m), transparent var(--m)); mask: conic-gradient(from -90deg at 50% 104%, #000 var(--m), transparent var(--m)); }
+    .arm { position: absolute; left: 50%; bottom: -4%; width: 3px; height: 118%; margin-left: -1.5px; border-radius: 2px; background: linear-gradient(#0d0d0c, #2a2a28); transform-origin: 50% 100%; transform: rotate(calc(var(--a) - 90deg)); box-shadow: 0 0 6px rgba(0, 0, 0, 0.45); opacity: 0; }
+    .rain:hover .glass, .rain:focus-visible .glass { animation: wiper 2.8s cubic-bezier(0.45, 0, 0.3, 1) infinite; }
+    .rain:hover .glass :global(.wiped), .rain:focus-visible .glass :global(.wiped) { opacity: var(--o); }
+    .rain:hover .arm, .rain:focus-visible .arm { opacity: 1; }
+    @keyframes wiper { 0% { --a: 0deg; --m: 0deg; --o: 1; } 38% { --a: 180deg; --m: 180deg; } 48% { --a: 180deg; --m: 180deg; --o: 1; } 86% { --a: 0deg; --m: 180deg; } 100% { --a: 0deg; --m: 180deg; --o: 0.12; } }
+    .bus__in { box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.45); }
+    .bus :global(img) { transition: transform 8s linear; box-shadow: none; }
+    .bus:hover :global(img) { transform: scale(1.14) translateX(-5%); }
+    .bus__line { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font-size: max(14px, calc(21 * var(--u))); color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 12px rgba(0, 0, 0, 0.6); }
+
+    .roll { background: #1a120c; padding: 6px 16px; box-shadow: 0 24px 50px -28px rgba(0, 0, 0, 0.6); }
+    .roll__row { display: flex; gap: 12px; padding: 8px 0; }
+    .roll__nums { display: flex; justify-content: space-between; font: 400 10px/1.4 var(--font-mono); letter-spacing: 0.22em; color: var(--gold); padding: 3px 6px 0; }
+
+    .film :global(img) { box-shadow: none; }
+    .film__in { box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.45); }
+    .play { position: absolute; left: 50%; top: 50%; width: 76px; height: 76px; margin: -38px 0 0 -38px; border-radius: 50%; background: rgba(241, 240, 236, 0.92); display: flex; align-items: center; justify-content: center; transition: transform 0.3s; pointer-events: none; }
+    .film:hover .play { transform: scale(1.08); }
+    .chap { position: absolute; left: 16px; right: 16px; bottom: 10px; display: flex; gap: 3px; z-index: 2; }
+    .seg { position: relative; display: block; height: 44px; }
+    .seg::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: rgba(255, 255, 255, 0.4); transition: height 0.15s; }
+    .seg:hover::before, .seg:focus-visible::before { height: 7px; }
+    .fill { position: absolute; left: 0; bottom: 0; height: 4px; background: var(--rec); z-index: 1; transition: height 0.15s; }
+    .seg:hover .fill, .seg:focus-visible .fill { height: 7px; }
+    .pv { position: absolute; bottom: 32px; left: 50%; width: 170px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; opacity: 0; transform: translate(-50%, 6px); transition: opacity 0.2s, transform 0.2s; pointer-events: none; }
+    .pv :global(img) { width: 96px; aspect-ratio: 9 / 16; object-fit: cover; border: 2px solid #fff; border-radius: 6px; box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.6); }
+    .pv b { font-size: 12px; font-weight: 500; line-height: 1.3; color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9); }
+    .pv small { font: 400 9px/1 var(--font-mono); letter-spacing: 0.14em; color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9); }
+    .seg:hover .pv, .seg:focus-visible .pv { opacity: 1; transform: translate(-50%, 0); }
+    .film__cap { display: block; padding-top: 10px; color: var(--ink); }
+    .wc { background: #f4eede; padding: calc(18 * var(--u)) calc(18 * var(--u)) calc(54 * var(--u)); box-shadow: 0 24px 50px -26px rgba(0, 0, 0, 0.5); }
+    .wc::before { content: ""; position: absolute; left: calc(18 * var(--u)); top: calc(18 * var(--u)); right: calc(18 * var(--u)); bottom: calc(54 * var(--u)); background: linear-gradient(180deg, #9fb9cc 0%, #cbd8db 36%, rgba(244, 238, 222, 0) 66%), radial-gradient(70% 26% at 40% 92%, rgba(178, 150, 108, 0.5), rgba(178, 150, 108, 0)); opacity: 0; transition: opacity 2.2s ease; }
+    .wc:hover::before { opacity: 1; }
+    .wc :global(img) { position: relative; box-shadow: none; mix-blend-mode: multiply; }
+    .wc figcaption { position: absolute; left: calc(22 * var(--u)); bottom: calc(12 * var(--u)); padding: 0; font: 500 calc(26 * var(--u)) / 1 var(--font-hand); color: #2f2a24; }
+
+    .olive { height: calc(579 * var(--u)); outline: none; overflow: hidden; box-shadow: 0 24px 50px -28px rgba(0, 0, 0, 0.6); }
+    .olive::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 42%; background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.42)); pointer-events: none; }
+    .olive > :global(img) { height: 100%; box-shadow: none; }
+    .walkers { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: visible; }
+    .walkers path { fill: none; stroke: rgba(255, 246, 228, 0.62); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; transition: stroke-dashoffset 2.6s ease; }
+    .olive:hover .walkers path, .olive:focus-visible .walkers path { stroke-dashoffset: 0; }
+    .fg { fill: #fff9ee; opacity: 0; offset-rotate: 0deg; }
+    @supports (offset-path: path('M 0 0 L 1 1')) {
+      .olive:hover .fg.a, .olive:focus-visible .fg.a { animation: walkA 26s linear 1s both; }
+      .olive:hover .fg.b, .olive:focus-visible .fg.b { animation: walkB 26s linear 1s both; }
+    }
+    @keyframes walkA { 0% { offset-distance: 12%; opacity: 1; } 60% { offset-distance: 95%; opacity: 1; } 78% { offset-distance: 100%; opacity: 1; } 100% { offset-distance: 100%; opacity: 0; } }
+    @keyframes walkB { 0% { offset-distance: 0%; opacity: 1; } 54% { offset-distance: 92%; } 66% { offset-distance: 94%; } 100% { offset-distance: 0%; opacity: 1; } }
+    .ev { position: absolute; bottom: 40px; z-index: 3; width: 17%; display: block; color: #fff !important; text-decoration: none; outline: 2px solid rgba(255, 255, 255, 0); transition: outline-color 0.25s; }
+    .ev :global(img) { aspect-ratio: 16 / 9; box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.7); }
+    .ev span { position: absolute; left: 0; right: 0; top: 0; padding: 10px 12px 28px; font-size: 13px; font-weight: 500; background: linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0)); opacity: 0; transition: opacity 0.25s; }
+    .ev:hover, .ev:focus-visible { outline-color: #fff; }
+    .ev:hover span, .ev:focus-visible span { opacity: 1; }
+    .es { position: absolute; z-index: 3; left: 50%; bottom: 30px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .es :global(img) { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px #fff, 0 10px 30px -10px rgba(0, 0, 0, 0.7); }
+    .es a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 999px; background: var(--paper); color: var(--ink) !important; text-decoration: none; font-size: 14px; font-weight: 500; }
+    .olive:hover .ev, .olive:hover .es { animation: pop 0.5s cubic-bezier(0.3, 1.5, 0.5, 1) both; }
+    .olive:hover .es { animation-delay: 0.1s; } .olive:hover .ev.r { animation-delay: 0.2s; }
+    @keyframes pop { from { scale: 0.86; opacity: 0.3; } to { scale: 1; opacity: 1; } }
+    .olive__cap { position: absolute; left: 28px; top: calc(1194 * var(--u)); }
+
+    .snap { background: #f4f1e8; padding: calc(8 * var(--u)) calc(8 * var(--u)) calc(40 * var(--u)); box-shadow: 0 22px 40px -18px rgba(0, 0, 0, 0.7); margin: 0; transition: translate 0.5s ease; z-index: 4; }
+    .snap:hover { translate: 0 -6px; }
+    .snap :global(img), .snap video { display: block; width: 100%; height: auto; object-fit: cover; }
+    .snap__in { position: relative; display: block; }
+    .snap__in video { position: absolute; inset: 0; height: 100%; }
+    .snap figcaption { position: absolute; left: calc(12 * var(--u)); right: calc(10 * var(--u)); bottom: calc(8 * var(--u)); font: 500 max(13px, calc(21 * var(--u))) / 1 var(--font-hand); color: #2f2a24; }
+
+    .snap--clip figcaption { font-size: max(11px, calc(17 * var(--u))); white-space: nowrap; }
+
+    .moon { position: absolute; left: calc(1000 * var(--u)); top: max(96px, calc(86 * var(--u))); width: calc(250 * var(--u)); animation: rise 60s ease-out both; }
+    @keyframes rise { from { translate: 0 26px; } }
+    .moon__cap { position: absolute; left: calc(1108 * var(--u)); top: calc(86 * var(--u) + 250 * var(--u)); color: var(--night-muted) !important; }
+    .ask { top: max(150px, calc(150 * var(--u))); }
+    .ask p { margin-top: 18px; font-size: max(30px, calc(58 * var(--u))); }
+    .ask__row { margin-top: calc(30 * var(--u)); }
   }
-  .split__middle { display: flex; flex-direction: column; gap: 22px; }
-  .split__title { font-weight: 600; font-size: clamp(56px, 7vw, 108px); line-height: 0.9; letter-spacing: -0.05em; }
-  .split__statement { font-family: var(--font-serif); font-size: clamp(28px, 3vw, 42px); line-height: 1.15; }
-  .split__foot { font: 500 12px/1.6 var(--font-mono); letter-spacing: 0.06em; color: var(--night-muted); }
-  .split__image { flex: 1.3 1 520px; min-height: 520px; position: relative; overflow: hidden; background: var(--night-panel); }
-  .split__image :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
-  .creds { padding-block: 72px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 24px; }
-  .creds__item { display: flex; flex-direction: column; gap: 8px; padding-top: 16px; border-top: 1px solid var(--ink); }
-  .creds__value { font-weight: 600; font-size: 24px; line-height: 1.2; letter-spacing: -0.02em; }
-
-  .section-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; }
-  .section-head__titles { display: flex; flex-direction: column; gap: 12px; }
-  .plain-link { text-decoration: none; }
-
-  .langtang { padding-block: 24px 96px; display: flex; flex-direction: column; gap: 24px; }
-  .langtang__media { display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch; }
-  .langtang__main { flex: 3 1 min(560px, 100%); min-width: 0; }
-  .langtang__reel { flex: 0 1 280px; min-width: 200px; }
-  .langtang__link { display: block; transition: opacity 200ms ease; }
-  .langtang__link:hover { opacity: 0.88; }
-  .langtang__stills { display: flex; gap: 12px; overflow-x: auto; }
-  .langtang__still { flex: 0 0 auto; height: clamp(220px, 24vw, 320px); width: auto; }
-
-  .homestay { padding-block: 96px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; }
-  .homestay__text { flex: 1 1 360px; display: flex; flex-direction: column; gap: 16px; }
-  .homestay__title { max-width: 760px; font-weight: 600; font-size: clamp(34px, 4vw, 56px); line-height: 0.98; letter-spacing: -0.04em; }
-  .homestay__link { align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; font-weight: 500; }
-  .homestay__photos { flex: 1.2 1 420px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-
-  .photos { padding-block: 96px; }
-  .photos .section-head { margin-bottom: 28px; }
-  .photos__more { font-size: 15px; line-height: 1.5; padding-block: 10px; margin-block: -10px; }
-  .photos__grid { columns: 3 280px; column-gap: 12px; }
-  .photos__item { margin-bottom: 12px; break-inside: avoid; display: flex; flex-direction: column; gap: 6px; }
-
-  .cta-line { border-top: 1px solid var(--line); }
-  .cta-line__inner { padding-block: 96px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 28px; }
-  .cta-line__text { max-width: 760px; font-size: clamp(30px, 3.6vw, 52px); line-height: 1.1; }
-
-  @media (max-width: 800px) {
-    .split { min-height: 0; }
-    .split__image { min-height: 420px; order: -1; flex-basis: 100%; }
-    .split__text { flex-basis: 100%; }
-    .langtang__reel { flex: 0 1 60%; margin-inline: auto; }
-    .creds { padding-block: 48px; }
-    .langtang, .photos { padding-bottom: 64px; }
-    .homestay, .cta-line__inner { padding-block: 64px; }
-    .photos { padding-top: 64px; }
-  }
-  @media (max-width: 700px) {
-    .photos__grid { columns: 2; column-gap: 8px; }
-    .photos__item { margin-bottom: 8px; }
+  /* ================= Phones: the same climb, top to bottom ================= */
+  @media (max-width: 699.98px) {
+    .trail { display: flex; flex-direction: column; }
+    .trail > section { position: relative; display: flex; flex-direction: column; gap: 18px; padding: 18px 22px; background: var(--paper); }
+    .mslug { display: flex; gap: 14px; margin: 18px 0 0; font: 400 10.5px/1.4 var(--font-script); text-transform: uppercase; opacity: 0.8; }
+    .trail :global(.slugline) { color: var(--ink); }
+    .s-ktm { padding-top: 120px !important; overflow: hidden; }
+    h1 { font-size: 74px; }
+    .hand { margin: 4px 0 0; max-width: 300px; font: 500 27px/1.1 var(--font-hand); rotate: -1.5deg; }
+    .boudha { width: 270px; margin: 10px 0 0 38px; rotate: 1.4deg; }
+    .mroll { margin: 6px -32px 0; rotate: -1.5deg; background: #1a120c; padding: 3px 10px; }
+    .mroll .sprk { height: 10px; background-size: 19px 6px; background-image: repeating-linear-gradient(90deg, transparent 0 6px, #f1e3c8 6px 13px, transparent 13px 19px); background-position: 0 2px; }
+    .mroll__row { display: flex; gap: 6px; padding: 4px 0; }
+    .scrap { font-size: 25px; line-height: 1.22; background-image: none; padding: 16px 18px; rotate: -1.2deg; }
+    .scrap::before { display: none; }
+    .pols { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .pol { padding: 0; box-shadow: none; background: none; }
+    .em { aspect-ratio: 4 / 5; }
+    .pol b { display: none; }
+    .mcard, .bus__in, .film__in, .hat { position: relative; display: block; margin: 0 -22px; color: #f4efe6; overflow: hidden; background: #0a0a09; }
+    .mcard :global(img), .mcard video, .bus__in :global(img), .hat :global(img) { display: block; width: 100%; height: auto; object-fit: cover; box-shadow: none; }
+    .bus__in :global(img) { aspect-ratio: 16 / 10 !important; }
+    .film__in :global(img) { aspect-ratio: 16 / 10 !important; box-shadow: none; }
+    .mcard::after, .bus__in::after, .hat::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.72)); pointer-events: none; }
+    .card__t { position: absolute; left: 30px; right: 30px; bottom: 28px; z-index: 3; display: flex; flex-direction: column; gap: 7px; pointer-events: none; }
+    .card__t b { font-weight: 600; font-size: 40px; line-height: 0.94; letter-spacing: -0.05em; }
+    .card__t small { font: 400 9px/1.5 var(--font-mono); letter-spacing: 0.16em; text-transform: uppercase; }
+    .film__m { position: absolute; inset: 0; z-index: 4; }
+    .roll { rotate: none; }
+    .roll__row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .roll .neg :global(img) { aspect-ratio: 1 / 1; filter: none; }
+    .roll .neg::after { display: none; }
+    .trail > .s-moon { background: #07080c; color: var(--night-ink); padding-bottom: 44px; }
+    .moon { align-self: center; width: 190px; }
+    .ask { display: flex; flex-direction: column; gap: 18px; }
+    .ask p { font: italic 400 24px/1.2 var(--font-serif); }
+    .ask__row { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .pill { font-size: 15px; }
   }
 </style>

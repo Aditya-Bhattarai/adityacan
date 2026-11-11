@@ -177,6 +177,7 @@ a:hover > .ni-everything .mv, a.on > .ni-everything .mv { transform: translateX(
   text-transform: uppercase;
   white-space: nowrap;
   pointer-events: none;
+  color: var(--nav-ink, inherit);
 }
 .slugline b { font-weight: 400; opacity: 0.62; }
 .rail {
