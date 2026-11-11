@@ -30,6 +30,9 @@ This is the full code for adityacan.com. You don't need to know how to code to c
 Open the matching file in `site-content/pages/` and change the text after the colon.
 For example, the homepage headline is `title:` in `site-content/pages/home.yaml`.
 
+### Change words on the redesigned pages (November 2026)
+Home, Films, For creators, Classes, Near Mountains, Me, The museum and Everything keep their words at the top of their own file in `src/pages/`, under a line that says WORDS. Change the text between the quotes and save. Their photos are in `src/assets/day/`.
+
 ### Fill in your contact details
 Open `site-content/about/bio.md`. Replace anything in `[square brackets]` with the real value.
 **Anything still in `[square brackets]` stays hidden on the website**, so nothing half-finished ever shows.
