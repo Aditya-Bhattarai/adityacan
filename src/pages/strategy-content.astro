@@ -200,6 +200,11 @@ const groups = page.groups
 
 <script src="../scripts/loops.js"></script>
 
+<style is:global>
+  /* Phones open on the reel, so the menu sits on the picture in a light colour. */
+  @media (max-width: 899.98px) { .scene { --nav-ink: #F1F0EC !important; } .slugline { display: none; } }
+</style>
+
 <style>
   .bay { position: relative; }
   .bay input { position: absolute; opacity: 0; pointer-events: none; }

@@ -128,6 +128,11 @@ const countIn = (key) => pieces.filter((piece) => piece.chapter === key).length;
 
 <script src="../../scripts/wall.js"></script>
 
+<style is:global>
+  /* Phones open on the pale fog, so the menu and scene line are dark there. */
+  @media (max-width: 899.98px) { .scene { --nav-ink: #121212 !important; } }
+</style>
+
 <style>
   .arch { position: relative; color: var(--night-ink); }
   .col { flex: 1; min-width: 0; position: relative; }

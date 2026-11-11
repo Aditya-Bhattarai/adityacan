@@ -262,6 +262,11 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
   })();
 </script>
 
+<style is:global>
+  /* Phones start in daylight in Kathmandu, so the menu and scene line are dark there. */
+  @media (max-width: 899.98px) { .scene { --nav-ink: #121212 !important; } }
+</style>
+
 <style>
   .trail { position: relative; }
   .trail a { color: inherit; }
