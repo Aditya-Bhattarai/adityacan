@@ -1,186 +1,198 @@
 ---
-// FILM CHAPTER (dark). Words are in site-content/pages/film.yaml
+// FILMS: the screening room (scene 3, dusk). Pick a film below the screen and it plays on it.
+// The screen keeps one height. The side masking moves for each film's shape.
 import Base from '../layouts/Base.astro';
-import NextChapter from '../components/NextChapter.astro';
 import Picture from '../components/Picture.astro';
-import TitleTile from '../components/TitleTile.astro';
-import VideoFacade from '../components/VideoFacade.astro';
-import { getChapter, getImages, getPage, getProjects, getWorkProjects, getWriting } from '../lib/content.js';
+import { getPage, getSettings } from '../lib/content.js';
+import { clip, day } from '../lib/day.js';
 
 const page = await getPage('film');
-const chapter = getChapter('film');
-const projects = await getProjects();
-const work = await getWorkProjects();
-const writing = await getWriting();
+const settings = getSettings();
 
-const sapana = projects.find((project) => project.slug === page.featured.project);
-const sapanaStill = sapana ? getImages(`${sapana.folder}/stills`)[0] : null;
-const sapanaScript = writing.find((piece) => piece.slug === sapana?.screenplay);
-const docs = [
-  ...(sapanaScript?.pdf ? [{ url: sapanaScript.pdf.url, caption: 'Screenplay V4', preview: sapanaScript.pdf.preview }] : []),
-  ...(sapana?.documents ?? []),
+// ---------- WORDS: change the text between the quotes and save ----------
+// "width" is how wide the picture is on the screen, out of 1180. Sapana is full width (2.39:1).
+const films = [
+  { id: 'r1', title: 'सपना', nepali: true, role: 'writer and director', link: { href: '/writing/sapana', text: 'read the script' }, image: 'u/sapana-clearing.jpg', alt: 'Sapana walking alone through the pines.', width: 1180, subtitle: 'Where are you off to so early again, Sapana?', card: 'Sapana', ratio: '4 / 3' },
+  { id: 'r2', title: 'Path to Prosperity', role: 'assistant director · 15th European Union Film Festival Nepal', link: { href: '/work/path-to-prosperity', text: 'about the film' }, image: 'u/ptp-screen.jpg', alt: 'Path to Prosperity on the festival screen.', width: 878, card: 'Path to Prosperity', ratio: '4 / 3' },
+  { id: 'r3', title: 'Instagram short', role: 'made for the phone', link: page.reel?.link ? { href: page.reel.link, text: 'watch ↗', out: true } : null, image: 'u/insta-cover.jpg', alt: 'Two cats asleep in the sun.', width: 278, rec: true, card: 'Instagram short', ratio: '4 / 5' },
 ];
-const selection = projects.find((project) => project.slug === page.selection?.project);
-const selectionStills = selection ? getImages(`${selection.folder}/stills`) : [];
-const selectionPhotos = (page.selection?.photos ?? []).map((name) => selectionStills.find((still) => still.path.includes(name))).filter(Boolean);
-
-const films = work.filter((project) => project.chapterKey === 'film');
-// The Instagram short: words in film.yaml (reel), cover in site-content/02-film/_instagram-reel/
-const reelCover = getImages('02-film/_instagram-reel')[0];
-const reel = page.reel?.link ? { provider: 'external', url: page.reel.link, title: page.reel.title } : null;
+const story = { id: 'r4', title: 'Fireflies', role: 'short story', link: { href: '/writing/fireflies', text: 'read it' }, line: 'She was seven years old the summer she caught her first firefly.' };
 ---
 
-<Base title={`Chapter ${chapter.number}: ${chapter.title}`} current="work" theme="dark" description="Short films written and directed by Aditya Bhattarai at film school, with their scripts.">
-  <section class="title-card-section film-title">
-    <div class="title-card">
-      <div class="title-card__kicker">CHAPTER {chapter.number}</div>
-      <h1 class="title-card__title film-title__word">Film</h1>
-      <p class="title-card__statement">{page.statement}</p>
-      <div class="title-card__rule"></div>
-      <p class="title-card__intro">{page.intro}</p>
-    </div>
-  </section>
+<Base
+  title="Films"
+  description="Short films written and directed by Aditya Bhattarai, a festival film he was assistant director on, and their scripts."
+  current="film" theme="dark" scene="3" slug="INT. SCREENING ROOM. DUSK." note="last light was 18:25"
+  sky="linear-gradient(180deg, #0A0C14 0%, #0F0F0E 44%, #17110D 76%, #2E1B10 100%)" grain
+>
+  <div class="room">
+    {films.map((film, index) => <input type="radio" name="reel" id={film.id} checked={index === 0} aria-label={`Play ${film.card}`} />)}
+    <input type="radio" name="reel" id={story.id} aria-label="Show Fireflies" />
+    <input type="checkbox" id="ambm" checked aria-label="Ambient mode" />
 
-  {sapana && (
-    <section class="wrap featured">
-      <div class="featured__labels"><span>FEATURED</span><span>{page.featured.meta_right}</span></div>
-      <div class="featured__band">
-        {sapana.video ? (
-          <VideoFacade video={sapana.video} poster={sapanaStill?.image} ratio="2.39/1" large widths={[800, 1600]} sizes="(max-width: 1320px) 100vw, 1272px" />
-        ) : sapanaStill ? (
-          <div class="frame" style="aspect-ratio:2.39/1;border-radius:0"><Picture image={sapanaStill.image} alt="A still from Sapana" widths={[800, 1600]} sizes="(max-width: 1320px) 100vw, 1272px" eager /></div>
-        ) : (
-          <div class="scope">
-            <span class="scope__word">{page.featured.nepali}</span>
-            <span class="scope__credit">A FILM BY ADITYA BHATTARAI · 2026</span>
-          </div>
-        )}
+    <div class="beam d-only" aria-hidden="true"></div>
+    {films.map((film, index) => (
+      <div class={`amb a${index + 1} d-only`} style={`width: calc(${film.width} * var(--u))`} aria-hidden="true">
+        <Picture image={day(film.image)} alt="" widths={[320]} sizes="320px" />
       </div>
-      <div class="featured__text">
-        <div class="featured__titles">
-          <h2 class="featured__title">{page.featured.nepali}<br /><span>{page.featured.english}</span></h2>
-          <div class="meta">{page.featured.meta}</div>
-        </div>
-        <div class="featured__story">
-          <p class="statement featured__logline">{page.featured.logline}</p>
-          <p class="body-text">{page.featured.note}</p>
-          <div class="btn-row">
-            {sapana.video && <a class="btn btn--primary" href={sapana.video.url} target="_blank" rel="noopener">Watch the film</a>}
-            {sapanaScript && <a class:list={['btn', sapana.video ? 'btn--ghost' : 'btn--primary']} href={sapanaScript.href}>Read the screenplay</a>}
-            <a class="btn btn--ghost" href={sapana.href}>Credits</a>
+    ))}
+
+    <Picture image={day('moon_disc.jpg')} alt="A thin moon, cut from my own photograph of the moon." widths={[112]} sizes="56px" class="moon d-only" />
+    <video class="bell d-only" data-loop data-src={clip('c/dusk_bell.mp4')} muted loop playsinline preload="none" aria-label="A temple bell in silhouette against a red dusk sky. My footage."></video>
+
+    <h1 class="visually-hidden">Films</h1>
+
+    <!-- The screen -->
+    <div class="screen">
+      {films.map((film, index) => (
+        <div class={`reel s${index + 1}`}>
+          <div class="mask" style={`--mw:${film.width}`}>
+            <Picture image={day(film.image)} alt={film.alt} widths={[700, 1400]} sizes="(max-width: 700px) 100vw, 82vw" eager={index === 0} />
+            {film.subtitle && <div class="sub">{film.subtitle}</div>}
+            {film.rec && <span class="rec"><i></i>REC</span>}
           </div>
         </div>
+      ))}
+      <span class="sugi" aria-hidden="true"></span>
+      <div class="reel s4">
+        <div class="mask mask--text" style="--mw:1180"><p>{story.line}</p></div>
       </div>
-      {docs.length > 0 && (
-        <div class="docs">
-          {docs.map((doc) => (
-            <a class="docs__item" href={doc.url}>
-              {doc.preview && <div class="frame" style="aspect-ratio:3/4"><Picture image={doc.preview} alt="" widths={[240, 480]} sizes="(max-width: 700px) 50vw, 25vw" /></div>}
-              <span>{doc.caption}</span>
-            </a>
-          ))}
-        </div>
-      )}
-    </section>
-  )}
-
-  {selection && (
-    <section class="wrap selection">
-      <div class="selection__text">
-        <span class="label">{page.selection.kicker}</span>
-        <h2 class="selection__title">{page.selection.title}</h2>
-        <p class="body-text">{page.selection.text}</p>
-        <a class="btn btn--ghost selection__button" href={selection.href}>{page.selection.button}</a>
-      </div>
-      {selectionPhotos.length > 0 && (
-        <div class="selection__photos">
-          {selectionPhotos.map((photo) => (
-            <div class="frame" style="aspect-ratio:3/4;border-radius:6px"><Picture image={photo.image} alt={photo.caption} widths={[400, 800]} sizes="(max-width: 700px) 50vw, 25vw" /></div>
-          ))}
-        </div>
-      )}
-    </section>
-  )}
-
-  {reel && (
-    <section class="wrap reel">
-      <div class="reel__video"><VideoFacade video={reel} poster={reelCover?.image} ratio="9/16" widths={[320, 640]} sizes="(max-width: 700px) 70vw, 320px" /></div>
-      <div class="reel__text">
-        <span class="label">{page.reel.kicker}</span>
-        <h2 class="selection__title">{page.reel.title}</h2>
-        <p class="body-text">{page.reel.text}</p>
-        <a class="btn btn--ghost selection__button" href={page.reel.link} target="_blank" rel="noopener">{page.reel.button}</a>
-      </div>
-    </section>
-  )}
-
-  <section class="wrap filmography">
-    <div class="filmography__head">
-      <h2 class="h2 h2--small">{page.filmography.title}</h2>
-      <span class="meta">{page.filmography.note}</span>
     </div>
-    <div class="filmography__grid">
-      {films.map((film) => (
-        <a class="film" href={film.href}>
-          {(film.wideImage ?? film.cover)
-            ? <div class="frame" style="aspect-ratio:16/9;border-radius:4px"><Picture image={(film.wideImage ?? film.cover).image} alt={film.title} widths={[480, 960]} sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw" /></div>
-            : <TitleTile title={film.title} ratio="16/9" dark />}
-          <div class="film__row"><span class="film__title">{film.title}</span>{film.years && <span class="meta">{film.years}</span>}</div>
-          <span class="meta">{film.shortRoles.join(' · ').toUpperCase()}</span>
-          {film.oneLiner && <span class="film__log">{film.oneLiner}</span>}
-        </a>
+    <div class="steam d-only" aria-hidden="true">
+      {[[8, 0], [24, 0.5], [40, 0.15], [57, 0.8], [73, 0.3], [90, 1], [32, 1.3], [65, 1.5]].map(([left, delay]) => <i style={`left:${left}%;animation-delay:${delay}s`}></i>)}
+    </div>
+
+    <!-- The booth: pick a film -->
+    <div class="pick">
+      {[...films, story].map((item) => (
+        <label for={item.id}>
+          <span class:list={['t', { dv: item.nepali, 't--serif': item.id === 'r4' }]} lang={item.nepali ? 'ne' : undefined}>{item.title}</span>
+          <span class="v">{item.role}{item.link && <> · <a href={item.link.href} target={item.link.out ? '_blank' : undefined} rel={item.link.out ? 'noopener' : undefined}>{item.link.text}</a></>}</span>
+        </label>
       ))}
     </div>
-  </section>
 
-  <NextChapter current="film" />
+    <Picture image={day('u/portrait-bw.jpg')} alt="" widths={[80]} sizes="22px" class="cameo d-only" />
+    <div class="proj d-only" aria-hidden="true">
+      <svg class="spool a" width="52" height="52" viewBox="0 0 52 52" style="left: 6px; top: 0"><circle cx="26" cy="26" r="24" fill="#3A3936" stroke="#A3A29C" stroke-width="1.5"></circle><circle cx="26" cy="14" r="4.8" fill="#0F0F0E"></circle><circle cx="37.4" cy="22.3" r="4.8" fill="#0F0F0E"></circle><circle cx="33.1" cy="35.7" r="4.8" fill="#0F0F0E"></circle><circle cx="18.9" cy="35.7" r="4.8" fill="#0F0F0E"></circle><circle cx="14.6" cy="22.3" r="4.8" fill="#0F0F0E"></circle><circle cx="26" cy="26" r="3" fill="#A3A29C"></circle></svg>
+      <svg class="spool b" width="44" height="44" viewBox="0 0 44 44" style="left: 66px; top: 8px"><circle cx="22" cy="22" r="20" fill="#3A3936" stroke="#A3A29C" stroke-width="1.5"></circle><circle cx="22" cy="12" r="4" fill="#0F0F0E"></circle><circle cx="31.5" cy="18.9" r="4" fill="#0F0F0E"></circle><circle cx="27.9" cy="30.1" r="4" fill="#0F0F0E"></circle><circle cx="16.1" cy="30.1" r="4" fill="#0F0F0E"></circle><circle cx="12.5" cy="18.9" r="4" fill="#0F0F0E"></circle><circle cx="22" cy="22" r="3" fill="#A3A29C"></circle></svg>
+      <span style="position: absolute; left: 0; top: 50px; width: 120px; height: 30px; background: #2A2A28; border-radius: 4px"></span>
+      <span style="position: absolute; left: 120px; top: 56px; width: 16px; height: 18px; background: #2A2A28; border-radius: 2px"></span>
+    </div>
+    <a class="wwm-pill d-only" href="/about#work">Work with me</a>
+    <label class="ambt d-only" for="ambm">Ambient mode <span class="sw"></span></label>
+
+    <!-- Phones: the same films as cards -->
+    <div class="cards m-only">
+      <div class="card">
+        <Picture image={day('c/dusk_bell_poster.jpg')} alt="A temple bell in silhouette against a red dusk sky. My footage." widths={[540]} sizes="100vw" style="aspect-ratio: 4 / 5; object-position: 50% 80%" />
+        <span class="vf"></span>
+        <span class="card__t"><b>Doors open at dusk.</b><small>my footage · Kathmandu</small></span>
+      </div>
+      {films.map((film) => (
+        <a class="card" href={film.link?.href ?? '/work'} target={film.link?.out ? '_blank' : undefined} rel={film.link?.out ? 'noopener' : undefined}>
+          <Picture image={day(film.image)} alt={film.alt} widths={[480, 800]} sizes="100vw" style={`aspect-ratio: ${film.ratio}`} />
+          <span class="vf"></span>
+          <span class="card__t"><b>{film.card}</b><small>{film.role}{film.link && ` · ${film.link.text.replace(' ↗', '')} →`}</small></span>
+        </a>
+      ))}
+      <p class="line">{story.line}</p>
+      <a class="row" href={story.link.href}><small>{story.role}</small><b>{story.title}</b></a>
+      <a class="btn" href="/about#work">Work with me</a>
+    </div>
+  </div>
 </Base>
 
+<script src="../scripts/loops.js"></script>
+
 <style>
-  .film-title { padding-block: 96px 72px; }
-  .film-title__word { font-size: clamp(72px, 12vw, 180px); line-height: 0.85; letter-spacing: -0.055em; }
+  .room { position: relative; color: var(--night-ink); }
+  .room input { position: absolute; opacity: 0; pointer-events: none; }
+  .room a { color: inherit; }
 
-  .featured { padding-bottom: 96px; display: flex; flex-direction: column; gap: 28px; }
-  .featured__labels { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font: 500 12px/1 var(--font-mono); letter-spacing: 0.14em; color: var(--label); }
-  .scope { aspect-ratio: 2.39 / 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(8px, 2vw, 20px); border-block: 1px solid #2a2a28; }
-  .scope__word { font-weight: 600; font-size: clamp(56px, 15vw, 200px); line-height: 1; letter-spacing: -0.01em; }
-  .scope__credit { font: 500 clamp(9px, 1.1vw, 13px)/1 var(--font-mono); letter-spacing: 0.3em; color: var(--night-muted); text-align: center; }
-  .featured__text { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 40px; }
-  .featured__titles { display: flex; flex-direction: column; gap: 14px; }
-  .featured__title { font-weight: 600; font-size: clamp(48px, 6vw, 88px); line-height: 0.95; letter-spacing: -0.02em; }
-  .featured__title span { font-family: var(--font-serif); font-weight: 400; font-style: italic; letter-spacing: 0; }
-  .featured__story { display: flex; flex-direction: column; gap: 18px; }
-  .featured__logline { font-size: 28px; line-height: 1.25; color: var(--night-ink); }
-  .docs { margin-top: 8px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 46%), 1fr)); gap: 12px; }
-  .docs__item { display: flex; flex-direction: column; gap: 8px; font-size: 14px; text-decoration: none; }
-  .docs__item .frame { background: #fff; }
-  .docs__item :global(img) { object-fit: contain; transition: opacity 200ms ease; }
-  .docs__item:hover :global(img) { opacity: 0.8; }
+  .screen { position: relative; animation: flick 3.2s steps(2) infinite, emerge 3.4s ease-out both; }
+  @keyframes flick { 0%, 100% { opacity: 1; } 50% { opacity: 0.965; } }
+  @keyframes emerge { from { filter: blur(14px) brightness(0.35); } to { filter: none; } }
+  .reel { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0s 0.9s; pointer-events: none; z-index: 1; }
+  #r1:checked ~ .screen .s1, #r2:checked ~ .screen .s2, #r3:checked ~ .screen .s3, #r4:checked ~ .screen .s4 { opacity: 1; pointer-events: auto; transition: opacity 0s; z-index: 2; animation: wipe 0.9s cubic-bezier(0.7, 0, 0.25, 1) both; }
+  @keyframes wipe { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0 0 0 0); } }
+  .mask { position: relative; height: 100%; width: calc(var(--mw) / 1180 * 100%); overflow: hidden; }
+  .mask :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .mask--text { background: #000; display: flex; align-items: center; justify-content: center; padding: 0 6%; }
+  .mask--text p { margin: 0; max-width: 760px; text-align: center; font: italic 400 clamp(20px, 3.05cqw, 44px) / 1.2 var(--font-serif); color: var(--night-ink); }
+  .sub { position: absolute; left: 0; right: 0; bottom: 5.2%; padding: 0 10px; text-align: center; font-size: clamp(13px, 1.46cqw, 21px); line-height: 1.35; color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 12px rgba(0, 0, 0, 0.6); }
+  .rec { position: absolute; top: 14px; left: 14px; display: flex; align-items: center; gap: 6px; font: 400 10px/1 var(--font-mono); letter-spacing: 0.14em; color: #fff; }
+  .rec i { width: 8px; height: 8px; border-radius: 50%; background: var(--rec); }
+  .sugi { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; animation: sugi 9s ease-in 120s forwards; z-index: 4; }
+  @keyframes sugi { to { opacity: 0.94; } }
 
-  .selection { padding-bottom: 96px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; }
-  .selection__text { flex: 1 1 360px; display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
-  .selection__title { font-weight: 600; font-size: clamp(40px, 5vw, 72px); line-height: 0.95; letter-spacing: -0.035em; }
-  .selection__button { margin-top: 8px; }
-  .selection__photos { flex: 1.4 1 min(520px, 100%); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .pick label { display: flex; flex-direction: column; gap: 6px; padding: 14px 0; min-height: 44px; color: #7a7974; transition: color 0.4s; }
+  .pick label:hover { color: var(--night-muted); }
+  .pick .t { font-size: 22px; letter-spacing: -0.03em; font-weight: 500; }
+  .pick .t.dv, .pick .t--serif { font-weight: 400; font-size: 26px; letter-spacing: 0; }
+  .pick .t--serif { font-family: var(--font-serif); font-style: italic; }
+  .pick .v { font: 400 10px/1.5 var(--font-mono); letter-spacing: 0.16em; text-transform: uppercase; opacity: 0; transition: opacity 0.4s; }
+  .pick .v a { color: var(--night-ink); text-underline-offset: 3px; }
+  #r1:checked ~ .pick label[for="r1"], #r2:checked ~ .pick label[for="r2"], #r3:checked ~ .pick label[for="r3"], #r4:checked ~ .pick label[for="r4"] { color: var(--night-ink); }
+  #r1:checked ~ .pick label[for="r1"] .v, #r2:checked ~ .pick label[for="r2"] .v, #r3:checked ~ .pick label[for="r3"] .v, #r4:checked ~ .pick label[for="r4"] .v { opacity: 1; color: var(--night-muted); }
+  .room input:focus-visible ~ .pick { outline: 1px dashed var(--night-muted); outline-offset: 6px; }
 
-  /* The Instagram short: tall video on the left, words on the right. Stacks on a phone. */
-  .reel { padding-bottom: 96px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; }
-  .reel__video { flex: 0 0 min(320px, 70vw); }
-  .reel__text { flex: 1 1 320px; display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+  @media (min-width: 700px) {
+    .room { height: max(640px, calc(900 * var(--u))); overflow: hidden; }
+    .beam { position: absolute; left: 50%; top: -200px; width: 1400px; height: 900px; transform: translateX(-50%); background: radial-gradient(ellipse at 50% 30%, rgba(236, 235, 230, 0.07), rgba(236, 235, 230, 0) 60%); pointer-events: none; }
+    .room :global(.moon) { position: absolute; right: 40px; top: calc(168 * var(--u)); width: 56px; height: 56px; border-radius: 50%; mix-blend-mode: screen; -webkit-mask-image: radial-gradient(circle 27px at 21px 25px, transparent 96%, #000 100%); mask-image: radial-gradient(circle 27px at 21px 25px, transparent 96%, #000 100%); pointer-events: none; }
+    .bell { position: absolute; left: 22px; top: calc(150 * var(--u)); width: calc(92 * var(--u)); aspect-ratio: 9 / 20; object-fit: cover; object-position: 50% 78%; border-radius: 3px; mix-blend-mode: screen; opacity: 0; transition: opacity 1s; -webkit-mask-image: linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent); mask-image: linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent); pointer-events: none; }
+    .bell:global(.is-playing) { opacity: 0.9; }
+    .screen { position: absolute; left: 50%; top: max(110px, calc(120 * var(--u))); width: calc(1180 * var(--u)); height: calc(494 * var(--u)); translate: -50% 0; }
+    .mask { transition: width 0.9s cubic-bezier(0.6, 0, 0.2, 1); }
+    .amb { position: absolute; left: 50%; top: max(110px, calc(120 * var(--u))); height: calc(494 * var(--u)); transform: translateX(-50%) scale(1.06, 1.16); filter: blur(64px) saturate(1.6); opacity: 0; transition: opacity 1.4s ease; pointer-events: none; }
+    .amb :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; }
+    #r1:checked ~ .a1, #r2:checked ~ .a2, #r3:checked ~ .a3 { opacity: 0.42; }
+    .room:has(.screen:hover) #r1:checked ~ .a1, .room:has(.screen:hover) #r2:checked ~ .a2, .room:has(.screen:hover) #r3:checked ~ .a3 { opacity: 0.62; }
+    #ambm:not(:checked) ~ .amb { opacity: 0 !important; }
+    .steam { position: absolute; left: 0; right: 0; top: 120px; height: calc(600 * var(--u)); pointer-events: none; z-index: 5; overflow: hidden; }
+    .steam i { position: absolute; bottom: -60px; width: 460px; height: 320px; margin-left: -230px; border-radius: 50%; background: radial-gradient(closest-side, rgba(236, 235, 230, 0.5), rgba(236, 235, 230, 0)); filter: blur(16px); opacity: 0; animation: steam 5.6s ease-out both; }
+    @keyframes steam { 0% { opacity: 0; transform: translateY(0) scale(0.7); } 22% { opacity: 0.95; } 100% { opacity: 0; transform: translateY(-460px) scale(1.7); } }
 
-  .filmography { padding-bottom: 96px; }
-  .filmography__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 20px; }
-  /* Landscape pictures: three across on a computer, two on a tablet, one on a phone. */
-  .filmography__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 36px 20px; }
-  .film { display: flex; flex-direction: column; gap: 10px; color: var(--fg); text-decoration: none; }
-  .film:hover { color: var(--fg); }
-  .film__row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
-  .film__title { font-weight: 600; font-size: 20px; line-height: 1.15; letter-spacing: -0.02em; }
-  .film__log { font-size: 14px; line-height: 1.45; color: var(--text); }
+    .pick { position: absolute; left: 50%; top: calc(max(110px, 120 * var(--u)) + 540 * var(--u)); width: calc(1180 * var(--u)); translate: -50% 0; display: grid; grid-template-columns: 1.3fr 1.4fr 1fr 1fr; gap: 24px; border-top: 1px solid #2a2a28; }
+    .pick .t { font-size: max(16px, calc(22 * var(--u))); }
+    .pick .t.dv, .pick .t--serif { font-size: max(19px, calc(26 * var(--u))); }
 
-  @media (max-width: 700px) {
-    .film-title { padding-block: 32px 48px; }
-    .featured, .filmography, .selection, .reel { padding-bottom: 64px; }
-    .reel__video { margin-inline: auto; }
+    .room :global(.cameo) { position: absolute; left: 168px; bottom: 66px; width: 22px; height: 22px; border-radius: 50%; object-fit: cover; filter: grayscale(1) contrast(1.05); box-shadow: 0 0 0 2px #2a2a28; transition: transform 0.4s cubic-bezier(0.3, 0.6, 0.2, 1); z-index: 6; }
+    .room :global(.cameo:hover) { transform: scale(3.2); }
+    .proj { position: absolute; left: 28px; bottom: 16px; width: 150px; height: 92px; opacity: 0.45; transition: opacity 0.6s; pointer-events: none; }
+    .spool { position: absolute; animation: spin 2.6s linear infinite; animation-play-state: paused; }
+    .spool.b { animation-duration: 2s; }
+    .room:has(.screen:hover) .spool, .room:has(.pick label:hover) .spool { animation-play-state: running; }
+    .room:has(.screen:hover) .proj, .room:has(.pick label:hover) .proj { opacity: 0.9; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .wwm-pill { position: absolute; right: 28px; bottom: 18px; display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; background: var(--night-ink); color: var(--night) !important; text-decoration: none; font-size: 14px; font-weight: 500; }
+    .ambt { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 12px; min-height: 44px; font-size: 13px; color: var(--night-muted); z-index: 6; user-select: none; }
+    .ambt:hover { color: var(--night-ink); }
+    .sw { position: relative; width: 34px; height: 14px; border-radius: 7px; background: #3a3936; transition: background 0.3s; }
+    .sw::after { content: ""; position: absolute; left: -2px; top: -3px; width: 20px; height: 20px; border-radius: 50%; background: var(--night-muted); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); transition: transform 0.3s, background 0.3s; }
+    #ambm:checked ~ .ambt .sw { background: #6b6a66; }
+    #ambm:checked ~ .ambt .sw::after { transform: translateX(18px); background: var(--night-ink); }
+  }
+
+  @media (max-width: 699.98px) {
+    .room { padding-top: 150px; }
+    .screen { aspect-ratio: 2.39 / 1; width: 100%; }
+    .pick { display: flex; flex-direction: column; padding: 26px 22px 20px; }
+    .pick label { padding: 16px 0; border-top: 1px solid #2a2a28; }
+    .pick .v { font-size: 9px; }
+    .pick .v a { display: inline-block; padding: 6px 0; }
+    .cards { display: flex; flex-direction: column; gap: 18px; padding: 16px 22px 44px; }
+    .card { position: relative; display: block; margin: 0 -22px; color: #f4efe6 !important; text-decoration: none; overflow: hidden; background: #0a0a09; }
+    .card :global(img) { display: block; width: 100%; height: auto; object-fit: cover; }
+    .card::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.72)); pointer-events: none; }
+    .card__t { position: absolute; left: 30px; right: 30px; bottom: 28px; z-index: 3; display: flex; flex-direction: column; gap: 7px; }
+    .card__t b { font-weight: 600; font-size: 40px; line-height: 0.94; letter-spacing: -0.05em; }
+    .card__t small { font: 400 9px/1.5 var(--font-mono); letter-spacing: 0.16em; text-transform: uppercase; }
+    .line { margin: 8px 0 0; font: italic 400 24px/1.2 var(--font-serif); }
+    .row { display: flex; flex-direction: column; gap: 5px; padding: 14px 0; min-height: 44px; border-top: 1px solid rgba(128, 128, 128, 0.4); text-decoration: none; }
+    .row small { font: 400 8.5px/1 var(--font-mono); letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.7; }
+    .row b { font-weight: 500; font-size: 20px; letter-spacing: -0.02em; }
+    .btn { align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 999px; background: var(--night-ink); color: var(--night) !important; font-size: 15px; font-weight: 500; text-decoration: none; }
   }
 </style>
