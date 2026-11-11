@@ -19,6 +19,7 @@ A quiet, almost empty barren land with few trees surrounding the area. Sound of 
 
 @मुनाल
 फेरी कता निस्केको त सपना बिहान बिहान?
+= Where are you off to so early again, Sapana?
 
 सपना clicks her tongue without looking behind at मुनाल.
 
@@ -26,6 +27,7 @@ A quiet, almost empty barren land with few trees surrounding the area. Sound of 
 
 @मुनाल (CONT'D)
 हेर त्यै चप्पल लगाएर हिडीछे, दशैं मा लगाउनु भनेर राखेको झन.
+= Look at her, out in the slippers I was saving for Dashain.
 
 सपना looks down at her feet, and up again at the hill and keeps walking.
 
@@ -33,6 +35,7 @@ A quiet, almost empty barren land with few trees surrounding the area. Sound of 
 
 @मुनाल (ENTHUSIASTIC) (CONT'D)
 बजार गको, कति सस्तो मा गमला पाए नानी मैले त... ३ वोटा ल्याए हेर्न!
+= I went to the market, dear, got these pots so cheap... brought three, look!
 
 As सपना walks, the sunlight hits her face. With a slight scrunch on her eyes she tries to block it with her hand with flowers.
 
