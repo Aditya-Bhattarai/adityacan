@@ -7,9 +7,14 @@ import '@fontsource/inter-tight/latin-700.css';
 import '@fontsource/instrument-serif/latin-400.css';
 import '@fontsource/instrument-serif/latin-400-italic.css';
 import '@fontsource/jetbrains-mono/latin-500.css';
+import '@fontsource/jetbrains-mono/latin-400.css';
 import '@fontsource/noto-sans-devanagari/devanagari-600.css';
+import '@fontsource/courier-prime/latin-400.css';
+import '@fontsource/caveat/latin-500.css';
+import '@fontsource/tiro-devanagari-hindi/devanagari-400.css';
 import '../styles/tokens.css';
 import '../styles/global.css';
+import '../styles/frame.css';
 
 import displayFont from '@fontsource/inter-tight/files/inter-tight-latin-600-normal.woff2?url';
 import { getImage } from 'astro:assets';
@@ -23,6 +28,20 @@ const {
   description = 'Aditya Bhattarai is a filmmaker and content strategist from Kathmandu, Nepal. 400+ videos edited and 750M+ impressions across YouTube, podcasts, reels and short films.',
   current = '',
   theme = 'light',
+  // The scene: its number, its screenplay slugline, and its sky (a CSS background for that hour).
+  scene = '',
+  slug = '',
+  sky = '',
+  // Text colour on the sky, and on the menu if that differs (a light page with a dark top, like Home).
+  ink = '',
+  navInk = '',
+  // Small note beside the clock, e.g. "golden hour at 17:21".
+  note = '',
+  grain = false,
+  rail = true,
+  // Pages built on the old layouts need room under the menu. Full designs place things themselves.
+  pad = false,
+  footerDark = theme === 'dark',
   image = null,
   jsonLd = null,
   noindex = false,
@@ -91,10 +110,17 @@ const person = {
   </head>
   <body id="top" class={theme === 'dark' ? 'theme-night' : ''}>
     <a class="skip-link" href="#main">Skip to content</a>
-    <Nav current={current} />
-    <main id="main">
-      <slot />
-    </main>
-    <Footer />
+    <div
+      class:list={['scene', { 'scene--grain': grain, 'scene--pad': pad }]}
+      style={[sky && `--sky:${sky}`, (ink || theme === 'dark') && `--scene-ink:${ink || '#ECEBE6'}`, navInk && `--nav-ink:${navInk}`].filter(Boolean).join(';')}
+    >
+      <Nav current={current} note={note} />
+      {slug && <p class="slugline"><b>{scene}</b><span>{slug}</span></p>}
+      {rail && <span class="rail" aria-hidden="true"></span>}
+      <main id="main">
+        <slot />
+      </main>
+    </div>
+    <Footer current={current} scene={scene} dark={footerDark} />
   </body>
 </html>

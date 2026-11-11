@@ -1,116 +1,59 @@
 ---
-// The "end credits" footer with the big wordmark.
-import { getChapters, getSettings, handleFrom } from '../lib/content.js';
+// BOTTOM OF EVERY PAGE: the call sheet (ways to reach Aditya), the "Every scene" list of all pages, the big name.
+// Contact details come from site-content/about/bio.md. The page list comes from src/lib/scenes.js
+import { SCENE_INDEX } from '../lib/scenes.js';
+import { getSettings, handleFrom } from '../lib/content.js';
 
+const { current = '', scene = '', dark = false } = Astro.props;
 const settings = getSettings();
-const chapters = getChapters();
-const year = new Date().getFullYear();
+const sceneLabel = /^\d$/.test(scene) ? `0${scene}` : scene;
 
-const columns = [
-  {
-    heading: 'CHAPTERS',
-    items: chapters.map((chapter) => ({ text: `${chapter.number} · ${chapter.title}`, href: chapter.href })),
-  },
-  {
-    heading: 'PAGES',
-    items: [
-      { text: 'All work', href: '/work' },
-      { text: 'Clients & projects', href: '/clients' },
-      { text: 'Services & process', href: '/services' },
-      { text: 'Writing', href: '/writing' },
-      { text: 'About', href: '/about' },
-    ],
-  },
-  {
-    heading: 'ELSEWHERE',
-    items: [
-      settings.instagram && { text: `Instagram ${handleFrom(settings.instagram)}`, href: settings.instagram },
-      settings.instagramPhotos && { text: `Photographs ${handleFrom(settings.instagramPhotos)}`, href: settings.instagramPhotos },
-      settings.linkedin && { text: 'LinkedIn', href: settings.linkedin },
-      settings.youtube && { text: 'YouTube', href: settings.youtube },
-      settings.vimeo && { text: 'Vimeo', href: settings.vimeo },
-    ].filter(Boolean),
-  },
-  {
-    heading: 'CONTACT',
-    items: [
-      { text: 'Book a call (Calendly)', href: '/contact#book' },
-      settings.email && { text: settings.email, href: `mailto:${settings.email}` },
-      settings.whatsapp && { text: `WhatsApp ${settings.whatsapp}`, href: settings.whatsappHref },
-    ].filter(Boolean),
-  },
-];
+const cells = [
+  settings.email && { k: 'Email', v: settings.email, href: `mailto:${settings.email}` },
+  settings.whatsapp && { k: 'WhatsApp', v: settings.whatsapp, href: settings.whatsappHref, out: true },
+  settings.calendly && { k: 'Book a call', v: '30 minutes, free, on Google Meet', href: settings.calendly, out: true },
+  settings.instagram && { k: 'Instagram', v: handleFrom(settings.instagram), href: settings.instagram, out: true },
+  settings.instagramPhotos && { k: 'My photographs', v: handleFrom(settings.instagramPhotos), href: settings.instagramPhotos, out: true },
+  settings.linkedin && { k: 'LinkedIn', v: settings.name, href: settings.linkedin, out: true },
+  settings.location && { k: 'Location', v: settings.location },
+  { k: 'Call time', v: 'Whenever you like. I usually reply right away.', serif: true },
+].filter(Boolean);
 ---
 
-<footer class="site-footer">
-  <div class="wrap site-footer__inner">
-    <div class="site-footer__title">END CREDITS</div>
-    <div class="site-footer__columns">
-      {columns.map((column) => (
-        <div class="site-footer__column">
-          <div class="label label--small">{column.heading}</div>
-          {column.items.map((item) => (
-            <a href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noopener' : undefined}>{item.text}</a>
-          ))}
+<footer class:list={['csh', { dk: dark }]}>
+  <div class="csh__in">
+    <div class="csh__hd">
+      <b>CALL SHEET</b>
+      <span>Production · {settings.name}</span>
+      {sceneLabel && <span>Scene {sceneLabel} · day one of many</span>}
+      <span>Kathmandu · UTC+5:45</span>
+    </div>
+
+    <div class="csh__gr">
+      {cells.map((cell) => cell.href ? (
+        <a class="csh__c" href={cell.href} target={cell.out ? '_blank' : undefined} rel={cell.out ? 'noopener' : undefined}>
+          <span class="csh__k">{cell.k}</span>
+          <span class="csh__v">{cell.v}</span>
+          <span class="csh__ar" aria-hidden="true">↗</span>
+        </a>
+      ) : (
+        <div class="csh__c">
+          <span class="csh__k">{cell.k}</span>
+          <span class:list={['csh__v', { 'csh__v--s': cell.serif }]}>{cell.v}</span>
         </div>
       ))}
     </div>
-    <div class="site-footer__wordmark" aria-hidden="true">{settings.name}</div>
-    <div class="site-footer__end">
-      <span>© {year} {settings.name} · {settings.location}</span>
-      <span>Directed, written &amp; edited by the same person</span>
-      <a href="#top">Back to top ↑</a>
+
+    <nav class="csh__idx" aria-label="Every page">
+      <span>Every scene</span>
+      {SCENE_INDEX.map((item) => (
+        <a href={item.href} class={current === item.key ? 'on' : ''}><b>{item.number}</b>{item.label}</a>
+      ))}
+    </nav>
+
+    <div class="csh__wm">
+      <span>{settings.name}</span>
+      <small>Filmmaker · editor · trekking guide · adityacan.com</small>
     </div>
   </div>
 </footer>
-
-<style>
-  .site-footer { background: var(--bg); color: var(--fg); border-top: 1px solid var(--hairline); }
-  .site-footer__inner { padding-block: 72px 32px; display: flex; flex-direction: column; gap: 56px; container-type: inline-size; }
-  .site-footer__title {
-    text-align: center;
-    font: 500 12px/1 var(--font-mono);
-    letter-spacing: 0.24em;
-    color: var(--label);
-  }
-  .site-footer__columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
-  .site-footer__column { display: flex; flex-direction: column; gap: 14px; }
-  .site-footer__column a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 28px;
-    font-size: 16px;
-    line-height: 1.3;
-    text-decoration: none;
-    overflow-wrap: anywhere;
-  }
-  .site-footer__column a:hover { text-decoration: underline; color: inherit; }
-  .site-footer__wordmark {
-    font-weight: 700;
-    /* The name is about 6.5 times as wide as its font size, so this always fills the row exactly. */
-    font-size: min(12vw, 190px);
-    font-size: calc(100cqw / 6.56);
-    line-height: 0.95;
-    padding-bottom: 0.08em;
-    letter-spacing: -0.055em;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-  .site-footer__end {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 12px;
-    font: 500 12px/1.5 var(--font-mono);
-    letter-spacing: 0.04em;
-    color: var(--label);
-  }
-  .site-footer__end a { color: var(--fg); min-height: 28px; }
-
-  @media (max-width: 700px) {
-    .site-footer__columns { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; }
-    /* Sized so the email address stays on one line in its half width column. */
-    .site-footer__column a { min-height: 44px; font-size: clamp(12px, calc((100vw - 68px) / 21.8), 16px); }
-    .site-footer__end a { display: inline-flex; align-items: center; min-height: 44px; }
-  }
-</style>

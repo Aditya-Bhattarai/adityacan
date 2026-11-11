@@ -63,6 +63,7 @@
   --night-muted: #a3a29c; /* labels on night */
   --rec: #d9411e;         /* camera record light: only beside the reel */
   --live: #2e9e5b;        /* available, online, happening now */
+  --gold: #e8b23a;        /* the one accent: sun, dial, small drawings, markers */
 
   /* Colours that change with the page theme */
   --bg: var(--paper);
@@ -78,6 +79,10 @@
   --font-sans: 'Inter Tight', 'Inter Tight Fallback', 'Noto Sans Devanagari', system-ui, sans-serif;
   --font-serif: 'Instrument Serif', 'Instrument Serif Fallback', 'Noto Sans Devanagari', Georgia, serif;
   --font-mono: 'JetBrains Mono', 'JetBrains Mono Fallback', 'Noto Sans Devanagari', ui-monospace, monospace;
+
+  --font-script: 'Courier Prime', 'Courier New', monospace;                  /* scene sluglines, screenplay text */
+  --font-hand: 'Caveat', 'Segoe Print', cursive;                              /* his handwritten notes */
+  --font-devanagari: 'Tiro Devanagari Hindi', 'Noto Sans Devanagari', serif;  /* Nepali words */
 
   /* Layout */
   --max-width: 1320px;

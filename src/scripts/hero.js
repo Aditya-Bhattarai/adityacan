@@ -52,7 +52,7 @@ if (video) {
   soundButton?.addEventListener('click', () => {
     const turnOn = video.muted;
     video.muted = !turnOn;
-    soundButton.textContent = turnOn ? 'MUTE' : 'UNMUTE';
+    soundButton.textContent = turnOn ? '23 sec · sound on' : '23 sec · tap for sound';
     soundButton.setAttribute('aria-pressed', String(turnOn));
     if (video.paused) start();
   });

@@ -1,247 +1,58 @@
 ---
-// Sticky navigation with the live Kathmandu timecode.
-// On phones it becomes name + MENU, which opens a full-screen dark menu.
-import { getChapters, getProjects, getSettings, getWorkProjects, getWriting } from '../lib/content.js';
-import { getPage } from '../lib/content.js';
+// TOP OF EVERY PAGE: name, live Kathmandu clock, sun and moon dial, the six links, the gold pill.
+// On phones: name + MENU, which opens the full-screen dark menu.
+// The links come from src/lib/scenes.js
+import NavIcon from './NavIcon.astro';
+import { MENU_MORE, NAV_LINKS } from '../lib/scenes.js';
+import { getSettings } from '../lib/content.js';
 
-const { current = '' } = Astro.props;
+const { current = '', note = '' } = Astro.props;
 const settings = getSettings();
-const chapters = getChapters();
-const work = await getWorkProjects();
-const writing = await getWriting();
-const services = await getPage('services');
-const projects = await getProjects();
-const clientCount = projects.filter((project) => project.what).length;
-
-const count = (value) => String(value).padStart(2, '0');
-const links = [
-  { key: 'work', label: 'Work', href: '/work', count: count(work.length) },
-  { key: 'clients', label: 'Clients', href: '/clients', count: count(clientCount) },
-  { key: 'services', label: 'Services', href: '/services', count: count(services.services?.length ?? 0) },
-  { key: 'writing', label: 'Writing', href: '/writing', count: count(writing.length) },
-  { key: 'about', label: 'About', href: '/about' },
-];
-const available = settings.availableFrom ? `Available ${settings.availableFrom}` : 'Available';
-const elsewhere = [
-  { label: 'Instagram', href: settings.instagram },
-  { label: 'LinkedIn', href: settings.linkedin },
-  { label: 'YouTube', href: settings.youtube },
-].filter((item) => item.href);
 ---
 
-<header class="site-header">
-  <div class="site-header__row">
-    <div class="site-header__brand">
-      <a class="site-header__name" href="/">{settings.name}</a>
-      <span class="site-header__time mobile-hide" aria-label="Kathmandu time">KTM <span data-timecode>00:00:00:00</span></span>
-    </div>
-
-    <nav class="site-header__links" aria-label="Main">
-      {links.map((link) => (
-        <a href={link.href} class:list={['nav-link', { 'is-current': current === link.key }]} aria-current={current === link.key ? 'page' : undefined}>{link.label}</a>
-      ))}
-    </nav>
-
-    <div class="site-header__actions">
-      <span class="site-header__available"><span class="live-dot"></span>{available}</span>
-      <a class="btn btn--primary site-header__book" href="/contact#book">Book a call</a>
-    </div>
-
-    <button class="menu-button" type="button" data-menu-open aria-haspopup="dialog">MENU</button>
+<header class="nav">
+  <div class="nav__id">
+    <a class="nav__name" href="/">{settings.name}</a>
+    <span class="nav__clock">KTM <span data-timecode>00:00:00:00</span></span>
+    {note && <span class="nav__note" data-golden>{note}</span>}
+    <svg class="dial" width="28" height="28" viewBox="0 0 28 28" role="img" aria-label="Where the sun or moon is over Kathmandu right now.">
+      <circle cx="14" cy="14" r="10.5" fill="none" stroke="currentColor" stroke-opacity=".5" stroke-width="1.1" stroke-dasharray="0.1 3.3" stroke-linecap="round"></circle>
+      <line x1="1" y1="14" x2="27" y2="14" stroke="currentColor" stroke-opacity=".5" stroke-width="1"></line>
+      <circle data-dial cx="3.5" cy="14" r="3.3" fill="#E8B23A"></circle>
+    </svg>
   </div>
+
+  <nav class="nav__links" aria-label="Main">
+    {NAV_LINKS.map((link) => (
+      <a href={link.href} class={current === link.key ? 'on' : ''} aria-current={current === link.key ? 'page' : undefined}>
+        <NavIcon name={link.icon} />{link.label}
+      </a>
+    ))}
+    <a class="wwm" href="/about#work">Work with me</a>
+  </nav>
+
+  <button class="nav__menu-btn" type="button" data-menu-open aria-haspopup="dialog">MENU</button>
 </header>
 
-<div class="phone-status" aria-hidden="true">
-  <span>KTM <span data-timecode>00:00:00:00</span></span>
-  <span class="phone-status__available"><span class="live-dot"></span>{available.toUpperCase()}</span>
-</div>
-
 <dialog class="menu" data-menu aria-label="Menu">
-  <div class="menu__inner theme-night">
-    <div class="menu__top">
-      <a class="site-header__name" href="/">{settings.name}</a>
-      <button class="menu__close" type="button" data-menu-close aria-label="Close menu">
-        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="2" fill="none"></path></svg>
-      </button>
-    </div>
-
-    <nav class="menu__links" aria-label="Menu links">
-      {[...links, { key: 'contact', label: 'Contact', href: '/contact' }].map((link) => (
-        <a href={link.href}><span class="menu__link-title">{link.label}</span>{link.count && <span class="menu__link-count">{link.count}</span>}</a>
-      ))}
-    </nav>
-
-    <div class="menu__chapters">
-      {chapters.map((chapter) => (
-        <a class="tag" href={chapter.href}>{chapter.number} · {chapter.short.toUpperCase()}</a>
-      ))}
-    </div>
-
-    <div class="menu__bottom">
-      <a class="btn btn--primary btn--large menu__book" href="/contact#book">Book a call</a>
-      <p class="menu__meta">
-        KTM <span data-timecode>00:00:00:00</span>
-        {elsewhere.map((item) => <> · <a href={item.href} target="_blank" rel="noopener">{item.label.toUpperCase()}</a></>)}
-      </p>
-    </div>
+  <div class="menu__bar">
+    <a class="nav__name" href="/">{settings.name}</a>
+    <button class="nav__menu-btn" type="button" data-menu-close>CLOSE</button>
+  </div>
+  <nav class="menu__links" aria-label="Main, phone">
+    {NAV_LINKS.map((link) => (
+      <a href={link.href} class:list={[{ on: current === link.key, 'menu__me': link.key === 'about' }]}>
+        <NavIcon name={link.icon} size={32} />{link.label}
+      </a>
+    ))}
+  </nav>
+  <div class="menu__more">
+    {MENU_MORE.map((link) => <a href={link.href}>{link.label}</a>)}
+  </div>
+  <div class="menu__foot">
+    <span class="nav__clock">KTM <span data-timecode>00:00:00:00</span></span>
+    <a class="menu__pill" href="/about#work">Work with me</a>
   </div>
 </dialog>
 
 <script src="../scripts/nav.js"></script>
-
-<style>
-  .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: var(--bg);
-    color: var(--fg);
-  }
-  .site-header__row {
-    max-width: 1440px;
-    margin-inline: auto;
-    padding: 12px var(--gutter);
-    min-height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px 24px;
-  }
-  .site-header__brand { display: flex; align-items: baseline; gap: 16px; min-width: 0; }
-  .site-header__name {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    color: inherit;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 17px;
-    letter-spacing: -0.02em;
-    white-space: nowrap;
-  }
-  .site-header__time {
-    font: 500 12px/1 var(--font-mono);
-    letter-spacing: 0.06em;
-    color: var(--label);
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-  }
-  .site-header__links { display: flex; gap: 2px; }
-  .nav-link {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    padding: 0 14px;
-    border-radius: var(--radius-pill);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 15px;
-    white-space: nowrap;
-    transition: background-color 200ms ease;
-  }
-  .nav-link:hover { color: inherit; background: var(--hairline); }
-  .nav-link.is-current { background: var(--hairline); }
-  .site-header__actions { display: flex; align-items: center; gap: 16px; }
-  .site-header__available {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font: 500 12px/1 var(--font-mono);
-    letter-spacing: 0.04em;
-    color: var(--label);
-    white-space: nowrap;
-  }
-  .site-header__book { min-height: 44px; padding: 0 18px; font-size: 14px; }
-
-  .menu-button {
-    display: none;
-    min-height: 44px;
-    min-width: 64px;
-    border: 1px solid var(--fg);
-    border-radius: var(--radius-pill);
-    background: transparent;
-    font: 500 11px/1 var(--font-mono);
-    letter-spacing: 0.08em;
-    cursor: pointer;
-  }
-
-  .phone-status {
-    display: none;
-    justify-content: space-between;
-    padding: 0 18px 10px;
-    font: 500 10px/1 var(--font-mono);
-    letter-spacing: 0.06em;
-    color: var(--label);
-    font-variant-numeric: tabular-nums;
-  }
-  .phone-status__available { display: inline-flex; align-items: center; gap: 6px; }
-  .phone-status .live-dot { width: 6px; height: 6px; }
-
-  /* Full-screen dark menu */
-  .menu {
-    width: 100vw;
-    max-width: none;
-    height: 100dvh;
-    max-height: none;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    background: var(--night);
-    color: var(--night-ink);
-  }
-  .menu::backdrop { background: var(--night); }
-  .menu__inner {
-    min-height: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 16px 18px 28px;
-    background: var(--night);
-    color: var(--night-ink);
-  }
-  .menu__top { display: flex; justify-content: space-between; align-items: center; }
-  .menu__close {
-    width: 44px;
-    height: 44px;
-    border: 0;
-    border-radius: 50%;
-    background: var(--night-ink);
-    color: var(--night);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-  .menu__links { display: flex; flex-direction: column; margin-top: 36px; }
-  .menu__links a {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 12px 0;
-    border-top: 1px solid #2a2a28;
-    color: inherit;
-    text-decoration: none;
-  }
-  .menu__link-title { font-weight: 600; font-size: 40px; line-height: 1; letter-spacing: -0.04em; }
-  .menu__link-count { font: 500 10px/1 var(--font-mono); color: var(--night-muted); }
-  .menu__chapters { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
-  .menu__chapters .tag { min-height: 44px; padding: 8px 12px; text-decoration: none; }
-  .menu__bottom { margin-top: auto; padding-top: 24px; display: flex; flex-direction: column; gap: 12px; }
-  .menu__book { width: 100%; }
-  .menu__meta {
-    text-align: center;
-    font: 500 10px/1.5 var(--font-mono);
-    color: var(--night-muted);
-    font-variant-numeric: tabular-nums;
-  }
-
-  @media (max-width: 1080px) {
-    .site-header__available { display: none; }
-  }
-  @media (max-width: 900px) {
-    .site-header__row { padding: 12px 18px 10px; }
-    .site-header__links, .site-header__actions, .mobile-hide { display: none; }
-    .menu-button { display: inline-flex; align-items: center; justify-content: center; }
-    .phone-status { display: flex; }
-    .site-header__name { font-size: 16px; }
-  }
-</style>
