@@ -1,94 +1,216 @@
 ---
-// ALL WORK, with filters by chapter and role. The list and count come from your project folders.
+// EVERYTHING (scene 11, fog before sunrise): every piece on one wall, in no order.
+// The wall keeps drifting under the pointer. Pointing at a piece lifts it and shows its name.
+// Clicking or tapping a piece holds the wall on it, dims the rest and shows a gold link that opens it.
+// Clicking anywhere else lets the wall move again.
+// The pieces and every count come from the project folders in site-content. Nothing is typed by hand.
 import Base from '../../layouts/Base.astro';
-import ProjectCard from '../../components/ProjectCard.astro';
-import { getChapters, getWorkProjects, ROLE_ORDER } from '../../lib/content.js';
+import Picture from '../../components/Picture.astro';
+import { getSettings, getWorkProjects, ROLE_ORDER } from '../../lib/content.js';
 
+const settings = getSettings();
 const work = await getWorkProjects();
-const chapters = getChapters();
+
+// The four filters by chapter, named the way the menu names them.
+const CHAPTERS = [
+  { key: 'film', label: 'Films' },
+  { key: 'strategy-content', label: 'For creators' },
+  { key: 'trekking-guide', label: 'Near Mountains.' },
+  { key: 'teaching', label: 'Classes' },
+];
+// At most this many pieces from one project, so no single project takes over the wall.
+const MOST_PER_PROJECT = 8;
+
+function whereTo(url) {
+  if (/instagram\.com/.test(url)) return 'Instagram ↗';
+  if (/youtu/.test(url)) return 'YouTube ↗';
+  if (/tiktok\.com/.test(url)) return 'TikTok ↗';
+  return 'Watch ↗';
+}
+
+// Every project gives its pictures and its reels (the ones with a cover), taken evenly from each kind.
+const pieces = work.flatMap((project) => {
+  const pools = project.tabs.filter((tab) => tab.key !== 'assets').map((tab) => [
+    ...tab.links.filter((link) => link.poster).map((link) => ({ image: link.poster, name: link.title || project.title, href: link.url, to: whereTo(link.url), out: true })),
+    ...tab.items.map((item) => ({ image: item.image, name: tab.noCaption ? project.title : item.caption, href: project.href, to: 'Open →' })),
+  ]).filter((pool) => pool.length);
+  const picked = [];
+  for (let round = 0; picked.length < MOST_PER_PROJECT && pools.some((pool) => pool[round]); round += 1) {
+    for (const pool of pools) if (pool[round] && picked.length < MOST_PER_PROJECT) picked.push(pool[round]);
+  }
+  if (!picked.length && project.cover) picked.push({ image: project.cover.image, name: project.title, href: project.href, to: 'Open →' });
+  const role = project.shortRoles.slice(0, 2).join(' and ').toLowerCase();
+  return picked.map((piece) => ({
+    ...piece,
+    sub: [piece.name === project.title ? '' : project.title, role].filter(Boolean).join(' · '),
+    chapter: project.chapterKey,
+    roles: project.shortRoles.join('|'),
+  }));
+});
+
+// "In no order": the same shuffle every build, so the wall doesn't change by itself.
+let seed = 20261111;
+const random = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
+const wall = pieces.map((piece) => [random(), piece]).sort((a, b) => a[0] - b[0]).map(([, piece]) => piece);
+
+const COLUMNS = 9;
+const columns = Array.from({ length: COLUMNS }, (_, index) => wall.filter((_, at) => at % COLUMNS === index));
+const speeds = [96, 120, 84, 132, 116, 104, 90, 126, 110];
+const starts = [-44.6, -54.8, -26.2, -53.7, 0, -20.4, -17.3, -32.1, -35.2];
+
 const usedRoles = new Set(work.flatMap((project) => project.shortRoles));
 const roles = ROLE_ORDER.filter((role) => usedRoles.has(role));
-const count = String(work.length).padStart(2, '0');
+const countIn = (key) => pieces.filter((piece) => piece.chapter === key).length;
 ---
 
-<Base title="Work" current="work" description="Every project by Aditya Bhattarai. Filter by chapter, or by role: editor, director, writer, strategist and more.">
-  <section class="wrap work-head">
-    <div class="slate"><span></span><i></i></div>
-    <div class="work-head__row">
-      <h1 class="h1-huge work-head__title">Work <span class="work-head__count"><span data-count>{count}</span></span></h1>
-      <p class="statement work-head__note">Not everything I’ve made, just the work I most want you to see. Filter by chapter or by what I did on each.</p>
-    </div>
-    <div class="slate"><span></span><i></i></div>
-  </section>
+<Base
+  title="Everything"
+  description="Every piece by Aditya Bhattarai on one wall: films, videos for creators, mountain films, photographs and classes. Filter by chapter or by role."
+  current="work" theme="dark" scene="11" slug="EXT. FOG. BEFORE SUNRISE." sky="#0F0F0E" rail={false}
+>
+  <div class="arch" data-wall>
+    <h1 class="visually-hidden">Everything</h1>
 
-  <section class="wrap filters" data-filters>
-    <div class="filters__row" role="group" aria-label="Filter by chapter">
-      <span class="label label--small filters__label">CHAPTER</span>
-      <button class="chip chip--chapter" type="button" data-filter="chapter" data-value="All" aria-pressed="true">All</button>
-      {chapters.map((chapter) => (
-        <button class="chip chip--chapter" type="button" data-filter="chapter" data-value={chapter.number} aria-pressed="false">{chapter.number} · {chapter.title}</button>
+    <div class="mhead m-only">
+      <p class="mhead__t">Everything,<br />in no order.</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters" data-filters>
+      <div class="filters__row" role="group" aria-label="Filter by chapter">
+        <button class="chip" type="button" data-filter="chapter" data-value="All" aria-pressed="true">All <b>{pieces.length}</b></button>
+        {CHAPTERS.filter((chapter) => countIn(chapter.key) > 0).map((chapter) => (
+          <button class="chip" type="button" data-filter="chapter" data-value={chapter.key} aria-pressed="false">{chapter.label} <b>{countIn(chapter.key)}</b></button>
+        ))}
+      </div>
+      <div class="filters__row filters__row--roles" role="group" aria-label="Filter by what I did">
+        <button class="chip chip--role" type="button" data-filter="role" data-value="All" aria-pressed="true">Any role</button>
+        {roles.map((role) => <button class="chip chip--role" type="button" data-filter="role" data-value={role} aria-pressed="false">{role}</button>)}
+      </div>
+    </div>
+    <p class="mcount m-only"><span data-count>{pieces.length}</span> pieces · tap any one</p>
+    <p class="empty" data-empty hidden>Nothing here. Try another filter.</p>
+
+    <!-- The wall -->
+    <div class="field">
+      {columns.map((column, index) => (
+        <div class:list={['col', index % 2 ? 'dn' : 'up']}>
+          <div class="lane" style={`animation-duration:${speeds[index]}s;animation-delay:${starts[index]}s`}>
+            {[0, 1].map((copy) => (
+              <>
+                {index === 4 && (
+                  <div class:list={['ttl', { dup: copy }]} aria-hidden={copy ? 'true' : undefined}>
+                    <span>Everything,<br />in no order.</span>
+                    <small><span data-count>{pieces.length}</span> PIECES</small>
+                    <small>CLICK A PIECE TO HOLD IT</small>
+                  </div>
+                )}
+                {column.map((piece) => (
+                  <div class:list={['it', { dup: copy }]} tabindex={copy ? -1 : 0} aria-hidden={copy ? 'true' : undefined} data-piece data-chapter={piece.chapter} data-roles={piece.roles}>
+                    <Picture image={piece.image} alt={copy ? '' : piece.name} widths={[200, 400]} sizes="(max-width: 900px) 33vw, 11vw" style={`aspect-ratio:${piece.image.width}/${piece.image.height}`} />
+                    <span class="cap">
+                      <b>{piece.name}</b>
+                      {piece.sub && <small>{piece.sub}</small>}
+                      <a class="to" href={piece.href} target={piece.out ? '_blank' : undefined} rel={piece.out ? 'noopener' : undefined} tabindex={copy ? -1 : undefined}>{piece.to}</a>
+                    </span>
+                  </div>
+                ))}
+              </>
+            ))}
+          </div>
+        </div>
       ))}
     </div>
-    <div class="filters__row" role="group" aria-label="Filter by role">
-      <span class="label label--small filters__label">ROLE</span>
-      <button class="chip chip--role" type="button" data-filter="role" data-value="All" aria-pressed="true">All</button>
-      {roles.map((role) => (
-        <button class="chip chip--role" type="button" data-filter="role" data-value={role} aria-pressed="false">{role}</button>
-      ))}
-    </div>
-  </section>
 
-  <section class="wrap results">
-    <p class="statement results__empty" data-empty hidden>Nothing here. Try another role.</p>
-    <div class="results__grid">
-      {work.map((project) => <ProjectCard project={project} />)}
-    </div>
-  </section>
+    {settings.calendly && <a class="book" href={settings.calendly} target="_blank" rel="noopener"><i></i>Book a call</a>}
+  </div>
 </Base>
 
-<script src="../../scripts/filters.js"></script>
+<script src="../../scripts/wall.js"></script>
 
 <style>
-  .work-head { padding-block: 72px 32px; border-bottom: 1px solid var(--line); }
-  .slate { display: flex; align-items: center; gap: 20px; }
-  .slate span { flex: 1; height: 1px; background: var(--ink); }
-  .slate i { width: 7px; height: 7px; border-radius: 50%; background: var(--ink); }
-  .work-head__row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; padding-block: 28px; }
-  .work-head__title { font-size: clamp(64px, 12vw, 184px); line-height: 0.85; }
-  .work-head__count {
-    font: 500 clamp(18px, 2vw, 26px)/1 var(--font-mono);
-    letter-spacing: 0;
-    vertical-align: top;
-    color: var(--muted);
+  .arch { position: relative; color: var(--night-ink); }
+  .col { flex: 1; min-width: 0; position: relative; }
+  .lane { display: flex; flex-direction: column; gap: 6px; }
+  .it { position: relative; display: block; overflow: hidden; border-radius: 3px; background: #1b1b19; color: #fff; outline: none; transition: filter 0.35s ease, transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .it[hidden], .ttl[hidden] { display: none; }
+  .it :global(img) { display: block; width: 100%; height: auto; object-fit: cover; transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .cap { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; gap: 3px; padding: 26px 10px 9px; background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.82)); opacity: 0; transform: translateY(8px); transition: opacity 0.25s, transform 0.25s; }
+  .cap b { font-size: 12px; font-weight: 500; line-height: 1.3; }
+  .cap small { font: 400 9px/1.3 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: #c9c8c2; }
+  .to { align-self: flex-start; color: #fff; text-decoration: none; font: 400 9px/1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; pointer-events: none; border-radius: 999px; transition: background 0.25s, color 0.25s, padding 0.25s; }
+  .ttl { aspect-ratio: 4 / 5; background: var(--paper); color: var(--ink); border-radius: 3px; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: 0 14px; }
+  .ttl > span { font: italic 400 clamp(17px, 1.9cqw, 27px) / 1.02 var(--font-serif); }
+  .ttl small { font: 400 8.5px/1.3 var(--font-mono); letter-spacing: 0.16em; color: var(--muted); }
+
+  .chip { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 0 16px; border: 0; border-radius: 999px; background: rgba(241, 240, 236, 0.9); color: var(--ink); font: 500 14px/1 var(--font-sans); white-space: nowrap; }
+  .chip b { font: 400 10px/1 var(--font-mono); opacity: 0.7; }
+  .chip[aria-pressed="true"] { background: var(--gold); }
+  .chip--role { min-height: 36px; padding: 0 12px; font: 400 10px/1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; background: rgba(15, 15, 14, 0.82); color: var(--night-ink); box-shadow: inset 0 0 0 1px #44433f; }
+  .chip--role[aria-pressed="true"] { background: var(--night-ink); color: var(--ink); box-shadow: none; }
+  .filters__row { display: flex; gap: 6px; }
+  .empty { margin: 0; padding: 40px 22px; font: italic 400 26px/1.2 var(--font-serif); }
+  .book { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px; border-radius: 999px; background: var(--paper); color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 500; box-shadow: 0 14px 34px -14px rgba(0, 0, 0, 0.8); }
+  .book i { width: 8px; height: 8px; border-radius: 50%; background: var(--live); }
+
+  /* ================= PCs and laptops: the drifting wall ================= */
+  @media (min-width: 900px) {
+    .arch { height: max(640px, 100svh); overflow: hidden; }
+    .field { position: absolute; left: 0; right: 0; top: 100px; bottom: 0; display: flex; gap: 6px; padding: 0 6px; overflow: hidden; }
+    .lane { animation-timing-function: linear; animation-iteration-count: infinite; will-change: transform; }
+    .up .lane { animation-name: up; }
+    .dn .lane { animation-name: dn; }
+    @keyframes up { from { transform: translateY(0); } to { transform: translateY(calc(-50% - 3px)); } }
+    @keyframes dn { from { transform: translateY(calc(-50% - 3px)); } to { transform: translateY(0); } }
+
+    /* Pointing at a piece only lifts it and shows its name. The wall keeps moving. */
+    .it:hover { z-index: 2; transform: scale(1.03); }
+    .it:hover .cap, .it:focus-within .cap, .it.is-held .cap { opacity: 1; transform: none; }
+    /* A click, a tap or the Tab key holds the wall on one piece. */
+    .field:has(.it:focus-within) .lane, .field:has(.it.is-held) .lane { animation-play-state: paused; }
+    .field:has(.it:focus-within) .it:not(:focus-within), .field:has(.it.is-held) .it:not(.is-held) { filter: brightness(0.42) saturate(0.6); }
+    .it:focus-within, .it.is-held { z-index: 3; transform: scale(1.045); box-shadow: 0 0 0 2px var(--gold), 0 18px 40px -16px rgba(0, 0, 0, 0.8); }
+    .it:focus-within :global(img), .it.is-held :global(img) { transform: scale(1.06); }
+    .it:focus-within .to, .it.is-held .to { pointer-events: auto; background: var(--gold); color: var(--ink); padding: 0 12px; margin-top: 4px; min-height: 32px; display: inline-flex; align-items: center; }
+
+    .filters { position: absolute; left: 20px; bottom: 18px; z-index: 12; display: flex; flex-direction: column; gap: 6px; max-width: calc(100% - 200px); }
+    .filters__row { flex-wrap: wrap; }
+    .filters .chip { box-shadow: 0 14px 34px -14px rgba(0, 0, 0, 0.8); }
+    .filters .chip--role { box-shadow: inset 0 0 0 1px #44433f, 0 14px 34px -14px rgba(0, 0, 0, 0.8); }
+    .book { position: absolute; right: 20px; bottom: 18px; z-index: 12; }
+    .empty { position: absolute; left: 0; right: 0; top: 40%; text-align: center; z-index: 5; }
+
+    /* With a filter on, the wall stops and shows only what matches, so nothing is missed. */
+    .arch.is-filtered { height: auto; min-height: 100svh; padding-bottom: 60px; overflow: visible; }
+    .arch.is-filtered .filters { position: static; max-width: none; padding: 104px 20px 16px; }
+    .arch.is-filtered .field { position: static; overflow: visible; align-items: flex-start; }
+    .arch.is-filtered .lane { animation: none; }
+    .arch.is-filtered .dup { display: none; }
+    .arch.is-filtered .book { position: static; margin: 30px 20px 0; }
+    .arch.is-filtered .empty { position: static; }
   }
-  .work-head__note { max-width: 420px; font-size: 24px; line-height: 1.25; }
 
-  .filters { padding-block: 24px 8px; display: flex; flex-direction: column; gap: 14px; }
-  .filters__row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-  .filters__label { width: 96px; }
-  .chip {
-    min-height: 44px;
-    padding: 0 16px;
-    border-radius: var(--radius-pill);
-    border: 1px solid var(--ink);
-    background: transparent;
-    color: var(--ink);
-    cursor: pointer;
-    transition: background-color 200ms ease, color 200ms ease;
-  }
-  .chip[aria-pressed='true'] { background: var(--ink); color: var(--paper); }
-  .chip--chapter { font: 500 14px/1 var(--font-sans); }
-  .chip--role { padding: 0 14px; border-color: var(--line-strong); font: 500 12px/1 var(--font-mono); letter-spacing: 0.03em; }
-  .chip--role[aria-pressed='true'] { border-color: var(--ink); }
-
-  .results { padding-block: 24px 120px; }
-  .results__empty { padding-block: 48px; font-size: 26px; color: var(--muted); }
-  .results__empty[hidden] { display: none; }
-  .results__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 40px 20px; }
-
-  @media (max-width: 700px) {
-    .work-head { padding-block: 40px 24px; }
-    .filters__label { width: 100%; }
-    .results { padding-block: 16px 72px; }
+  /* ================= Phones: a grid you tap ================= */
+  @media (max-width: 899.98px) {
+    .arch { padding: 0 0 44px; }
+    .mhead { display: flex; align-items: center; justify-content: center; min-height: 300px; padding: 110px 22px 20px; background: linear-gradient(180deg, #e7ecee 0%, #f1f0ec 52%, #e6e5e0 100%); color: var(--ink); text-align: center; }
+    .arch :global(.slugline) { color: var(--ink); }
+    .mhead__t { margin: 0; font: italic 400 38px/1.05 var(--font-serif); }
+    .filters { position: sticky; top: 0; z-index: 12; display: flex; flex-direction: column; gap: 6px; padding: 10px 0 10px 14px; background: var(--night); }
+    .filters__row { overflow-x: auto; scrollbar-width: none; padding-right: 14px; }
+    .filters__row::-webkit-scrollbar { display: none; }
+    .chip { flex: none; }
+    .chip--role { min-height: 44px; }
+    .mcount { margin: 0; padding: 12px 22px; font: 400 9px/1.4 var(--font-mono); letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.7; }
+    .field { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 0 22px; }
+    .col, .lane { display: contents; }
+    .dup, .ttl { display: none !important; }
+    .it { aspect-ratio: 4 / 5; }
+    .it :global(img) { height: 100%; aspect-ratio: auto !important; }
+    .cap { opacity: 0; padding: 0; inset: 0; background: none; transform: none; }
+    .cap b, .cap small { display: none; }
+    .to { position: absolute; inset: 0; pointer-events: auto; font-size: 0; }
+    .it.is-held { box-shadow: none; }
+    .book { margin: 26px 22px 0; }
   }
 </style>
