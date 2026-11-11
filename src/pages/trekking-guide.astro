@@ -411,7 +411,7 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
 
     .moon { position: absolute; left: calc(1000 * var(--u)); top: max(96px, calc(86 * var(--u))); width: calc(250 * var(--u)); animation: rise 60s ease-out both; }
     @keyframes rise { from { translate: 0 26px; } }
-    .moon__cap { position: absolute; left: calc(1108 * var(--u)); top: calc(86 * var(--u) + 250 * var(--u)); color: var(--night-muted) !important; }
+    .moon__cap { position: absolute; left: calc(1108 * var(--u)); top: calc(max(96px, 86 * var(--u)) + 258 * var(--u)); color: var(--night-muted) !important; }
     .ask { top: max(150px, calc(150 * var(--u))); }
     .ask p { margin-top: 18px; font-size: max(30px, calc(58 * var(--u))); }
     .ask__row { margin-top: calc(30 * var(--u)); }

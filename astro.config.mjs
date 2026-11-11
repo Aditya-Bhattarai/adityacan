@@ -5,6 +5,8 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://adityacan.com',
   trailingSlash: 'never',
+  // Old addresses that now live somewhere else. (Cloudflare also redirects these from public/_redirects.)
+  redirects: { '/services': '/about#work' },
   build: {
     format: 'file', // Clean addresses like /work instead of /work/
     inlineStylesheets: 'always', // Puts the styles inside each page so it opens faster
