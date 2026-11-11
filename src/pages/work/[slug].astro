@@ -27,6 +27,14 @@ const screenplay = writing.find((piece) => piece.slug === project.screenplay);
 const wideIsTall = project.wideImage && project.wideImage.image.height > project.wideImage.image.width;
 const hasFeature = project.video || (project.wideImage && !wideIsTall);
 const dark = project.chapterKey === 'film';
+// Each project page is an insert shot inside its chapter's scene: same scene number, same hour, same sky.
+const SCENES = {
+  film: { current: 'film', scene: '3', place: 'INT. SCREENING ROOM. DUSK.', label: 'FILMS', sky: 'linear-gradient(180deg, #0A0C14 0%, #0F0F0E 44%, #0F0F0E 100%)' },
+  'strategy-content': { current: 'strategy', scene: '2', place: 'INT. EDIT BAY. MORNING.', label: 'FOR CREATORS', sky: 'linear-gradient(180deg, #D3E2EE 0px, #E8EDEC 160px, #F1F0EC 340px)' },
+  'trekking-guide': { current: 'mountains', scene: '5', place: 'EXT. THE TRAIL. DAY.', label: 'NEAR MOUNTAINS.', sky: 'linear-gradient(180deg, #C9D6E2 0px, #E6EAEA 180px, #F1F0EC 380px)' },
+  teaching: { current: 'teaching', scene: '4', place: 'INT. CLASSROOM. AFTERNOON.', label: 'CLASSES', sky: 'linear-gradient(180deg, #9DC2E2 0px, #C9DDEC 200px, #F1F0EC 480px)' },
+};
+const scene = SCENES[project.chapterKey] ?? SCENES['strategy-content'];
 // With no wide picture, the tall cover sits beside the brief instead of on its own.
 const posterMode = !hasFeature && project.cover;
 
@@ -62,11 +70,11 @@ const jsonLd = {
 };
 ---
 
-<Base title={project.title} current="work" theme={dark ? 'dark' : 'light'} description={project.oneLiner || `${project.title}, a project by Aditya Bhattarai.`} image={project.wideImage?.image ?? project.cover?.image ?? project.logo?.image} jsonLd={jsonLd}>
+<Base title={project.title} current={scene.current} theme={dark ? 'dark' : 'light'} scene={scene.scene} slug={`INSERT. ${scene.place}`} sky={scene.sky} pad grain description={project.oneLiner || `${project.title}, a project by Aditya Bhattarai.`} image={project.wideImage?.image ?? project.cover?.image ?? project.logo?.image} jsonLd={jsonLd}>
   <section class="wrap head">
     <nav class="crumbs" aria-label="Breadcrumb">
       <a href="/work">WORK</a><span>/</span>
-      <a href={project.chapter?.href}>CHAPTER {project.chapter?.number} · {project.chapter?.title.toUpperCase()}</a><span>/</span>
+      <a href={project.chapter?.href}>{scene.label}</a><span>/</span>
       <span class="crumbs__current">{project.title.toUpperCase()}</span>
     </nav>
     <div class="head__row">
@@ -106,7 +114,7 @@ const jsonLd = {
     </section>
   ) : (
     <section class="wrap feature">
-      <TitleTile kicker={`CHAPTER ${project.chapter?.number}`} title={project.title} ratio="21/9" dark={dark} />
+      <TitleTile kicker={scene.label} title={project.title} ratio="21/9" dark={dark} />
     </section>
   )}
 
