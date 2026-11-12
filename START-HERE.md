@@ -33,6 +33,9 @@ For example, the homepage headline is `title:` in `site-content/pages/home.yaml`
 ### Change words on the redesigned pages (November 2026)
 Home, Films, For creators, Classes, Near Mountains, Me, The museum and Everything keep their words at the top of their own file in `src/pages/`, under a line that says WORDS. Change the text between the quotes and save. Their photos are in `src/assets/day/`.
 
+### Add a new Nepali word in the big display font
+The site carries a very small font file with only the Nepali words it shows large (like सपना). For a new one, add the word to the list in `scripts/make-word-font.mjs`, or just ask Claude to do it.
+
 ### Fill in your contact details
 Open `site-content/about/bio.md`. Replace anything in `[square brackets]` with the real value.
 **Anything still in `[square brackets]` stays hidden on the website**, so nothing half-finished ever shows.
