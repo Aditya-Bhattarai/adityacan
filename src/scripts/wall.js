@@ -37,7 +37,9 @@ if (wall) {
     wall.classList.toggle('is-filtered', filtered);
     counts.forEach((count) => { count.textContent = String(shown); });
     if (empty) empty.hidden = shown > 0;
-    if (filtered) window.scrollTo({ top: wall.offsetTop });
+    // The buttons never move. If you had scrolled down a filtered list, come back to its top.
+    const listTop = wall.offsetTop + (wall.querySelector('.mhead')?.offsetHeight ?? 0);
+    if (window.scrollY > listTop) window.scrollTo({ top: listTop, behavior: 'instant' });
   }
 
   wall.querySelector('[data-filters]')?.addEventListener('click', (event) => {
