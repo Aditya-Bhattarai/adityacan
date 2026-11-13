@@ -2,7 +2,7 @@
 // ME, then WORK WITH ME, on one page.
 // Top half (scene 8, before sunrise): who I am, a pause, the darkroom contact sheet of my life.
 // Bottom half (scene 8B, golden hour, at #work): the booklet. What I do, how it goes, ways to work, questions.
-// There are no prices anywhere. Every "Book a call" goes to Calendly.
+// There are no prices anywhere. Every "Contact me" button opens the Contact page.
 import Base from '../layouts/Base.astro';
 import Picture from '../components/Picture.astro';
 import { getSettings } from '../lib/content.js';
@@ -87,7 +87,7 @@ const steam = 'M6 40 C 0 30, 12 22, 6 12 C 2 6, 8 3, 6 0';
       <p class="who">{me.who}</p>
       <p class="more">{me.more}</p>
       <div class="hello__row">
-        {settings.calendly && <a class="btn" href={settings.calendly} target="_blank" rel="noopener">Book a call</a>}
+        <a class="btn" href="/contact">Contact me</a>
         {settings.whatsappHref && <a class="btn btn--line" href={settings.whatsappHref} target="_blank" rel="noopener">Message me on WhatsApp</a>}
         <a class="down" href="#work">How I work <span aria-hidden="true">↓</span></a>
       </div>
@@ -147,7 +147,7 @@ const steam = 'M6 40 C 0 30, 12 22, 6 12 C 2 6, 8 3, 6 0';
     <div class="howi">
       <h2>How I work.</h2>
       <p class="bk-only">{book.intro}</p>
-      {settings.calendly && <a class="btn bk-only" href={settings.calendly} target="_blank" rel="noopener">Book a call</a>}
+      <a class="btn bk-only" href="/contact">Contact me</a>
     </div>
     <span class="blinds bk-only" aria-hidden="true">{[1, 2, 3, 4, 5, 6].map(() => <i></i>)}</span>
 
@@ -199,7 +199,7 @@ const steam = 'M6 40 C 0 30, 12 22, 6 12 C 2 6, 8 3, 6 0';
       <div class="sp s4">
         <div class="pg pg--back">
           <span class="chiya dv" lang="ne">चिया?{['a', 'b', 'c'].map((name) => <i class={`st ${name}`} aria-hidden="true"><svg viewBox="0 0 12 40" width="12" height="40"><path d={steam} fill="none" stroke="#8A8984" stroke-width="2" stroke-linecap="round"></path></svg></i>)}</span>
-          {settings.calendly && <a class="btn" href={settings.calendly} target="_blank" rel="noopener">Book a call</a>}
+          <a class="btn" href="/contact">Contact me</a>
           <span class="bk-mono">30 min · Google Meet</span>
           <label class="back" for="p3" title="Back"></label>
         </div>
@@ -223,7 +223,7 @@ const steam = 'M6 40 C 0 30, 12 22, 6 12 C 2 6, 8 3, 6 0';
       <h3>Questions</h3>
       {book.questions.map(([question, answer]) => <div class="row"><b>{question}</b><span>{answer}</span></div>)}
       <h3 class="dv" lang="ne">चिया?</h3>
-      {settings.calendly && <a class="btn" href={settings.calendly} target="_blank" rel="noopener">Book a call</a>}
+      <a class="btn" href="/contact">Contact me</a>
       <p class="flow__l">30 min · Google Meet</p>
     </div>
   </div>
@@ -293,7 +293,7 @@ const steam = 'M6 40 C 0 30, 12 22, 6 12 C 2 6, 8 3, 6 0';
   .cutto { position: relative; height: 150px; background: linear-gradient(180deg, var(--paper), #e8e3d8); display: flex; align-items: flex-end; justify-content: flex-end; padding: 0 56px 26px; }
   .cutto span { font: 400 15px/1 var(--font-script); letter-spacing: 0.04em; }
   .desk { position: relative; background: #e8e3d8; scroll-margin-top: 0; }
-  .desk input { position: absolute; opacity: 0; pointer-events: none; }
+  .desk input { position: fixed; top: 50%; left: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
   .slug8b { display: flex; gap: 18px; margin: 0; font: 400 12.5px/1.4 var(--font-script); letter-spacing: 0.02em; text-transform: uppercase; }
   .slug8b b { font-weight: 400; opacity: 0.62; }
   .howi h2 { margin: 0; font-weight: 600; line-height: 0.92; letter-spacing: -0.05em; }

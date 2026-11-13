@@ -11,7 +11,7 @@ const sceneLabel = /^\d$/.test(scene) ? `0${scene}` : scene;
 const cells = [
   settings.email && { k: 'Email', v: settings.email, href: `mailto:${settings.email}` },
   settings.whatsapp && { k: 'WhatsApp', v: settings.whatsapp, href: settings.whatsappHref, out: true },
-  settings.calendly && { k: 'Book a call', v: '30 minutes, free, on Google Meet', href: settings.calendly, out: true },
+  { k: 'Contact me', v: 'Call, WhatsApp or email', href: '/contact' },
   settings.instagram && { k: 'Instagram', v: handleFrom(settings.instagram), href: settings.instagram, out: true },
   settings.instagramPhotos && { k: 'My photographs', v: handleFrom(settings.instagramPhotos), href: settings.instagramPhotos, out: true },
   settings.linkedin && { k: 'LinkedIn', v: settings.name, href: settings.linkedin, out: true },

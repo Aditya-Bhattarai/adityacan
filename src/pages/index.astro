@@ -4,7 +4,7 @@
 import { getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Picture from '../components/Picture.astro';
-import { getImages, getSettings } from '../lib/content.js';
+import { getImages, getPage, getSettings } from '../lib/content.js';
 import { at, clip, day } from '../lib/day.js';
 
 // ---------- WORDS: change the text between the quotes and save ----------
@@ -46,16 +46,9 @@ const thumbs = [
   { img: 'yt/ip3.webp', name: 'Ideapreneur', alt: 'Ideapreneur thumbnail about margin trading.', href: 'https://www.youtube.com/watch?v=uHrm39pG2-w', pos: at(498, 1686, 200, 0.5) },
 ];
 
-// The birds that land on the wire, one by one, while you wait on that picture.
-const birds = [
-  [15.6, 59.9, 0.62, 40, -46, 1], [31.2, 57.3, 0.99, 55, -49, 1], [60.3, 51.0, 1.49, 48, -58, 0], [8.0, 61.1, 2.08, 52, -43, 0],
-  [70.2, 48.7, 2.52, 21, -61, 1], [68.1, 49.2, 3.12, 32, -36, 1], [3.0, 61.9, 3.62, 27, -58, 0], [78.9, 46.5, 4.03, 64, -38, 1],
-  [93.6, 42.4, 4.42, 29, -47, 1], [52.2, 52.9, 4.91, 60, -54, 1], [23.4, 58.7, 5.53, 47, -63, 1], [91.2, 43.1, 6.23, 58, -52, 0],
-  [39.5, 55.6, 6.66, 19, -64, 0], [13.1, 60.3, 7.08, 52, -61, 1], [54.6, 52.3, 7.41, 48, -29, 0], [36.8, 56.1, 8.2, 57, -53, 0],
-  [21.3, 59.1, 8.43, 58, -27, 0], [88.6, 43.8, 8.98, 27, -61, 0], [5.3, 61.5, 9.58, 26, -41, 1],
-];
-
 const settings = getSettings();
+// The short film on Instagram: its link is in site-content/pages/film.yaml (reel > link).
+const shortLink = (await getPage('film')).reel?.link;
 
 // The reel lives in site-content/00-home/hero-reel/. It is tall, and is never stretched.
 const heroFiles = import.meta.glob('/site-content/00-home/hero-reel/{hero-tall.mp4,hero-tall.webm,hero-tall-hevc.mp4}', { eager: true, query: '?url', import: 'default' });
@@ -126,13 +119,13 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
 
       <div class="pill pill--hero">
         <span class="pill__live">{words.status}</span>
-        <a href="/about#work"><span class="clap" aria-hidden="true"><i></i></span>Work with me</a>
+        <a href="/me#work"><span class="clap" aria-hidden="true"><i></i></span>Work with me</a>
       </div>
     </section>
 
     <!-- Call time: the slate carries the numbers -->
     <section class="s-call">
-      <a class="slate at" href="/strategy-content" style={at(40, 896, 400)}>
+      <a class="slate at" href="/for-creators" style={at(40, 896, 400)}>
         <span class="slate__st slate__st--up"></span><span class="slate__st"></span>
         <span class="slate__sb">
           <span class="fd" style="grid-column: span 6"><small>Prod.</small><b>adityacan.com</b></span>
@@ -146,16 +139,16 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
         </span>
       </a>
       <p class="statement at" style={at(520, 960, 430)}>{words.statement}</p>
-      <a class="f at d-only" href="/trekking-guide" style={at(1000, 944, 220, 1.6)}>
+      <a class="f at d-only" href="/near-mountains" style={at(1000, 944, 220, 1.6)}>
         <Picture image={day('best/ktm_basantapur.jpg')} alt="Basantapur Durbar Square under big white clouds." widths={[240, 480]} sizes="16vw" style="aspect-ratio: 4 / 3" />
-        <span class="cap"><span class="name">Basantapur</span><span class="verb">Kathmandu, where I work</span><span>07:30</span></span>
+        <span class="cap"><span class="name">Kathmandu</span><span class="verb">where I work</span><span>07:30</span></span>
       </a>
     </section>
 
     <!-- 2. The edit bay -->
     <section class="s2">
       <p class="slug" style="--y:1290"><b>2</b><span>INT. EDIT BAY. MORNING.</span></p>
-      <h2 class="tt at" style={at(36, 1330, 700)}><a href="/strategy-content">For creators<span class="go" aria-hidden="true">→</span></a></h2>
+      <h2 class="tt at" style={at(36, 1330, 700)}><a href="/for-creators">For creators<span class="go" aria-hidden="true">→</span></a></h2>
       <p class="vb at d-only" style={at(42, 1446, 660)}>{words.creators}</p>
       <div class="thumbs">
         {thumbs.map((item, index) => (
@@ -165,30 +158,30 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
           </a>
         ))}
       </div>
-      <a class="f at d-only" href="/strategy-content" style={at(740, 1300, 480, 0.7)}>
+      <a class="f at d-only" href="/for-creators" style={at(740, 1300, 480, 0.7)}>
         <span class="shot">
           <Picture image={day('u/mg-donut.jpg')} alt="An animated chart from an Ideapreneur Nepal video." widths={[480, 960]} sizes="34vw" style="aspect-ratio: 16 / 9" />
           <span class="burn"><span class="tl">A003 C012</span><span class="tr">24.00 FPS</span><span class="bl">TC 08:41:12:08</span><span class="br"><span class="recdot"></span></span></span>
         </span>
         <span class="cap"><span class="name">Ideapreneur</span><span class="verb">edit and motion graphics</span><span>02</span></span>
       </a>
-      <a class="f at d-only" href="/strategy-content" style={at(730, 1622, 290, -1.2)}>
+      <a class="f at d-only" href="/for-creators" style={at(730, 1622, 290, -1.2)}>
         <Picture image={day('c/desk.jpg')} alt="My desk at night: the rope lamp, the screen, the hat sitting on the computer." widths={[300, 600]} sizes="20vw" style="aspect-ratio: 4 / 3" />
         <span class="cap"><span class="name">My desk</span><span class="verb">where it gets cut</span><span>03</span></span>
       </a>
-      <a class="f at d-only" href="/strategy-content" style={at(1060, 1612, 150, 2)}>
+      <a class="f at d-only" href={shortLink ?? '/films'} target={shortLink ? '_blank' : undefined} rel={shortLink ? 'noopener' : undefined} style={at(1060, 1612, 150, 2)}>
         <span class="shot">
-          <Picture image={day('u/insta-cover.jpg')} alt="Two cats asleep in the sun." widths={[160, 320]} sizes="11vw" style="aspect-ratio: 9 / 16" />
+          <Picture image={day('c/cat.jpg')} alt="A cat asleep in the sun, from my short film on Instagram." widths={[160, 320]} sizes="11vw" style="aspect-ratio: 9 / 16; object-position: 40% 50%" />
           <span class="story"><i></i></span>
         </span>
-        <span class="cap"><span class="name">A short</span><span class="verb">made for the phone</span></span>
+        <span class="cap"><span class="name">A short</span><span class="verb">on Instagram ↗</span></span>
       </a>
     </section>
 
     <!-- 3. On set -->
     <section class="s3">
       <p class="slug" style="--y:2000"><b>3</b><span>EXT. PINE FOREST. DAY.</span></p>
-      <a class="f at wide d-only" href="/film" style={at(40, 2036, 1180)}>
+      <a class="f at wide d-only" href="/films" style={at(40, 2036, 1180)}>
         <span class="kb">
           <Picture image={day('u/sapana-clearing.jpg')} alt="Sapana walking alone through the pines." widths={[900, 1400]} sizes="82vw" style="aspect-ratio: 2.39 / 1" />
           <span class="burn burn--bars">
@@ -198,15 +191,15 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
           <span class="wide__title">Films<span aria-hidden="true">→</span></span>
         </span>
       </a>
-      <a class="f at d-only" href="/film" style={at(930, 2622, 250, 1.6)}>
+      <a class="f at d-only" href="/films" style={at(930, 2622, 250, 1.6)}>
         <Picture image={day('u/ptp-screen.jpg')} alt="Path to Prosperity on the festival screen." widths={[260, 520]} sizes="18vw" style="aspect-ratio: 16 / 9" />
         <span class="cap"><span class="name">Path to Prosperity</span><span class="verb">assistant director</span><span>05</span></span>
       </a>
-      <a class="f at d-only" href="/film" style={at(500, 2626, 220, -1.6)}>
+      <a class="f at d-only" href="/films" style={at(500, 2626, 220, -1.6)}>
         <Picture image={day('c/walkie.jpg')} alt="A walkie talkie in my hand, the crew waiting on a forest road." widths={[240, 480]} sizes="16vw" style="aspect-ratio: 900 / 768" />
         <span class="cap"><span class="name">On set</span><span class="verb">walkie in hand</span><span>04</span></span>
       </a>
-      <a class="card m-only" href="/film">
+      <a class="card m-only" href="/films">
         <Picture image={day('u/sapana-clearing.jpg')} alt="Sapana walking alone through the pines." widths={[480, 800]} sizes="100vw" style="aspect-ratio: 4 / 3" />
         <span class="vf"></span>
         <span class="card__t"><b>Films</b><small><span class="dv" lang="ne">सपना</span> · writer and director</small></span>
@@ -216,26 +209,23 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
     <!-- 4. Class -->
     <section class="s4">
       <p class="slug" style="--y:2790"><b>4</b><span>INT. CLASSROOM. AFTERNOON.</span></p>
-      <a class="f at d-only" href="/teaching" style={at(40, 2830, 290, -1.2)}>
+      <a class="f at d-only" href="/classes" style={at(40, 2830, 290, -1.2)}>
         <Picture image={day('best/greenscreen.jpg')} alt="A green screen studio with the lights set." widths={[300, 600]} sizes="20vw" style="aspect-ratio: 3 / 4" />
         <span class="cap"><span class="name">The studio</span><span class="verb">lights set</span><span>06</span></span>
       </a>
-      <a class="f at d-only" href="/teaching" style={at(370, 2900, 320, 1.3)}>
-        <Picture image={day('u/teach-green.jpg')} alt="A class in front of a green screen." widths={[320, 640]} sizes="22vw" style="aspect-ratio: 1 / 1" />
-        <span class="cap"><span class="name">Frame</span><span class="verb">teaching</span><span>07</span></span>
+      <a class="f at d-only" href="/classes" style={at(370, 2900, 320, 1.3)}>
+        <Picture image={day('u/teach-setup.jpg')} alt="The editing desk set up for a Frame class: lamp on, timeline open." widths={[320, 640]} sizes="22vw" style="aspect-ratio: 1 / 1" />
+        <span class="cap"><span class="name">Frame</span><span class="verb">the editing desk</span><span>07</span></span>
       </a>
-      <h2 class="tt at d-only" style={at(760, 2838, 460)}><a href="/teaching">Classes<span class="go" aria-hidden="true">→</span></a></h2>
+      <h2 class="tt at d-only" style={at(760, 2838, 460)}><a href="/classes">Classes<span class="go" aria-hidden="true">→</span></a></h2>
       <p class="vb at d-only" style={at(766, 2954, 440)}>{words.classes}</p>
-      <a class="f at d-only wire-link" href="/work" style={at(840, 3040, 360, -0.8)}>
-        <span class="ins">Insert: the wire. Wait.</span>
+      <a class="f at d-only wire-link" href="/everything" style={at(840, 3040, 360, -0.8)}>
+        <span class="ins">Insert: the gate. Wait.</span>
         <span class="wire">
-          <Picture image={day('birds.jpg')} alt="Birds on a wire against a blue sky, a dark hill below." widths={[360, 720]} sizes="25vw" style="aspect-ratio: 4 / 3" />
-          {birds.map(([left, top, delay, fx, fy, flip]) => (
-            <i class:list={['bd', { l: flip }]} style={`left:${left}%;top:${top}%;--d:${delay}s;--fx:${fx}px;--fy:${fy}px`}></i>
-          ))}
+          <Picture image={day('c/gate_night.jpg')} alt="Night, in black and white: one small figure in a gateway between two lamps, trees overhead." widths={[360, 720]} sizes="25vw" style="aspect-ratio: 4 / 3" />
         </span>
       </a>
-      <a class="card m-only" href="/teaching">
+      <a class="card m-only" href="/classes">
         <Picture image={day('best/greenscreen.jpg')} alt="The green screen studio where I teach." widths={[480, 800]} sizes="100vw" style="aspect-ratio: 4 / 5" />
         <span class="vf"></span>
         <span class="card__t"><b>Classes</b><small>{words.classes}</small></span>
@@ -245,9 +235,9 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
     <!-- 5. Langtang -->
     <section class="s5">
       <p class="slug" style="--y:3400"><b>5</b><span>EXT. LANGTANG. LATE AFTERNOON.</span></p>
-      <h2 class="tt at d-only" style={at(36, 3440, 900)}><a href="/trekking-guide">Near Mountains.<span class="go" aria-hidden="true">→</span></a></h2>
+      <h2 class="tt at d-only" style={at(36, 3440, 900)}><a href="/near-mountains">Near Mountains.<span class="go" aria-hidden="true">→</span></a></h2>
       <p class="vb at d-only" style={at(42, 3556, 700)}>{words.mountains}</p>
-      <a class="f at d-only" href="/trekking-guide" style={at(40, 3606, 210, -1)}>
+      <a class="f at d-only" href="/near-mountains" style={at(40, 3606, 210, -1)}>
         <span class="shot">
           <video class="loop" data-loop data-src={clip('best/loop_icefall.mp4')} muted loop playsinline preload="none" aria-label="The icefall above Kyanjin Gompa, my footage, silent." style="aspect-ratio: 9 / 16"></video>
           <Picture image={day('best/v_icefall.jpg')} alt="" widths={[220, 440]} sizes="15vw" style="aspect-ratio: 9 / 16" class="loop__poster" />
@@ -255,19 +245,19 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
         </span>
         <span class="cap"><span class="name">The icefall</span><span class="verb">filmed and edited</span><span>08</span></span>
       </a>
-      <a class="f at d-only" href="/trekking-guide" style={at(300, 3640, 420, 1.2)}>
+      <a class="f at d-only" href="/near-mountains" style={at(300, 3640, 420, 1.2)}>
         <Picture image={day('best/lt_hat2.jpg')} alt="My orange hat with cartoon eyes, set down in front of the Langtang range." widths={[420, 840]} sizes="29vw" style="aspect-ratio: 4 / 3" />
         <span class="cap"><span class="name">The hat</span><span class="verb">it came all the way up</span><span>09</span></span>
       </a>
-      <a class="f at pol d-only" href="/about" style={at(790, 3590, 250, -2.4)}>
+      <a class="f at pol d-only" href="/me" style={at(790, 3590, 250, -2.4)}>
         <Picture image={day('best/lt_selfie.jpg')} alt="Aditya at the top in Langtang: hat, orange glasses, face wrapped against the wind, prayer flags and peaks behind." widths={[260, 520]} sizes="17vw" style="aspect-ratio: 4 / 5; object-position: 50% 30%" />
         <span class="pc">me, Langtang</span>
       </a>
-      <a class="f at d-only" href="/trekking-guide" style={at(1080, 3650, 150, 2.2)}>
+      <a class="f at d-only" href="/near-mountains" style={at(1080, 3650, 150, 2.2)}>
         <Picture image={day('c/shadow_hat.jpg')} alt="My shadow on the snow, wearing the hat." widths={[160, 320]} sizes="11vw" style="aspect-ratio: 3 / 4; object-position: 50% 80%" />
         <span class="cap"><span class="name">My shadow</span><span class="verb">and the hat</span></span>
       </a>
-      <a class="card m-only" href="/trekking-guide">
+      <a class="card m-only" href="/near-mountains">
         <Picture image={day('best/v_icefall.jpg')} alt="An icefall in Langtang, from my footage." widths={[480, 540]} sizes="100vw" style="aspect-ratio: 4 / 5" />
         <span class="vf"></span>
         <span class="card__t"><b>Near Mountains.</b><small>{words.mountains}</small></span>
@@ -300,15 +290,15 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
       <p class="closing">{words.closing}</p>
       <div class="pill pill--night">
         <span class="pill__live">{words.status}</span>
-        <a href="/about#work"><span class="clap" aria-hidden="true"><i></i></span>Work with me</a>
-        {settings.calendly && <a class="pill__ghost" href={settings.calendly} target="_blank" rel="noopener">Book a call ↗</a>}
+        <a href="/me#work"><span class="clap" aria-hidden="true"><i></i></span>Work with me</a>
+        <a class="pill__ghost" href="/contact">Contact me</a>
       </div>
       <div class="also">
         <small>Also playing</small>
-        <a href="/work">Everything</a>
+        <a href="/everything">Everything</a>
         <a href="/museum">The museum</a>
         <a href="/writing/fireflies">Fireflies{[[-8, 10, 0], [30, -18, 0.6], [68, -6, 1.2], [104, 30, 1.8], [48, 96, 0.3]].map(([left, top, delay]) => <span class="ff" style={`left:${left}%;top:${top}%;animation-delay:${delay}s`}></span>)}</a>
-        <a href="/about">Me</a>
+        <a href="/me">Me</a>
       </div>
       <p class="sp fade-out">FADE OUT.</p>
       <Picture image={day('u/portrait-bw.jpg')} alt="" widths={[80]} sizes="22px" class="cameo d-only" />
@@ -350,11 +340,8 @@ const dawnTall = await getImage({ src: day('home_dawn_tall.jpg'), format: 'webp'
   .ins { position: absolute; top: -19px; left: 0; font: 400 12px/1 var(--font-script); letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
   .wire { position: relative; display: block; overflow: hidden; box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08), 0 18px 40px -24px rgba(0, 0, 0, 0.45); }
   .wire :global(img) { box-shadow: none; }
-  .bd { position: absolute; width: 7px; height: 6px; margin: -6px 0 0 -3px; opacity: 0; transform: translate(var(--fx), var(--fy)) scale(0.6); transition: opacity 0.2s ease, transform 0.3s ease; pointer-events: none; }
-  .bd::before { content: ""; position: absolute; left: 0; bottom: 0; width: 6px; height: 4.4px; background: #16181c; border-radius: 60% 50% 45% 55%; }
-  .bd::after { content: ""; position: absolute; left: 3.7px; top: 0; width: 3px; height: 3px; border-radius: 50%; background: #16181c; }
-  .bd.l::after { left: -0.4px; }
-  .f:hover .bd, .f:focus-visible .bd { opacity: 1; transform: none; transition: opacity 0.4s ease var(--d), transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d); }
+  .wire :global(img) { transition: transform 9s ease-out; }
+  .f:hover .wire :global(img), .f:focus-visible .wire :global(img) { transform: scale(1.12); }
   .pol { background: #f7f4ec; padding: 9px 9px 40px; box-shadow: 0 22px 40px -20px rgba(0, 0, 0, 0.5); }
   .pol :global(img) { box-shadow: none; }
   .pc { position: absolute; left: 14px; right: 10px; bottom: 9px; font: 500 22px/1 var(--font-hand); color: #2f2a24; }

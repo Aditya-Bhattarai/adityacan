@@ -7,7 +7,7 @@
 - key: film
   title: Film
   short: Film
-  href: /film
+  href: /films
   description: The short films I’ve made at film school, and Path to Prosperity, which I was assistant director on.
   tags: [Director, Writer, Assistant director]
   theme: ink
@@ -21,7 +21,7 @@
 - key: strategy-content
   title: Strategy & Content
   short: Strategy
-  href: /strategy-content
+  href: /for-creators
   description: YouTube, podcasts, reels and brand content for some of Nepal’s biggest creators.
   tags: [Editor, Strategist, Thumbnails, Motion]
   theme: panel
@@ -35,7 +35,7 @@
 - key: trekking-guide
   title: Trekking Guide
   short: Trekking guide
-  href: /trekking-guide
+  href: /near-mountains
   description: I’m a licensed trekking guide. I film in the mountains, take a lot of photos, and have taught content classes at a community homestay.
   tags: [Licensed guide, Filmmaker, Photographer]
   theme: panel
@@ -49,7 +49,7 @@
 - key: teaching
   title: Teaching
   short: Teaching
-  href: /teaching
+  href: /classes
   description: Editing courses for creators, and classes that show older people how social media works.
   tags: [Courses, Workshops, Curriculum]
   theme: panel

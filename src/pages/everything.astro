@@ -4,9 +4,9 @@
 // Clicking or tapping a piece holds the wall on it, dims the rest and shows a gold link that opens it.
 // Clicking anywhere else lets the wall move again.
 // The pieces and every count come from the project folders in site-content. Nothing is typed by hand.
-import Base from '../../layouts/Base.astro';
-import Picture from '../../components/Picture.astro';
-import { getSettings, getWorkProjects, ROLE_ORDER } from '../../lib/content.js';
+import Base from '../layouts/Base.astro';
+import Picture from '../components/Picture.astro';
+import { getSettings, getWorkProjects, ROLE_ORDER } from '../lib/content.js';
 
 const settings = getSettings();
 const work = await getWorkProjects();
@@ -20,6 +20,9 @@ const CHAPTERS = [
 ];
 // At most this many pieces from one project, so no single project takes over the wall.
 const MOST_PER_PROJECT = 8;
+// Pieces whose name starts with one of these stay off the wall (they still show on their project page).
+const KEEP_OFF_WALL = ['Mithai challenge'];
+const offWall = (name = '') => KEEP_OFF_WALL.some((start) => name.toLowerCase().startsWith(start.toLowerCase()));
 
 function whereTo(url) {
   if (/instagram\.com/.test(url)) return 'Instagram ↗';
@@ -31,7 +34,7 @@ function whereTo(url) {
 // Every project gives its pictures and its reels (the ones with a cover), taken evenly from each kind.
 const pieces = work.flatMap((project) => {
   const pools = project.tabs.filter((tab) => tab.key !== 'assets').map((tab) => [
-    ...tab.links.filter((link) => link.poster).map((link) => ({ image: link.poster, name: link.title || project.title, href: link.url, to: whereTo(link.url), out: true })),
+    ...tab.links.filter((link) => link.poster && !offWall(link.title)).map((link) => ({ image: link.poster, name: link.title || project.title, href: link.url, to: whereTo(link.url), out: true })),
     ...tab.items.map((item) => ({ image: item.image, name: tab.noCaption ? project.title : item.caption, href: project.href, to: 'Open →' })),
   ]).filter((pool) => pool.length);
   const picked = [];
@@ -122,11 +125,11 @@ const countIn = (key) => pieces.filter((piece) => piece.chapter === key).length;
       ))}
     </div>
 
-    {settings.calendly && <a class="book" href={settings.calendly} target="_blank" rel="noopener"><i></i>Book a call</a>}
+    <a class="book" href="/contact"><i></i>Contact me</a>
   </div>
 </Base>
 
-<script src="../../scripts/wall.js"></script>
+<script src="../scripts/wall.js"></script>
 
 <style is:global>
   /* Phones open on the pale fog, so the menu and scene line are dark there. */

@@ -30,11 +30,20 @@ const parts = [
 // The strip of negatives. Point at a frame (or tap it) to print it.
 const roll = [
   ['best/lt_bridge.jpg', 'A suspension bridge on the way to Langtang, prayer flags along the rails.'],
-  ['best/lt_chortens.jpg', 'Three small white chortens under the peaks.'],
-  ['best/lt_yak.jpg', 'A yak grazing, looking straight into the lens.'],
+  ['best/lt_cairn.jpg', 'A cairn of flat stones stacked by the river.'],
+  ['best/lt_range_flags.jpg', 'A trekker looking out over prayer flags at the Langtang range.'],
   ['best/lt_flags_snow.jpg', 'Prayer flags heaped on the snow.'],
-  ['best/bk_gate.jpg', 'An orange gate opening onto stone steps, Bhairavkunda.'],
+  ['c/yak_cliff.jpg', 'A yak standing on a cliff edge in the mist.'],
+  ['best/bk_stairs.jpg', 'Stone steps climbing into a blue sky, Bhairavkunda.'],
+  ['best/lt_mist_trail.jpg', 'The trail running into low cloud.'],
+  ['best/peak_blue.jpg', 'A snow peak against a deep blue sky.'],
+  ['best/bk_tree.jpg', 'One tree on a ridge above the valley.'],
+  ['c/village.jpg', 'Langtang village under the snow line.'],
+  ['best/turquoise_lake.jpg', 'A turquoise lake behind a dam, seen from the road.'],
+  ['c/puppy.jpg', 'A mountain puppy, held up to the camera.'],
 ];
+// The clips the Langtang player runs through, one after another (all silent, all mine).
+const tape = ['best/loop_langtang.mp4', 'w/snow_a.mp4', 'c/flags.mp4', 'w/snow_b.mp4', 'c/ridge_gold.mp4', 'best/loop_icefall.mp4'].map((file) => clip(file));
 // Heights down the right edge: how far down the page, the height, and the place.
 const heights = [
   [233, '384,400 KM', 'the moon', 'night'], [549, '4,400 M', '', 'night'], [1193, '3,870 M', 'Kyanjin Gompa'], [1642, '3,500 M', ''],
@@ -127,17 +136,20 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
         <video data-loop data-src={clip('c/flags.mp4')} poster={(await import('astro:assets').then((m) => m.getImage({ src: day('c/flags_poster.jpg'), width: 800, format: 'webp' }))).src} muted loop playsinline preload="none" aria-label="Prayer flags moving in the wind over the valley. My footage." style="aspect-ratio: 16 / 10"></video>
         <span class="vf"></span><span class="card__t"><b>Prayer flags</b><small>my footage</small></span>
       </div>
-      <div class="roll at" style={at(-30, 2290, 1500, -1.2)}>
+      <div class="roll at" data-slide style={at(-30, 2290, 1500, -1.2)}>
         <div class="sprk d-only"></div>
-        <div class="roll__row">
+        <div class="roll__row" data-slide-row tabindex="0" aria-label="A roll of negatives. Slide sideways for more.">
           {roll.map(([img, alt], index) => (
-            <a class:list={['neg', { 'd-only': index === 4 }]} href={photos || '/work'} target={photos ? '_blank' : undefined} rel={photos ? 'noopener' : undefined}>
-              <Picture image={day(img)} alt={alt} widths={[300, 600]} sizes="(max-width: 900px) 50vw, 20vw" />
+            <a class="neg" href={photos || '/everything'} target={photos ? '_blank' : undefined} rel={photos ? 'noopener' : undefined}>
+              <Picture image={day(img)} alt={alt} widths={[300, 600]} sizes="(max-width: 900px) 62vw, 20vw" />
+              <span class="num" aria-hidden="true">{index === 0 ? '▸ ' : ''}{21 + Math.floor(index / 2)}{index % 2 ? 'A' : ''}</span>
             </a>
           ))}
         </div>
         <div class="sprk d-only"></div>
-        <div class="roll__nums d-only" aria-hidden="true">{['▸ 21', '21A', '22', '22A', '23', '23A', '24', '24A', '25'].map((n) => <span>{n}</span>)}</div>
+        <button class="roll__go roll__go--back" type="button" data-slide-back aria-label="Earlier frames">←</button>
+        <button class="roll__go roll__go--on" type="button" data-slide-on aria-label="More frames">→</button>
+        <p class="roll__hint">{roll.length} frames · slide for more</p>
       </div>
       <div class="mcard m-only">
         <video data-loop data-src={clip('c/mule.mp4')} poster={(await import('astro:assets').then((m) => m.getImage({ src: day('c/mule_poster.jpg'), width: 480, format: 'webp' }))).src} muted loop playsinline preload="none" aria-label="A mule walking the trail with its load. My footage." style="aspect-ratio: 4 / 5"></video>
@@ -161,24 +173,26 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
     <section class="s-langtang">
       <p class="mslug m-only"><span>3,870 M</span><span>KYANJIN GOMPA.</span></p>
       <div class="p at film" style={at(28, 1240, 820)}>
-        <div class="film__in">
+        <div class="film__in" data-seq={JSON.stringify(tape)}>
           <Picture image={day('best/v_langtang_village.jpg')} alt="Langtang village under the snow peaks." widths={[640, 960]} sizes="(max-width: 900px) 100vw, 57vw" style="aspect-ratio: 16 / 9" />
-          <video class="film__loop" data-loop data-src={clip('best/loop_langtang.mp4')} muted loop playsinline preload="none" aria-label="Langtang village under the snow peaks, my footage, silent."></video>
+          <video class="film__loop" data-seq-video muted playsinline preload="none" aria-label="Clips from Langtang, one after another: the village, snow, prayer flags, the ridge at first light. My footage, silent."></video>
           <span class="shade"></span>
-          <span class="play d-only" aria-hidden="true"><svg width="22" height="24" viewBox="0 0 22 24"><path d="M2 1 L21 12 L2 23 Z" fill="#121212"></path></svg></span>
+          <button class="play" type="button" data-seq-toggle aria-label="Play">
+            <svg class="i-play" width="22" height="24" viewBox="0 0 22 24" aria-hidden="true"><path d="M2 1 L21 12 L2 23 Z" fill="#121212"></path></svg>
+            <svg class="i-pause" width="20" height="24" viewBox="0 0 20 24" aria-hidden="true"><path d="M2 1 H8 V23 H2 Z M12 1 H18 V23 H12 Z" fill="#121212"></path></svg>
+          </button>
+          <span class="prog" aria-hidden="true"><i data-seq-fill></i></span>
           <div class="chap d-only">
             {parts.map((part, index) => (
               <a class="seg" href={part.href} target="_blank" rel="noopener" style={`flex:${part.flex}`} aria-label={`Part ${index + 1}: ${part.title}. Opens on Instagram.`}>
-                {part.played && <i class="fill" style="width: 40%"></i>}
-                <span class="pv"><Picture image={day(part.img)} alt="" widths={[192]} sizes="96px" /><b>{part.title}</b><small>PART {index + 1}</small></span>
+                <span class="pv"><Picture image={day(part.img)} alt="" widths={[192]} sizes="96px" /><b>{part.title}</b><small>PART {index + 1} · ON INSTAGRAM ↗</small></span>
               </a>
             ))}
           </div>
-          <a class="film__m m-only" href={parts[0].href} target="_blank" rel="noopener" aria-label="Langtang Diaries, three parts. Watch on Instagram."></a>
           <span class="vf m-only"></span>
-          <span class="card__t m-only"><b>Langtang Diaries</b><small>3 parts · watch on Instagram ↗</small></span>
+          <a class="card__t film__m m-only" href={parts[0].href} target="_blank" rel="noopener"><b>Langtang Diaries</b><small>3 parts · watch on Instagram ↗</small></a>
         </div>
-        <span class="mono film__cap d-only">{langtang ? <a href={langtang.href}>Langtang Diaries</a> : 'Langtang Diaries'} · 3 parts · hover the bar</span>
+        <span class="mono film__cap d-only">{langtang ? <a href={langtang.href}>Langtang Diaries</a> : 'Langtang Diaries'} · 3 parts on Instagram · hover the bar</span>
       </div>
       <figure class="p at wc d-only" style={at(900, 1236, 360, -1.4)}>
         <Picture image={day('u/sketch-kyanjin.jpg')} alt="A pencil sketch: a trekker, face wrapped against the wind, under the peaks." widths={[360, 720]} sizes="25vw" style="aspect-ratio: 4 / 5" />
@@ -205,7 +219,7 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
           <Picture image={day('u/portrait-bw.jpg')} alt="Aditya." widths={[168]} sizes="84px" />
           <a href={wa('Hi Aditya, I found you on adityacan.com.')} target="_blank" rel="noopener">Talk to me</a>
         </div>
-        <a class="ev r" href="/work" style="right: 2.9%"><Picture image={day('archive/58.webp')} alt="Above the clouds at Bhairavkunda." widths={[240, 480]} sizes="17vw" /><span>Everything</span></a>
+        <a class="ev r" href="/everything" style="right: 2.9%"><Picture image={day('archive/58.webp')} alt="Above the clouds at Bhairavkunda." widths={[240, 480]} sizes="17vw" /><span>Everything</span></a>
       </div>
       <p class="mono olive__cap d-only">The top · after Through the Olive Trees · hover and they walk</p>
       <figure class="snap at snap--clip d-only" style={at(850, 352, 150, -2.2)}>
@@ -240,7 +254,7 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
         <p>{words.ask}</p>
         <div class="ask__row">
           <a class="pill pill--solid" href={trekHref} target="_blank" rel="noopener">Plan a trek with me</a>
-          {settings.calendly && <a class="pill pill--line" href={settings.calendly} target="_blank" rel="noopener">Book a call</a>}
+          <a class="pill pill--line" href="/contact">Contact me</a>
           <span class="mono">{words.licence}</span>
         </div>
       </div>
@@ -249,6 +263,7 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
 </Base>
 
 <script src="../scripts/loops.js"></script>
+<script src="../scripts/sequence.js"></script>
 <script is:inline>
   // PCs and laptops: the journal opens at the bottom (Kathmandu) and you scroll up to climb.
   // Skipped when the address points at a place on the page, or when you come back to where you were.
@@ -304,7 +319,27 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
   video[data-loop]:global(.is-playing), video[data-loop][poster] { opacity: 1; }
   .shade { position: absolute; left: 0; right: 0; bottom: 0; height: 110px; background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)); pointer-events: none; }
   .film__in, .bus__in { position: relative; overflow: hidden; }
-  .film__loop { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .film__loop { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.4s; }
+  .film__loop:global(.is-playing) { opacity: 1; }
+  .play { position: absolute; left: 50%; top: 50%; z-index: 5; width: 76px; height: 76px; margin: -38px 0 0 -38px; padding: 0; border: 0; border-radius: 50%; background: rgba(241, 240, 236, 0.92); display: flex; align-items: center; justify-content: center; transition: transform 0.3s, opacity 0.4s; }
+  .play:hover { transform: scale(1.08); }
+  .play .i-pause { display: none; }
+  .film__in:not(.is-paused) .play { opacity: 0; }
+  .film__in:not(.is-paused):hover .play, .film__in:not(.is-paused) .play:focus-visible { opacity: 1; }
+  .film__in:not(.is-paused) .play .i-play { display: none; }
+  .film__in:not(.is-paused) .play .i-pause { display: block; }
+  .prog { position: absolute; left: 16px; right: 16px; bottom: 10px; height: 4px; z-index: 3; pointer-events: none; }
+  .prog i { display: block; width: 0; height: 100%; background: var(--gold); }
+  .roll { position: relative; }
+  .roll__row { display: flex; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; outline: none; }
+  .roll__row::-webkit-scrollbar { display: none; }
+  .roll .neg { flex: none; scroll-snap-align: start; }
+  .num { position: absolute; left: 6px; bottom: 4px; z-index: 2; font: 400 10px/1 var(--font-mono); letter-spacing: 0.22em; color: var(--gold); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8); }
+  .roll__go { position: absolute; top: 50%; z-index: 4; width: 44px; height: 44px; margin-top: -22px; padding: 0; border: 0; border-radius: 50%; background: var(--paper); color: var(--ink); font: 400 16px/1 var(--font-mono); box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.8); transition: opacity 0.3s; }
+  .roll__go--back { left: 44px; }
+  .roll__go--on { right: 44px; }
+  .roll:global(.at-start) .roll__go--back, .roll:global(.at-end) .roll__go--on { opacity: 0; pointer-events: none; }
+  .roll__hint { margin: 0; font: 400 10px/1.4 var(--font-mono); letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
 
   /* ================= PCs and laptops: the climb ================= */
   @media (min-width: 900px) {
@@ -349,19 +384,16 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
     .bus__line { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font-size: max(14px, calc(21 * var(--u))); color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 12px rgba(0, 0, 0, 0.6); }
 
     .roll { background: #1a120c; padding: 6px 16px; box-shadow: 0 24px 50px -28px rgba(0, 0, 0, 0.6); }
-    .roll__row { display: flex; gap: 12px; padding: 8px 0; }
-    .roll__nums { display: flex; justify-content: space-between; font: 400 10px/1.4 var(--font-mono); letter-spacing: 0.22em; color: var(--gold); padding: 3px 6px 0; }
+    .roll__row { gap: 12px; padding: 8px 0; }
+    .roll .neg { width: calc(280 * var(--u)); }
+    .roll__hint { padding: 3px 6px 0; }
 
     .film :global(img) { box-shadow: none; }
     .film__in { box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.45); }
-    .play { position: absolute; left: 50%; top: 50%; width: 76px; height: 76px; margin: -38px 0 0 -38px; border-radius: 50%; background: rgba(241, 240, 236, 0.92); display: flex; align-items: center; justify-content: center; transition: transform 0.3s; pointer-events: none; }
-    .film:hover .play { transform: scale(1.08); }
     .chap { position: absolute; left: 16px; right: 16px; bottom: 10px; display: flex; gap: 3px; z-index: 2; }
     .seg { position: relative; display: block; height: 44px; }
     .seg::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: rgba(255, 255, 255, 0.4); transition: height 0.15s; }
     .seg:hover::before, .seg:focus-visible::before { height: 7px; }
-    .fill { position: absolute; left: 0; bottom: 0; height: 4px; background: var(--rec); z-index: 1; transition: height 0.15s; }
-    .seg:hover .fill, .seg:focus-visible .fill { height: 7px; }
     .pv { position: absolute; bottom: 32px; left: 50%; width: 170px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; opacity: 0; transform: translate(-50%, 6px); transition: opacity 0.2s, transform 0.2s; pointer-events: none; }
     .pv :global(img) { width: 96px; aspect-ratio: 9 / 16; object-fit: cover; border: 2px solid #fff; border-radius: 6px; box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.6); }
     .pv b { font-size: 12px; font-weight: 500; line-height: 1.3; color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9); }
@@ -445,9 +477,15 @@ const walk = 'M 554 394 L 623 365 L 567 342 L 637 318 L 595 290 L 650 266 L 609 
     .card__t { position: absolute; left: 30px; right: 30px; bottom: 28px; z-index: 3; display: flex; flex-direction: column; gap: 7px; pointer-events: none; }
     .card__t b { font-weight: 600; font-size: 40px; line-height: 0.94; letter-spacing: -0.05em; }
     .card__t small { font: 400 12px/1.45 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; }
-    .film__m { position: absolute; inset: 0; z-index: 4; }
-    .roll { rotate: none; }
-    .roll__row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .film__m { z-index: 6; pointer-events: auto !important; color: #f4efe6 !important; text-decoration: none; }
+    .prog { left: 0; right: 0; bottom: 0; }
+    .play { top: 38%; width: 60px; height: 60px; margin: -30px 0 0 -30px; }
+    .roll { rotate: none; margin: 0 -22px; }
+    .roll__row { gap: 8px; padding: 0 22px; scroll-padding-left: 22px; }
+    .roll .neg { width: 62vw; max-width: 340px; }
+    .roll__go { display: none; }
+    .roll__hint { padding: 10px 22px 0; color: var(--muted); letter-spacing: 0.1em; font-size: 12px; }
+    .num { display: none; }
     .roll .neg :global(img) { aspect-ratio: 1 / 1; filter: none; }
     .roll .neg::after { display: none; }
     .trail > .s-moon { background: #07080c; color: var(--night-ink); padding-bottom: 44px; }

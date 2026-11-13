@@ -21,7 +21,7 @@ const words = {
 const floors = [
   { id: 'f3', k: 'k3', number: '03', title: 'Advanced', text: 'Motion graphics in After Effects, and colour grading.', image: 'u/teach-timeline.jpg', alt: 'A timeline on screen, mid edit.', bg: '#ECE9E1' },
   { id: 'f2', k: 'k2', number: '02', title: 'Professional', text: 'Moving to Premiere Pro, working with sound and cutting a story.', image: 'u/teach-setup.jpg', alt: 'An editing setup ready for class.', bg: '#E4E1D8' },
-  { id: 'f1', k: 'k1', number: '01', title: 'Foundations', text: 'Cutting in CapCut, with pacing, hooks and captions.', image: 'u/rc-7.jpg', alt: 'An editing class, mid lesson.', bg: '#DCD8CC' },
+  { id: 'f1', k: 'k1', number: '01', title: 'Foundations', text: 'Cutting in CapCut, with pacing, hooks and captions.', image: 'u/rc-7.jpg', alt: 'An editing class, mid lesson.', bg: '#DCD8CC', focus: '50% 30%' },
 ];
 
 // The button opens WhatsApp with a first line already typed.
@@ -62,11 +62,12 @@ const joinHref = settings.whatsapp
 
     <!-- The one crooked thing -->
     <figure class="crooked d-only">
-      <Picture image={day('u/teach-green.jpg')} alt="A class in front of a green screen." widths={[240, 480]} sizes="16vw" style="aspect-ratio: 1 / 1" />
+      <Picture image={day('c/green_studio.jpg')} alt="The green screen studio, lights up." widths={[240, 480]} sizes="16vw" style="aspect-ratio: 1 / 1" />
     </figure>
 
     <!-- The building -->
     <div class="tower">
+      <p class="howto"><span class="d-only">Three floors. Click one to look inside.</span><span class="m-only">Three floors. Tap one to look inside.</span></p>
       <div class="sign-row"><div class="sign" aria-hidden="true">{'FRAME'.split('').map((letter) => <span>{letter}</span>)}</div></div>
       <div class="floors">
         {floors.map((floor) => (
@@ -75,11 +76,12 @@ const joinHref = settings.whatsapp
               {floor.k === 'k3' && <svg viewBox="0 0 300 160" width="100%" height="100%" aria-hidden="true"><rect x="40" y="26" width="220" height="64" fill="none" stroke="#121212" stroke-width="2"></rect><path d="M60 70 L110 44 L150 62 L200 34 L240 52" fill="none" stroke="#121212" stroke-width="2"></path><circle cx="110" cy="128" r="9" fill="none" stroke="#121212" stroke-width="2"></circle><circle cx="190" cy="128" r="9" fill="none" stroke="#121212" stroke-width="2"></circle><path d="M110 118 L110 98 M190 118 L190 98" stroke="#121212" stroke-width="1.5" stroke-dasharray="2 4"></path></svg>}
               {floor.k === 'k2' && <svg viewBox="0 0 300 160" width="100%" height="100%" aria-hidden="true"><rect x="40" y="30" width="220" height="56" fill="none" stroke="#121212" stroke-width="2"></rect><path d="M52 58 h30 M90 58 h52 M150 58 h20 M178 58 h70" stroke="#121212" stroke-width="8"></path><path d="M52 76 q20 -12 40 0 t40 0 t40 0 t40 0 t40 0" fill="none" stroke="#121212" stroke-width="1.5"></path><circle cx="150" cy="128" r="9" fill="none" stroke="#121212" stroke-width="2"></circle><path d="M150 118 L150 96" stroke="#121212" stroke-width="1.5" stroke-dasharray="2 4"></path></svg>}
               {floor.k === 'k1' && <svg viewBox="0 0 300 160" width="100%" height="100%" aria-hidden="true"><rect x="118" y="18" width="64" height="110" rx="8" fill="none" stroke="#121212" stroke-width="2"></rect><path d="M130 100 h40 M130 108 h28" stroke="#121212" stroke-width="3"></path><circle cx="70" cy="128" r="9" fill="none" stroke="#121212" stroke-width="2"></circle><circle cx="230" cy="128" r="9" fill="none" stroke="#121212" stroke-width="2"></circle><path d="M78 122 L116 90 M222 122 L184 90" stroke="#121212" stroke-width="1.5" stroke-dasharray="2 4"></path></svg>}
-              <Picture image={day(floor.image)} alt={floor.alt} widths={[320, 640]} sizes="(max-width: 900px) 90vw, 21vw" eager={floor.k === 'k1'} />
+              <Picture image={day(floor.image)} alt={floor.alt} widths={[320, 640]} sizes="(max-width: 900px) 90vw, 21vw" eager={floor.k === 'k1'} style={floor.focus ? `object-position:${floor.focus}` : undefined} />
             </div>
             <div class="info">
               <span class="num">{floor.number}</span>
               <span class="ttl">{floor.title}</span>
+              <span class="peek">see this floor <i aria-hidden="true">→</i></span>
               <span class="tags">{floor.text}</span>
             </div>
             <span class="lamp"></span>
@@ -99,7 +101,7 @@ const joinHref = settings.whatsapp
       {frame && <a class="more" href={frame.href}>About the course →</a>}
     </div>
     <div class="mcard m-only">
-      <Picture image={day('best/greenscreen.jpg')} alt="A green screen studio with the lights set." widths={[480, 840]} sizes="100vw" style="aspect-ratio: 4 / 5" />
+      <Picture image={day('c/green_studio.jpg')} alt="The green screen studio, lights up." widths={[480, 840]} sizes="100vw" style="aspect-ratio: 4 / 5" />
       <span class="vf"></span>
       <span class="mcard__t"><b>The studio</b><small>lights set</small></span>
     </div>
@@ -108,7 +110,7 @@ const joinHref = settings.whatsapp
 
 <style>
   .bld { position: relative; }
-  .bld input { position: absolute; opacity: 0; pointer-events: none; }
+  .bld input { position: fixed; top: 50%; left: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
   h1 { margin: 0; font-weight: 600; line-height: 0.86; letter-spacing: -0.05em; }
   .intro { margin: 0; font-family: var(--font-serif); line-height: 1.2; }
   .num { font: 500 15px/1 var(--font-mono); letter-spacing: 0.3em; }
@@ -130,6 +132,14 @@ const joinHref = settings.whatsapp
   .info { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 10px; }
   .ttl { font-weight: 600; letter-spacing: -0.04em; line-height: 1; }
   .tags { font: 400 19px/1.25 var(--font-serif); opacity: 0; transform: translateY(6px); transition: opacity 0.5s, transform 0.5s; }
+  .howto { margin: 0 0 12px; text-align: center; font: 400 12px/1.4 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .peek { font: 400 12px/1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: #3a3a37; text-decoration: underline; text-underline-offset: 4px; }
+  .peek i { display: inline-block; font-style: normal; transition: translate 0.3s; }
+  .fl:hover .peek i { translate: 5px 0; }
+  .fl:hover .ttl { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 2px; }
+  #f1:checked ~ .tower .k1 .peek, #f2:checked ~ .tower .k2 .peek, #f3:checked ~ .tower .k3 .peek { display: none; }
+  #f1:not(:checked) ~ .tower .k1 .lamp, #f2:not(:checked) ~ .tower .k2 .lamp, #f3:not(:checked) ~ .tower .k3 .lamp { animation: blinklamp 2.4s ease-in-out infinite; }
+  @keyframes blinklamp { 50% { background: rgba(232, 178, 58, 0.45); } }
   .lamp { position: absolute; right: 22px; top: 22px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--ink); background: transparent; transition: background 0.4s; }
   #f1:checked ~ .tower .k1 .win :global(img), #f2:checked ~ .tower .k2 .win :global(img), #f3:checked ~ .tower .k3 .win :global(img) { opacity: 1; }
   #f1:checked ~ .tower .k1 svg, #f2:checked ~ .tower .k2 svg, #f3:checked ~ .tower .k3 svg { opacity: 0; }

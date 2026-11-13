@@ -12,11 +12,11 @@ const bySlug = Object.fromEntries(projects.map((project) => [project.slug, proje
 
 // ---------- WORDS for the edit bay: change the text between the quotes and save ----------
 const says = {
-  s1: ['LANGTANG · REEL', 'From my Langtang trek. I filmed and edited them.'],
-  s2: ['LANGTANG · REEL', 'Cut for Instagram, so people keep watching.'],
-  s3: ['IDEAPRENEUR NEPAL', 'Animated charts, so a video full of numbers is still easy to follow.'],
-  s7: ['THUMBNAILS', 'I do the title and thumbnail together, because that’s what decides if anyone clicks.'],
-  s8: ['STRATEGY', 'I plan what gets made and when it goes out.'],
+  reel: ['LANGTANG · REEL', 'From my Langtang trek. I filmed and edited them.'],
+  set: ['ON SET', 'Behind the cameras on shoot days.'],
+  motion: ['IDEAPRENEUR NEPAL', 'Animated charts, so a video full of numbers is still easy to follow.'],
+  thumbs: ['THUMBNAILS', 'I do the title and thumbnail together, because that’s what decides if anyone clicks.'],
+  strategy: ['STRATEGY', 'I plan what gets made and when it goes out.'],
 };
 // The editor's notes that show when you point at a gold marker on the timeline.
 const markers = [[186, 'cut on the breath'], [380, 'music drops here'], [560, 'hold two frames longer'], [870, 'the chart lands on the beat'], [1180, 'end on a question']];
@@ -31,28 +31,35 @@ const videos = [
   { img: 'yt/ip3.webp', alt: 'Ideapreneur thumbnail about margin trading.', title: 'Margin trading: is leverage worth it?', channel: 'Ideapreneur Nepal', tag: 'IN', href: 'https://www.youtube.com/watch?v=uHrm39pG2-w' },
 ];
 
-// The timeline is 1294 wide in the design. Each clip: which monitor picture it shows, where it sits, its frames.
-const W = 1294;
-const pct = (n) => `${((n / W) * 100).toFixed(3)}%`;
-const tracks = [
-  { label: 'MOTION', clips: [
-    { id: 'c3', left: 380, width: 240, frames: ['u/mg-donut.jpg', 'u/mg-donut.jpg'], chaos: [-40, -90, -14], name: 'animated chart' },
-    { id: 'c4', left: 626, width: 240, frames: ['u/mg-world.jpg', 'u/mg-world.jpg'], chaos: [30, 60, 9], name: 'bar chart' },
-    { id: 'c5', left: 872, width: 240, frames: ['u/mg-seven.jpg', 'u/mg-seven.jpg'], chaos: [-20, -140, 22], name: 'explainer frame' },
-    { id: 'c6', left: 1118, width: 176, frames: ['u/mg-xirr.jpg', 'u/mg-xirr.jpg'], chaos: [60, 40, -30], name: 'explainer frame' },
-  ] },
-  { label: 'EDIT', filler: true, clips: [
-    { id: 'c1', left: 0, width: 180, frames: ['best/v_waterfall_flags.jpg', 'u/lt-peaks.jpg', 'u/lt-valley.jpg'], chaos: [-30, 80, 12], name: 'Langtang reel' },
-    { id: 'c2', left: 186, width: 180, frames: ['u/lt-flags2.jpg', 'u/lt-flags.jpg', 'u/lt-flags2.jpg'], chaos: [50, -60, -18], name: 'prayer flags reel' },
-  ] },
-  { label: 'THUMBNAILS', clips: [
-    { id: 'c7', left: 380, width: 914, frames: ['u/th-yeti.jpg', 'u/th-chaudhary.jpg', 'u/th-engine.jpg', 'u/th-sorry.jpg', 'u/th-sip.jpg'], chaos: [10, 34, 4], name: 'thumbnails' },
-  ] },
-  { label: 'STRATEGY', thin: true, clips: [
-    { id: 'c8', left: 0, width: 1294, frames: [], chaos: [0, -22, -2], name: 'strategy' },
-  ] },
+// THE TIMELINE. It plays by itself, one clip after another, and a click jumps to a clip.
+// To add a clip to the EDIT track: put a short silent .mp4 and a .jpg of the same name in src/assets/day/w/
+// and add one line to "edits" below. "tall: true" is for upright phone footage.
+const edits = [
+  { file: 'best/loop_waterfall', poster: 'best/v_waterfall_flags.jpg', tall: true, say: 'reel', name: 'Langtang reel: flags over a waterfall' },
+  { file: 'w/set_wide', say: 'set', name: 'a podcast set, wide' },
+  { file: 'w/multicam', say: 'set', name: 'the multicam monitor' },
+  { file: 'w/green_talent', tall: true, say: 'set', name: 'a green screen take' },
+  { file: 'w/set_talk', say: 'set', name: 'two chairs, one conversation' },
+  { file: 'w/phone_green', say: 'set', name: 'the shot on the phone monitor' },
+  { file: 'w/studio_white', tall: true, say: 'set', name: 'the white studio' },
+  { file: 'w/night_set', tall: true, say: 'set', name: 'a late shoot' },
+  { file: 'best/loop_langtang', poster: 'best/v_langtang_village.jpg', say: 'reel', name: 'Langtang village' },
 ];
-const order = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8'];
+const W = 1294; // the timeline's width in the design
+const pct = (n) => `${((n / W) * 100).toFixed(3)}%`;
+const editWidth = (W - (edits.length - 1) * 6) / edits.length;
+const clips = [
+  ...edits.map((item, index) => ({ id: `e${index + 1}`, track: 'EDIT', kind: 'video', src: clip(`${item.file}.mp4`), frames: [item.poster ?? `${item.file}.jpg`], tall: item.tall, say: item.say, name: item.name, left: index * (editWidth + 6), width: editWidth })),
+  { id: 'm1', track: 'MOTION', kind: 'still', frames: ['u/mg-donut.jpg', 'u/mg-donut.jpg'], say: 'motion', name: 'animated chart', alt: 'An animated chart.', left: 380, width: 240 },
+  { id: 'm2', track: 'MOTION', kind: 'still', frames: ['u/mg-world.jpg', 'u/mg-world.jpg'], say: 'motion', name: 'bar chart', alt: 'A bar chart rising.', left: 626, width: 240 },
+  { id: 'm3', track: 'MOTION', kind: 'still', frames: ['u/mg-seven.jpg', 'u/mg-seven.jpg'], say: 'motion', name: 'explainer frame', alt: 'An animated explainer frame.', left: 872, width: 240 },
+  { id: 'm4', track: 'MOTION', kind: 'still', frames: ['u/mg-xirr.jpg', 'u/mg-xirr.jpg'], say: 'motion', name: 'explainer frame', alt: 'An animated explainer frame.', left: 1118, width: 176 },
+  { id: 't1', track: 'THUMBNAILS', kind: 'thumbs', frames: ['u/th-yeti.jpg', 'u/th-chaudhary.jpg', 'u/th-engine.jpg', 'u/th-sorry.jpg', 'u/th-sip.jpg'], say: 'thumbs', name: 'thumbnails', left: 380, width: 914 },
+  { id: 's1', track: 'STRATEGY', kind: 'count', frames: [], say: 'strategy', name: 'strategy', left: 0, width: 1294 },
+];
+// How far each clip flies when someone presses the red button.
+const chaos = [[-30, 80, 12], [50, -60, -18], [-40, -90, -14], [30, 60, 9], [-20, -140, 22], [60, 40, -30], [10, 34, 4], [0, -22, -2], [44, 70, 16]];
+const trackNames = ['MOTION', 'EDIT', 'THUMBNAILS', 'STRATEGY'];
 const digits = ['7', '5', '0', ',', '0', '0', '0', ',', '0', '0', '0', '+'];
 
 // ---------- The work, grouped by person then brand ----------
@@ -77,51 +84,50 @@ const groups = page.groups
   current="strategy" scene="2" slug="INT. EDIT BAY. MORNING." grain
   sky="linear-gradient(180deg, #D3E2EE 0px, #E8EDEC 160px, #F1F0EC 340px)"
 >
-  <div class="bay">
-    {order.map((id, index) => <input type="radio" name="clip" id={id} checked={index === 0} aria-label={`Show clip ${index + 1} in the monitor`} />)}
+  <div class="bay" data-bay>
     <input type="checkbox" id="chaos" aria-label="Don’t press this" />
     <span class="sunspot d-only" aria-hidden="true"></span>
     <h1 class="visually-hidden">For creators</h1>
 
-    <!-- Program monitor -->
+    <!-- Program monitor: it plays the timeline below, clip after clip -->
     <div class="viewer">
-      <div class="v v1">
-        <Picture image={day('best/v_waterfall_flags.jpg')} alt="Prayer flags over a waterfall on the way to Langtang, from a vertical reel." widths={[300, 540]} sizes="(max-width: 900px) 100vw, 20vw" eager class="tall" />
-        <video class="tall loop d-only" data-loop data-src={clip('best/loop_waterfall.mp4')} muted loop playsinline preload="none" aria-label="Prayer flags over a waterfall on the way to Langtang, a vertical reel, silent."></video>
-      </div>
-      <div class="v v2 d-only"><Picture image={day('u/lt-flags2.jpg')} alt="Prayer flags, a vertical reel." widths={[300, 359]} sizes="20vw" class="tall" /></div>
-      <div class="v v3 d-only"><Picture image={day('u/mg-donut.jpg')} alt="An animated chart." widths={[640, 1280]} sizes="64vw" class="fill" /></div>
-      <div class="v v4 d-only"><Picture image={day('u/mg-world.jpg')} alt="A bar chart rising." widths={[640, 1280]} sizes="64vw" class="fill" /></div>
-      <div class="v v5 d-only"><Picture image={day('u/mg-seven.jpg')} alt="An animated explainer frame." widths={[640, 1280]} sizes="64vw" class="fill" /></div>
-      <div class="v v6 d-only"><Picture image={day('u/mg-xirr.jpg')} alt="An animated explainer frame." widths={[640, 1280]} sizes="64vw" class="fill" /></div>
-      <div class="v v7 d-only">
-        <div class="yt">
-          {videos.map((video) => (
-            <a href={video.href} target="_blank" rel="noopener">
-              <span class="th"><Picture image={day(video.img)} alt={video.alt} widths={[400]} sizes="20vw" /><i class="pb"></i></span>
-              <span class="meta">
-                <span class="av" style={`background:${video.tag === 'SK' ? '#E8B23A' : '#ECEBE6'}`}>{video.tag}</span>
-                <span class="tx"><span class="ytt">{video.title}</span><span class="ch">{video.channel}</span><span class="ch">edited by me</span></span>
-              </span>
-            </a>
-          ))}
+      {clips.map((item, index) => (
+        <div class:list={['v', `v--${item.kind}`, { on: index === 0, 'd-only': item.kind !== 'video' }]} data-panel={item.id}>
+          {item.kind === 'video' && <Picture image={day(item.frames[0])} alt={`${item.name}.`} widths={[320, 640, 960]} sizes="(max-width: 900px) 100vw, 64vw" eager={index === 0} class={item.tall ? 'tall' : 'fill'} />}
+          {item.kind === 'still' && <Picture image={day(item.frames[0])} alt={item.alt} widths={[640, 1280]} sizes="64vw" class="fill" />}
+          {item.kind === 'thumbs' && (
+            <div class="yt">
+              {videos.map((video) => (
+                <a href={video.href} target="_blank" rel="noopener">
+                  <span class="th"><Picture image={day(video.img)} alt={video.alt} widths={[400]} sizes="20vw" /><i class="pb"></i></span>
+                  <span class="meta">
+                    <span class="av" style={`background:${video.tag === 'SK' ? '#E8B23A' : '#ECEBE6'}`}>{video.tag}</span>
+                    <span class="tx"><span class="ytt">{video.title}</span><span class="ch">{video.channel}</span><span class="ch">edited by me</span></span>
+                  </span>
+                </a>
+              ))}
+            </div>
+          )}
+          {item.kind === 'count' && (
+            <>
+              <span class="big"><span class="odo" aria-label="750,000,000+">{digits.map((digit, place) => /[0-9]/.test(digit)
+                ? <span class="oc" aria-hidden="true"><span style={`animation-duration:${(1.2 + place * 0.09).toFixed(2)}s`}>0<br />1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br />9<br />{digit}</span></span>
+                : <span aria-hidden="true">{digit}</span>)}</span></span>
+              <span class="small">IMPRESSIONS · 400+ VIDEOS</span>
+            </>
+          )}
         </div>
-      </div>
-      <div class="v v8 d-only">
-        <span class="big"><span class="odo" aria-label="750,000,000+">{digits.map((digit, index) => /\d/.test(digit)
-          ? <span class="oc" aria-hidden="true"><span style={`animation-duration:${(1.2 + index * 0.09).toFixed(2)}s`}>0<br />1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br />9<br />{digit}</span></span>
-          : <span aria-hidden="true">{digit}</span>)}</span></span>
-        <span class="small">IMPRESSIONS · 400+ VIDEOS</span>
-      </div>
+      ))}
+      <video class="film" data-bay-video muted playsinline preload="none" aria-label="Silent clips from my shoots and edits, playing one after another."></video>
       <span class="pgm d-only">PGM</span>
-      <div class="m-say m-only"><span>Langtang · reel</span><b>{says.s1[1]}</b></div>
+      <div class="m-say m-only"><span data-bay-kicker>Langtang · reel</span><b data-bay-line>{says.reel[1]}</b></div>
     </div>
 
-    <!-- What I did, one line for each clip -->
+    <!-- What I did, one line for each kind of clip -->
     <div class="right d-only">
-      {Object.entries(says).map(([key, [kicker, line]]) => <div class={`say ${key}`}><span>{kicker}</span><p>{line}</p></div>)}
+      {Object.entries(says).map(([key, [kicker, line]], index) => <div class:list={['say', { on: index === 0 }]} data-say={key} data-kicker={kicker} data-line={line}><span>{kicker}</span><p>{line}</p></div>)}
     </div>
-    <a class="wwm-pill d-only" href="/about#work">Work with me</a>
+    <a class="wwm-pill d-only" href="/me#work">Work with me</a>
     <label class="dont d-only" for="chaos"><span class="bt"></span><span class="w1">don’t</span><span class="w2">ok, put it back</span></label>
 
     <!-- The timeline: the tracks are the job -->
@@ -130,18 +136,20 @@ const groups = page.groups
         {markers.map(([left, note]) => <span class="mk" style={`left:${pct(left)}`}><span class="nt">{note}</span></span>)}
         {['00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00'].map((time) => <span>{time}</span>)}
       </div>
-      {tracks.map((track) => (
-        <div class:list={['trk', { 'trk--thin': track.thin }]}>
-          <span class="lab">{track.label}</span>
-          {track.clips.map((item) => (
-            <label for={item.id} title={`Play: ${item.name}`} style={`--x:${item.chaos[0]}px;--y:${item.chaos[1]}px;--r:${item.chaos[2]}deg;left:${pct(item.left)};width:${pct(item.width)}`}>
-              {item.frames.map((frame) => <Picture image={day(frame)} alt="" widths={[160]} sizes="90px" />)}
-            </label>
-          ))}
-          {track.filler && <span class="filler"></span>}
+      {trackNames.map((track) => (
+        <div class:list={['trk', { 'trk--thin': track === 'STRATEGY' }]}>
+          <span class="lab">{track}</span>
+          {clips.filter((item) => item.track === track).map((item) => {
+            const fly = chaos[clips.indexOf(item) % chaos.length];
+            return (
+              <button type="button" class:list={['clip', { on: item.id === 'e1' }]} data-clip={item.id} data-kind={item.kind} data-src={item.src} data-say={item.say} data-at={pct(item.left + Math.min(item.width / 2, 90))} aria-label={`Play: ${item.name}`} style={`--x:${fly[0]}px;--y:${fly[1]}px;--r:${fly[2]}deg;left:${pct(item.left)};width:${pct(item.width)}`}>
+                {item.frames.map((frame) => <Picture image={day(frame)} alt="" widths={[160]} sizes="90px" />)}
+              </button>
+            );
+          })}
         </div>
       ))}
-      <span class="ph"></span>
+      <span class="ph" data-bay-head></span>
     </div>
 
     <!-- Phones -->
@@ -153,7 +161,7 @@ const groups = page.groups
     <section class="mtext m-only">
       <p class="mslug"><span>2</span><span>INT. EDIT BAY. MORNING.</span></p>
       <h2>750M+ impressions.<br />400+ videos.</h2>
-      <p class="ms">{says.s8[1]}</p>
+      <p class="ms">{says.strategy[1]}</p>
       <div class="row"><small>Reels</small><b>Cut for Instagram</b><span>So people keep watching.</span></div>
       <div class="row"><small>Motion graphics</small><b>Animated charts</b><span>So a video full of numbers is still easy to follow.</span></div>
       <div class="row"><small>Thumbnails</small><b>Title and thumbnail together</b><span>Because that’s what decides if anyone clicks.</span></div>
@@ -163,7 +171,7 @@ const groups = page.groups
       </div>
       <div class="card"><Picture image={day('c/bts_set.jpg')} alt="A podcast set seen from behind the cameras." widths={[480, 840]} sizes="100vw" style="aspect-ratio: 4 / 5; object-position: 50% 60%" /><span class="vf"></span><span class="card__t"><b>Behind the cameras</b><small>a podcast day</small></span></div>
       <div class="card"><Picture image={day('c/desk.jpg')} alt="My desk at night: the rope lamp, the screen, the hat on the computer." widths={[480, 840]} sizes="100vw" style="aspect-ratio: 4 / 3" /><span class="vf"></span><span class="card__t"><b>My desk</b><small>where it gets cut</small></span></div>
-      <a class="btn" href="/about#work">Work with me</a>
+      <a class="btn" href="/me#work">Work with me</a>
     </section>
   </div>
 
@@ -198,7 +206,7 @@ const groups = page.groups
   </div>
 </Base>
 
-<script src="../scripts/loops.js"></script>
+<script src="../scripts/bay.js"></script>
 
 <style is:global>
   /* Phones open on the reel, so the menu sits on the picture in a light colour. */
@@ -207,28 +215,28 @@ const groups = page.groups
 
 <style>
   .bay { position: relative; }
-  .bay input { position: absolute; opacity: 0; pointer-events: none; }
+  .bay input { position: fixed; top: 50%; left: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
   .viewer { position: relative; background: var(--ink); overflow: hidden; }
   .v { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.5s ease; pointer-events: none; }
   .v :global(.tall) { display: block; height: 100%; width: auto; aspect-ratio: 9 / 16; object-fit: cover; }
   .v :global(.fill) { display: block; width: 100%; height: 100%; object-fit: cover; }
-  .v .loop { position: absolute; left: 50%; translate: -50% 0; opacity: 0; transition: opacity 0.4s; }
-  .v .loop:global(.is-playing) { opacity: 1; }
-  #c1:checked ~ .viewer .v1, #c2:checked ~ .viewer .v2, #c3:checked ~ .viewer .v3, #c4:checked ~ .viewer .v4, #c5:checked ~ .viewer .v5, #c6:checked ~ .viewer .v6, #c7:checked ~ .viewer .v7, #c8:checked ~ .viewer .v8 { opacity: 1; }
-  #c7:checked ~ .viewer .v7 { pointer-events: auto; }
+  .v.on { opacity: 1; }
+  .v--thumbs.on { pointer-events: auto; }
+  .film { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 0.35s; pointer-events: none; }
+  .film:global(.is-playing) { opacity: 1; }
 
   @media (min-width: 900px) {
     .bay { height: calc(900 * var(--u)); overflow: hidden; }
     .sunspot { position: absolute; right: -100px; top: -120px; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 240, 200, 0.98), rgba(255, 216, 142, 0.6) 32%, rgba(255, 216, 142, 0) 100%); pointer-events: none; }
     .viewer { position: absolute; left: 28px; top: max(100px, calc(84 * var(--u))); width: calc(920 * var(--u)); height: calc(518 * var(--u)); border-radius: 4px; }
     .pgm { position: absolute; top: 12px; left: 14px; font: 400 10px/1 var(--font-mono); letter-spacing: 0.18em; color: var(--night-muted); }
-    .v8 { flex-direction: column; gap: 12px; color: var(--night-ink); }
+    .v--count { flex-direction: column; gap: 12px; color: var(--night-ink); }
     .big { font: 400 calc(64 * var(--u)) / 1.1 var(--font-mono); letter-spacing: -0.04em; }
     .small { font: 400 max(9px, calc(11 * var(--u))) / 1 var(--font-mono); letter-spacing: 0.2em; color: var(--night-muted); }
     .odo { display: inline-flex; height: 1.1em; line-height: 1.1em; overflow: hidden; }
     .oc { display: block; height: 1.1em; overflow: hidden; }
     .oc span { display: block; transform: translateY(-11em); }
-    #c8:checked ~ .viewer .oc span { animation: odo 1.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+    .v--count.on .oc span { animation: odo 1.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
     @keyframes odo { from { transform: translateY(0); } to { transform: translateY(-11em); } }
 
     .yt { position: absolute; inset: 0; padding: calc(40 * var(--u)) calc(30 * var(--u)) 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(22 * var(--u)) calc(16 * var(--u)); align-content: start; background: #0f0f0f; }
@@ -250,7 +258,7 @@ const groups = page.groups
     .say { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 14px; opacity: 0; transition: opacity 0.5s ease; pointer-events: none; }
     .say span { font: 400 10px/1 var(--font-mono); letter-spacing: 0.18em; color: var(--muted); }
     .say p { margin: 0; font: 400 max(22px, calc(40 * var(--u))) / 1.12 var(--font-serif); letter-spacing: -0.01em; }
-    #c1:checked ~ .right .s1, #c2:checked ~ .right .s2, #c3:checked ~ .right .s3, #c4:checked ~ .right .s3, #c5:checked ~ .right .s3, #c6:checked ~ .right .s3, #c7:checked ~ .right .s7, #c8:checked ~ .right .s8 { opacity: 1; }
+    .say.on { opacity: 1; }
     .wwm-pill { position: absolute; left: calc(990 * var(--u)); top: calc(560 * var(--u)); display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; background: var(--ink); color: var(--paper); text-decoration: none; font-size: 14px; font-weight: 500; }
     .dont { position: absolute; left: calc(1160 * var(--u)); top: calc(560 * var(--u)); display: inline-flex; align-items: center; gap: 12px; min-height: 44px; font: 400 11px/1 var(--font-mono); letter-spacing: 0.08em; color: var(--muted); user-select: none; }
     .bt { width: 30px; height: 30px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #f06a4a, #b8321a 70%); box-shadow: 0 4px 0 #7a1e0e, 0 8px 14px -4px rgba(0, 0, 0, 0.5); transition: transform 0.08s, box-shadow 0.08s; }
@@ -270,29 +278,28 @@ const groups = page.groups
     @keyframes nxnw { from { transform: translateX(160px) skewX(-38deg); opacity: 0; } 55% { opacity: 1; } to { transform: none; opacity: 1; } }
     .trk--thin { height: calc(34 * var(--u)); border-bottom: none; }
     .lab { position: absolute; left: calc(-100 * var(--u)); top: 0; bottom: 0; width: calc(92 * var(--u)); display: flex; align-items: center; font: 400 max(7px, calc(9 * var(--u))) / 1 var(--font-mono); letter-spacing: 0.08em; color: var(--muted); }
-    .trk label { position: absolute; top: 4px; bottom: 4px; border-radius: 3px; overflow: hidden; display: flex; gap: 2px; background: var(--ink); outline: 2px solid transparent; outline-offset: 1px; transition: outline-color 0.3s, transform 0.9s cubic-bezier(0.3, 1.5, 0.4, 1); }
-    .trk label :global(img) { height: 100%; flex: 1; min-width: 0; object-fit: cover; opacity: 0.75; transition: opacity 0.3s; }
-    .trk label:hover :global(img) { opacity: 1; }
-    .trk label::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 2px; background: #fff; opacity: 0; pointer-events: none; }
-    .trk label:hover::after { opacity: 0.9; animation: scrub 1.6s linear infinite; }
+    .trk .clip { position: absolute; top: 4px; bottom: 4px; padding: 0; border: 0; border-radius: 3px; overflow: hidden; display: flex; gap: 2px; background: var(--ink); outline: 2px solid transparent; outline-offset: 1px; transition: outline-color 0.3s, transform 0.9s cubic-bezier(0.3, 1.5, 0.4, 1); }
+    .trk .clip :global(img) { height: 100%; flex: 1; min-width: 0; object-fit: cover; opacity: 0.75; transition: opacity 0.3s; }
+    .trk .clip:hover :global(img) { opacity: 1; }
+    .trk .clip::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 2px; background: #fff; opacity: 0; pointer-events: none; }
+    .trk .clip:hover::after { opacity: 0.9; animation: scrub 1.6s linear infinite; }
     @keyframes scrub { to { left: calc(100% - 2px); } }
-    .filler { position: absolute; left: 29.37%; right: 0; top: 4px; bottom: 4px; background: #dad8d1; border-radius: 3px; }
-    #c1:checked ~ .tl label[for="c1"], #c2:checked ~ .tl label[for="c2"], #c3:checked ~ .tl label[for="c3"], #c4:checked ~ .tl label[for="c4"], #c5:checked ~ .tl label[for="c5"], #c6:checked ~ .tl label[for="c6"], #c7:checked ~ .tl label[for="c7"], #c8:checked ~ .tl label[for="c8"] { outline-color: var(--ink); }
-    #c1:checked ~ .tl label[for="c1"] :global(img), #c2:checked ~ .tl label[for="c2"] :global(img), #c3:checked ~ .tl label[for="c3"] :global(img), #c4:checked ~ .tl label[for="c4"] :global(img), #c5:checked ~ .tl label[for="c5"] :global(img), #c6:checked ~ .tl label[for="c6"] :global(img), #c7:checked ~ .tl label[for="c7"] :global(img) { opacity: 1; }
+    .trk .clip.on { outline-color: var(--ink); }
+    .trk .clip.on :global(img) { opacity: 1; }
+    .trk .clip[data-kind="count"].on { outline-color: var(--gold); }
     .ph { position: absolute; top: -14px; bottom: 0; width: 1px; background: var(--ink); transition: left 0.7s cubic-bezier(0.6, 0, 0.2, 1), transform 0.9s; left: 6.96%; pointer-events: none; z-index: 3; }
     .ph::before { content: ""; position: absolute; top: 0; left: -6px; border: 6px solid transparent; border-top: 9px solid var(--ink); }
-    #c2:checked ~ .tl .ph { left: 21.33%; } #c3:checked ~ .tl .ph { left: 38.64%; } #c4:checked ~ .tl .ph { left: 57.65%; } #c5:checked ~ .tl .ph { left: 76.66%; } #c6:checked ~ .tl .ph { left: 93.2%; } #c7:checked ~ .tl .ph { left: 64.9%; } #c8:checked ~ .tl .ph { left: 3.1%; }
-    #chaos:checked ~ .tl label { transform: translate(var(--x), var(--y)) rotate(var(--r)); }
+    #chaos:checked ~ .tl .clip { transform: translate(var(--x), var(--y)) rotate(var(--r)); }
     #chaos:checked ~ .tl .ph { transform: rotate(24deg); }
     #chaos:checked ~ .viewer { animation: shake 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
     @keyframes shake { 10%, 90% { transform: translateX(-2px); } 20%, 80% { transform: translateX(4px); } 30%, 50%, 70% { transform: translateX(-9px) rotate(-0.7deg); } 40%, 60% { transform: translateX(9px) rotate(0.7deg); } }
-    .bay input:focus-visible ~ .tl { outline: 1px dashed var(--muted); outline-offset: 8px; }
+    .trk .clip:focus-visible { outline: 2px solid var(--gold); }
   }
 
   @media (max-width: 899.98px) {
     .viewer { height: min(640px, 78svh); }
-    .v1 { opacity: 1 !important; }
-    .v1 :global(.tall) { width: 100%; height: 100%; aspect-ratio: auto; opacity: 0.92; }
+    .v :global(.tall), .v :global(.fill) { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; opacity: 0.92; }
+    .film { object-fit: cover; }
     .m-say { position: absolute; left: 22px; right: 22px; bottom: 26px; display: flex; flex-direction: column; gap: 8px; color: #fff; text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6); }
     .m-say span { font: 400 9px/1 var(--font-mono); letter-spacing: 0.18em; text-transform: uppercase; color: var(--night-ink); }
     .m-say b { font: 400 30px/1.1 var(--font-serif); }

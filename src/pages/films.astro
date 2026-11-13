@@ -14,7 +14,7 @@ const settings = getSettings();
 const films = [
   { id: 'r1', title: 'सपना', nepali: true, role: 'writer and director', link: { href: '/writing/sapana', text: 'read the script' }, image: 'u/sapana-clearing.jpg', alt: 'Sapana walking alone through the pines.', width: 1180, subtitle: 'Where are you off to so early again, Sapana?', card: 'Sapana', ratio: '4 / 3' },
   { id: 'r2', title: 'Path to Prosperity', role: 'assistant director · 15th European Union Film Festival Nepal', link: { href: '/work/path-to-prosperity', text: 'about the film' }, image: 'u/ptp-screen.jpg', alt: 'Path to Prosperity on the festival screen.', width: 878, card: 'Path to Prosperity', ratio: '4 / 3' },
-  { id: 'r3', title: 'Instagram short', role: 'made for the phone', link: page.reel?.link ? { href: page.reel.link, text: 'watch ↗', out: true } : null, image: 'u/insta-cover.jpg', alt: 'Two cats asleep in the sun.', width: 278, rec: true, card: 'Instagram short', ratio: '4 / 5' },
+  { id: 'r3', title: 'Instagram short', role: 'made for the phone', link: page.reel?.link ? { href: page.reel.link, text: 'watch ↗', out: true } : null, image: 'c/cat.jpg', alt: 'A cat asleep in the sun, from my short film on Instagram.', width: 659, rec: true, card: 'Instagram short', ratio: '4 / 3' },
 ];
 const story = { id: 'r4', title: 'Fireflies', role: 'short story', link: { href: '/writing/fireflies', text: 'read it' }, line: 'She was seven years old the summer she caught her first firefly.' };
 ---
@@ -55,7 +55,7 @@ const story = { id: 'r4', title: 'Fireflies', role: 'short story', link: { href:
       ))}
       <span class="sugi" aria-hidden="true"></span>
       <div class="reel s4">
-        <div class="mask mask--text" style="--mw:1180"><p>{story.line}</p></div>
+        <div class="mask mask--text" style="--mw:1180"><p>{story.line}</p><a class="readit" href={story.link.href}>Read it →</a></div>
       </div>
     </div>
     <div class="steam d-only" aria-hidden="true">
@@ -64,7 +64,7 @@ const story = { id: 'r4', title: 'Fireflies', role: 'short story', link: { href:
 
     <!-- The booth: pick a film -->
     <div class="pick">
-      {[...films, story].map((item) => (
+      {[films[0], films[1], story, films[2]].map((item) => (
         <label for={item.id}>
           <span class:list={['t', { dv: item.nepali, 't--serif': item.id === 'r4' }]} lang={item.nepali ? 'ne' : undefined}>{item.title}</span>
           <span class="v">{item.role}{item.link && <> · <a href={item.link.href} target={item.link.out ? '_blank' : undefined} rel={item.link.out ? 'noopener' : undefined}>{item.link.text}</a></>}</span>
@@ -79,7 +79,7 @@ const story = { id: 'r4', title: 'Fireflies', role: 'short story', link: { href:
       <span style="position: absolute; left: 0; top: 50px; width: 120px; height: 30px; background: #2A2A28; border-radius: 4px"></span>
       <span style="position: absolute; left: 120px; top: 56px; width: 16px; height: 18px; background: #2A2A28; border-radius: 2px"></span>
     </div>
-    <a class="wwm-pill d-only" href="/about#work">Work with me</a>
+    <a class="wwm-pill d-only" href="/me#work">Work with me</a>
     <label class="ambt d-only" for="ambm">Ambient mode <span class="sw"></span></label>
 
     <!-- Phones: the same films as cards -->
@@ -89,16 +89,23 @@ const story = { id: 'r4', title: 'Fireflies', role: 'short story', link: { href:
         <span class="vf"></span>
         <span class="card__t"><b>Doors open at dusk.</b><small>my footage · Kathmandu</small></span>
       </div>
-      {films.map((film) => (
-        <a class="card" href={film.link?.href ?? '/work'} target={film.link?.out ? '_blank' : undefined} rel={film.link?.out ? 'noopener' : undefined}>
+      {films.slice(0, 2).map((film) => (
+        <a class="card" href={film.link?.href ?? '/everything'} target={film.link?.out ? '_blank' : undefined} rel={film.link?.out ? 'noopener' : undefined}>
           <Picture image={day(film.image)} alt={film.alt} widths={[480, 800]} sizes="100vw" style={`aspect-ratio: ${film.ratio}`} />
           <span class="vf"></span>
           <span class="card__t"><b>{film.card}</b><small>{film.role}{film.link && ` · ${film.link.text.replace(' ↗', '')} →`}</small></span>
         </a>
       ))}
       <p class="line">{story.line}</p>
-      <a class="row" href={story.link.href}><small>{story.role}</small><b>{story.title}</b></a>
-      <a class="btn" href="/about#work">Work with me</a>
+      <a class="row" href={story.link.href}><small>{story.role}</small><b>{story.title} · read it →</b></a>
+      {films.slice(2).map((film) => (
+        <a class="card" href={film.link?.href ?? '/everything'} target={film.link?.out ? '_blank' : undefined} rel={film.link?.out ? 'noopener' : undefined}>
+          <Picture image={day(film.image)} alt={film.alt} widths={[480, 800]} sizes="100vw" style={`aspect-ratio: ${film.ratio}`} />
+          <span class="vf"></span>
+          <span class="card__t"><b>{film.card}</b><small>{film.role}{film.link && ` · ${film.link.text.replace(' ↗', '')} →`}</small></span>
+        </a>
+      ))}
+      <a class="btn" href="/me#work">Work with me</a>
     </div>
   </div>
 </Base>
@@ -107,7 +114,7 @@ const story = { id: 'r4', title: 'Fireflies', role: 'short story', link: { href:
 
 <style>
   .room { position: relative; color: var(--night-ink); }
-  .room input { position: absolute; opacity: 0; pointer-events: none; }
+  .room input { position: fixed; top: 50%; left: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
   .room a { color: inherit; }
 
   .screen { position: relative; animation: flick 3.2s steps(2) infinite, emerge 3.4s ease-out both; }
@@ -118,7 +125,9 @@ const story = { id: 'r4', title: 'Fireflies', role: 'short story', link: { href:
   @keyframes wipe { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0 0 0 0); } }
   .mask { position: relative; height: 100%; width: calc(var(--mw) / 1180 * 100%); overflow: hidden; }
   .mask :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; }
-  .mask--text { background: #000; display: flex; align-items: center; justify-content: center; padding: 0 6%; }
+  .mask--text { background: #000; display: flex; flex-direction: column; gap: clamp(10px, 2cqw, 26px); align-items: center; justify-content: center; padding: 0 6%; }
+  .readit { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border: 1px solid rgba(236, 235, 230, 0.5); border-radius: 999px; font: 400 12px/1 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--night-ink) !important; text-decoration: none; }
+  .readit:hover { background: var(--night-ink); color: var(--night) !important; }
   .mask--text p { margin: 0; max-width: 760px; text-align: center; font: italic 400 clamp(20px, 3.05cqw, 44px) / 1.2 var(--font-serif); color: var(--night-ink); }
   .sub { position: absolute; left: 0; right: 0; bottom: 5.2%; padding: 0 10px; text-align: center; font-size: clamp(13px, 1.46cqw, 21px); line-height: 1.35; color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 12px rgba(0, 0, 0, 0.6); }
   .rec { position: absolute; top: 14px; left: 14px; display: flex; align-items: center; gap: 6px; font: 400 10px/1 var(--font-mono); letter-spacing: 0.14em; color: #fff; }

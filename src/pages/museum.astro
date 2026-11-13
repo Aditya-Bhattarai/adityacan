@@ -1,5 +1,5 @@
 ---
-// THE MUSEUM (scene 10, night): nine of my photographs in film frames, the people I learn from, what else made me.
+// THE MUSEUM (scene 10, night): nine of my photographs in film frames, chairs for the people I learn from, what else made me.
 import Base from '../layouts/Base.astro';
 import Picture from '../components/Picture.astro';
 import { getSettings } from '../lib/content.js';
@@ -12,7 +12,7 @@ const words = {
   title: 'I am a museum of everything I have loved.',
   room1: 'Nine of my photographs, framed the way I would frame a film. Hover one, or tap it, and the matte lifts.',
 };
-// Room 1. x and y place the frame, h is its height, bar is how tall the black matte is, top and bottom.
+// Room 1. x and y place the frame, h is its height, bar is how tall the black matte is, top and bottom. pos moves the picture inside its frame.
 const frames = [
   { img: 'boat_sq.jpg', name: 'A boat on gold water', ratio: '2.39 : 1', x: 50, y: 430, h: 414, bar: 119 },
   { img: 'best/window_bars_bw.jpg', name: 'Light through the bars', ratio: '1.85 : 1', x: 50, y: 924, h: 413, bar: 93 },
@@ -22,22 +22,18 @@ const frames = [
   { img: 'best/clouds_gold_hills.jpg', name: 'Light breaking over the hills', ratio: '2.39 : 1', x: 510, y: 1465, h: 560, bar: 192 },
   { img: 'moon.jpg', name: 'The moon, close', ratio: '2.39 : 1', x: 970, y: 430, h: 416, bar: 120 },
   { img: 'best/rain_car_bw.jpg', name: 'Monsoon on the window', ratio: '1.85 : 1', x: 970, y: 926, h: 472, bar: 122 },
-  { img: 'best/wires_bw.jpg', name: 'Kathmandu, wired', ratio: '1.85 : 1', x: 970, y: 1477, h: 560, bar: 166 },
+  { img: 'best/ktm_facade_bw.jpg', name: 'A face in the window', ratio: '1.85 : 1', x: 970, y: 1477, h: 560, bar: 166, pos: '50% 64%' },
 ];
-// Room 2. Each line opens a trailer or a channel on YouTube.
-const people = [
-  ['Abbas Kiarostami', 'Where Is the Friend’s House?, 1987', 'https://www.youtube.com/watch?v=run-u_2zAdA'],
-  ['Wes Anderson', 'The Grand Budapest Hotel, 2014', 'https://www.youtube.com/watch?v=1Fg5iWmQjwk'],
-  ['Martin Scorsese', 'Goodfellas, 1990', 'https://www.youtube.com/watch?v=2ilzidi_J8Q'],
-  ['Satyajit Ray', 'Pather Panchali, 1955', 'https://www.youtube.com/watch?v=sZNlRMdMdoI'],
-  ['Alfred Hitchcock', 'Vertigo, 1958', 'https://www.youtube.com/watch?v=95o-QM-lz8g'],
-  ['Akira Kurosawa', 'Rashomon, 1950', 'https://www.youtube.com/watch?v=xCZ9TguVOIA'],
-  ['Yasujiro Ozu', 'Tokyo Story, 1953', 'https://www.youtube.com/watch?v=xqO0d3328Do'],
-  ['Kenji Mizoguchi', 'Ugetsu, 1953', 'https://www.youtube.com/watch?v=C8Z3DYtUP0E'],
-  ['Wim Wenders', 'Perfect Days, 2023', 'https://www.youtube.com/watch?v=QzZBbX5A1FA'],
-  ['Gawx', 'on YouTube', 'https://www.youtube.com/@gawx'],
-  ['Life of Riza', 'on YouTube', 'https://www.youtube.com/@LifeOfRiza'],
-  ['Michael Reeves', 'on YouTube', 'https://www.youtube.com/@MichaelReeves'],
+// Room 2. A few chairs on set kept for the people I learn from. Name, then the film of theirs I return to.
+const chairs = [
+  ['Kiarostami', 'Where Is the Friend’s House?', '1987'],
+  ['Satyajit Ray', 'Pather Panchali', '1955'],
+  ['Ozu', 'Tokyo Story', '1953'],
+  ['Wenders', 'Perfect Days', '2023'],
+];
+// Room 3. The phone flips through covers I made. "fit" shows a wide YouTube cover with black above and below.
+const covers = [
+  ['u/ph-fonepay-mac.jpg'], ['u/ph-gold.jpg', 'fit'], ['u/ph-fonepay-rules.jpg'], ['u/ph-coffee.jpg'], ['u/ph-engine.jpg'], ['u/ph-nada.jpg'],
 ];
 // Room 3. The toolkit, as keys. "wide" keys carry a whole word.
 const keys = [
@@ -74,7 +70,7 @@ const quotes = [
         {frames.map((frame, index) => (
           <figure class="mf at" style={`${at(frame.x, frame.y, 420)};--h:${frame.h};--b:${frame.bar}`}>
             <div class="fr" tabindex="0">
-              <Picture image={day(frame.img)} alt={`${frame.name}. A photograph by Aditya.`} widths={[420, 840]} sizes="(max-width: 900px) 50vw, 30vw" eager={[0, 1, 3, 6].includes(index)} />
+              <Picture image={day(frame.img)} alt={`${frame.name}. A photograph by Aditya.`} widths={[420, 840]} sizes="(max-width: 900px) 50vw, 30vw" eager={[0, 1, 3, 6].includes(index)} style={frame.pos && `object-position:${frame.pos}`} />
               <span class="bar t"></span>
               <span class="bar b"><span class="n">{String(index + 1).padStart(2, '0')}</span><span class="rt">{frame.ratio}</span></span>
             </div>
@@ -84,12 +80,23 @@ const quotes = [
       </div>
     </section>
 
-    <!-- Room 2. The people I learn from -->
+    <!-- Room 2. The people I learn from: their chairs on set -->
     <section class="crl">
-      <p class="mono">Room 2 · The people I learn from · each line opens a trailer or a channel</p>
-      {people.map(([name, work, href]) => (
-        <a class="cr" href={href} target="_blank" rel="noopener"><i>{work}</i><b>{name}</b><span class="pl" aria-hidden="true"></span></a>
-      ))}
+      <p class="mono">Room 2 · The people I learn from · their chairs stay on my set</p>
+      <ul class="chairs">
+        {chairs.map(([name, film, year], index) => (
+          <li class="chair" style={`--tilt:${[-1.5, 1, -0.5, 1.8][index]}deg`}>
+            <div class="chair__art">
+              <svg viewBox="0 0 200 230" aria-hidden="true">
+                <g class="wood"><path d="M30 6 V150 M170 6 V150"></path><path d="M14 104 H186"></path><path d="M34 150 L166 224 M166 150 L34 224"></path><path d="M22 224 H62 M138 224 H178"></path></g>
+                <rect class="seat" x="30" y="136" width="140" height="14"></rect>
+              </svg>
+              <span class="chair__back">{name}</span>
+            </div>
+            <p><i>{film}</i><span>{year}</span></p>
+          </li>
+        ))}
+      </ul>
     </section>
 
     <!-- Room 3. What else made me -->
@@ -112,21 +119,21 @@ const quotes = [
 
       <div class="pin phone at d-only" style={at(1222, 3015, 196, 3)} aria-hidden="true">
         <div class="reel">
-          {['u/rc-1.jpg', 'u/rc-2.jpg', 'u/rc-3.jpg', 'u/rc-5.jpg'].map((img, index) => <Picture image={day(img)} alt="" widths={[200, 400]} sizes="196px" style={`animation-delay:${-[0, 1.5, 1, 0.5][index]}s`} />)}
+          {covers.map(([img, fit], index) => <Picture image={day(img)} alt="" widths={fit ? [400, 800] : [200, 400]} sizes="196px" class={fit ? 'fit' : undefined} style={`animation-delay:${(index - covers.length) * 1.2}s`} />)}
         </div>
       </div>
-      <div class="plq at d-only" style={at(1200, 3455, 220)}><b>Gawx · lifeofriza</b><span>Creators I keep learning from</span></div>
+      <div class="plq at d-only" style={at(1200, 3455, 220)}><b>Covers I made</b><span>Fonepay, Siddhartha, Satik Kura</span></div>
 
       {quotes.map((quote) => <blockquote class="quote at" style={quote.pos}><p>{quote.text}</p><cite>{quote.by}</cite></blockquote>)}
 
       <div class="pin jr at" style={at(600, 3535, 620, -1.2)}>
-        <div class="jr__l"><Picture image={day('u/sketch-horse.jpg')} alt="A pencil sketch of a pack horse on a mountain trail." widths={[300, 600]} sizes="(max-width: 900px) 50vw, 21vw" /></div>
-        <div class="jr__r"><span>It taught me men are afraid too.</span><span>And to put my morals above myself.</span></div>
+        <div class="jr__l"><figure class="jr__ph"><Picture image={day('c/horse_rdr.jpg')} alt="A pack horse with a worn saddle on a dry mountain trail, graded warm and faded like an old western. My photograph." widths={[300, 600]} sizes="(max-width: 900px) 80vw, 21vw" /></figure></div>
+        <div class="jr__r"><small>Langtang, May</small><span>It taught me men are afraid too.</span></div>
       </div>
-      <div class="plq at" style={at(1236, 3565, 180)}><b>Red Dead Redemption 2</b><i>Rockstar Games, 2018</i><span>Sketched from my photo of a horse on the trail</span></div>
+      <div class="plq at" style={at(1236, 3565, 180)}><b>Red Dead Redemption 2</b><i>Rockstar Games, 2018</i><span>My photo of a horse on the trail, in its colours</span></div>
 
       <figure class="pin snow at" style={at(70, 3740, 200, 1.6)}>
-        <Picture image={day('c/figure_snow.jpg')} alt="One small figure standing alone on a wide field of snow under dark rock. My photograph." widths={[200, 400]} sizes="(max-width: 900px) 60vw, 14vw" style="aspect-ratio: 4 / 5" />
+        <Picture image={day('c/figure_field.jpg')} alt="One small figure with open arms in a wide field under a big sky. My photograph." widths={[200, 400]} sizes="(max-width: 900px) 60vw, 14vw" style="aspect-ratio: 4 / 5" />
       </figure>
       <div class="plq at" style={at(290, 3930, 236)}><b>One small figure, a lot of land</b><span>After Kiarostami · my photograph</span></div>
 
@@ -160,14 +167,18 @@ const quotes = [
   .mf figcaption a:hover { color: var(--night-ink); }
 
   .crl .mono { padding-bottom: 22px; }
-  .cr { display: grid; grid-template-columns: 1fr 1fr 44px; align-items: center; column-gap: 28px; min-height: 54px; border-top: 1px solid #2e2e2b; text-decoration: none; transition: background 0.25s; }
-  .cr:last-child { border-bottom: 1px solid #2e2e2b; }
-  .cr i { justify-self: end; font: 400 23px/1.1 var(--font-serif); color: var(--night-muted); transition: color 0.25s; text-align: right; }
-  .cr b { font-size: 21px; font-weight: 600; letter-spacing: -0.03em; }
-  .pl { justify-self: center; width: 0; height: 0; border-left: 9px solid #5e5e5a; border-top: 6px solid transparent; border-bottom: 6px solid transparent; transition: border-color 0.25s, transform 0.25s; }
-  .cr:hover, .cr:focus-visible { background: rgba(236, 235, 230, 0.05); }
-  .cr:hover i, .cr:focus-visible i { color: var(--night-ink); }
-  .cr:hover .pl, .cr:focus-visible .pl { border-left-color: var(--gold); transform: scale(1.3); }
+  .chairs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+  .chair { rotate: var(--tilt); transition: rotate 0.6s cubic-bezier(0.3, 0.6, 0.2, 1), translate 0.6s cubic-bezier(0.3, 0.6, 0.2, 1); }
+  .chair:hover { rotate: 0deg; translate: 0 -6px; }
+  .chair__art { position: relative; }
+  .chair svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .wood { fill: none; stroke: #8a6a48; stroke-width: 7; stroke-linecap: round; }
+  .seat { fill: #0b0b0a; stroke: #5a4632; stroke-width: 2; }
+  .chair__back { position: absolute; left: 11%; right: 11%; top: 4.5%; height: 22%; display: flex; align-items: center; justify-content: center; background: #0b0b0a; border: 1px solid #3a3530; box-shadow: 0 8px 16px -10px rgba(0, 0, 0, 0.9); font: 600 clamp(12px, 1.5vw, 22px)/1 var(--font-sans); letter-spacing: 0.06em; text-transform: uppercase; color: var(--night-ink); white-space: nowrap; transition: color 0.4s; }
+  .chair:hover .chair__back { color: var(--gold); }
+  .chair p { margin: 18px 0 0; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
+  .chair p i { font: 400 21px/1.15 var(--font-serif); }
+  .chair p span { font: 400 9.5px/1.4 var(--font-mono); letter-spacing: 0.18em; color: var(--night-muted); }
 
   .pin { box-shadow: 0 30px 60px -28px rgba(0, 0, 0, 0.9); }
   .plq { background: #f4f3ee; color: var(--ink); padding: 11px 13px 13px; display: flex; flex-direction: column; gap: 3px; box-shadow: 0 10px 20px -12px rgba(0, 0, 0, 0.8); }
@@ -192,11 +203,17 @@ const quotes = [
   .quote { margin: 0; background: #fbf8f0; color: #3a3835; padding: 22px 26px; box-shadow: 0 24px 50px -26px rgba(0, 0, 0, 0.9); }
   .quote p { margin: 0; font: 500 30px/1.15 var(--font-hand); }
   .quote cite { display: block; padding-top: 12px; font: normal 400 9px/1.4 var(--font-mono); letter-spacing: 0.16em; color: #7a776f; }
-  .jr { background: #3b2a1e; border-radius: 6px; padding: 12px; display: flex; transition: rotate 0.8s cubic-bezier(0.3, 0.6, 0.2, 1), scale 0.8s; }
+  .jr { background: #2a1b11; background-image: radial-gradient(120% 90% at 30% 20%, #4a3020, #2a1b11 70%); border-radius: 8px; padding: 12px; display: flex; box-shadow: inset 0 0 0 2px #1a100a, inset 0 0 0 5px rgba(201, 160, 110, 0.18), 0 30px 60px -28px rgba(0, 0, 0, 0.9); transition: rotate 0.8s cubic-bezier(0.3, 0.6, 0.2, 1), scale 0.8s; }
   .jr:hover { rotate: 0deg; scale: 1.02; }
-  .jr__l { flex: 1; background: #f4eede; background-image: linear-gradient(270deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0) 30px); padding: 16px; display: flex; align-items: center; justify-content: center; }
-  .jr__l :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; }
-  .jr__r { flex: 1; background: #f4eede; background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0) 30px), repeating-linear-gradient(180deg, transparent 0 29px, rgba(90, 120, 160, 0.2) 29px 30px); padding: 24px 22px; font: 500 26px/30px var(--font-hand); color: #2f2a24; display: flex; flex-direction: column; gap: 6px; }
+  .jr__l, .jr__r { flex: 1; background-color: #e7dcc0; background-image: radial-gradient(40% 30% at 78% 82%, rgba(140, 95, 45, 0.22), transparent 70%), radial-gradient(30% 22% at 16% 14%, rgba(140, 95, 45, 0.16), transparent 70%), radial-gradient(120% 120% at 50% 50%, transparent 60%, rgba(120, 80, 40, 0.28)); }
+  .jr__l { box-shadow: inset -18px 0 22px -14px rgba(60, 35, 15, 0.45); padding: 18px; display: flex; align-items: center; justify-content: center; }
+  .jr__ph { position: relative; box-sizing: border-box; margin: 0; width: 100%; height: 100%; padding: 6px 6px 18px; background: #f3ead2; rotate: -2.5deg; box-shadow: 0 6px 12px -6px rgba(40, 25, 10, 0.6); }
+  .jr__ph::before, .jr__ph::after { content: ''; position: absolute; width: 22px; height: 22px; border: solid #3a2618; border-width: 0; }
+  .jr__ph::before { top: -3px; left: -3px; border-top-width: 6px; border-left-width: 6px; }
+  .jr__ph::after { bottom: -3px; right: -3px; border-bottom-width: 6px; border-right-width: 6px; }
+  .jr__ph :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; filter: sepia(0.18) contrast(1.04); }
+  .jr__r { position: relative; box-shadow: inset 18px 0 22px -14px rgba(60, 35, 15, 0.45); padding: 24px 22px; font: 500 26px/30px var(--font-hand); color: #3a2618; display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+  .jr__r small { font: 400 9px/1.4 var(--font-mono); letter-spacing: 0.2em; text-transform: uppercase; color: #6e5034; }
   .snow { margin: 0; background: #f4f1e8; padding: 8px 8px 10px; }
   .snow :global(img) { display: block; width: 100%; height: auto; object-fit: cover; }
   .floor { display: flex; flex-direction: column; gap: 10px; }
@@ -221,9 +238,8 @@ const quotes = [
     .fr { height: calc(var(--h) * var(--u)); }
     .bar { height: calc(var(--b) * var(--u)); }
     .crl { position: absolute; display: block !important; left: calc(50 * var(--u)); right: calc(50 * var(--u)); top: calc(2187 * var(--u)); }
-    .cr { min-height: calc(54 * var(--u)); }
-    .cr i { font-size: max(15px, calc(23 * var(--u))); }
-    .cr b { font-size: max(15px, calc(21 * var(--u))); }
+    .chairs { gap: calc(70 * var(--u)); padding: calc(10 * var(--u)) calc(60 * var(--u)) 0; }
+    .chair p i { font-size: max(15px, calc(22 * var(--u))); }
     .plq { position: absolute; }
     .keys { gap: calc(14 * var(--u)); }
     .key { height: calc(86 * var(--u)); border-radius: calc(12 * var(--u)); padding: calc(10 * var(--u)) calc(12 * var(--u)); }
@@ -234,10 +250,12 @@ const quotes = [
     .phone { height: calc(400 * var(--u)); background: #0a0a09; border-radius: calc(26 * var(--u)); padding: calc(10 * var(--u)); }
     .reel { position: relative; width: 100%; height: 100%; border-radius: calc(18 * var(--u)); overflow: hidden; background: #000; }
     .reel :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; animation: cut 2s steps(1) infinite; }
-    @keyframes cut { 0%, 24.9% { opacity: 1; } 25%, 100% { opacity: 0; } }
+    .reel :global(img.fit) { object-fit: contain; }
+    .reel :global(img) { animation-duration: 7.2s; }
+    @keyframes cut { 0%, 16.6% { opacity: 1; } 16.7%, 100% { opacity: 0; } }
     .quote p { font-size: max(18px, calc(30 * var(--u))); }
     .jr { height: calc(360 * var(--u)); }
-    .jr__r { font-size: max(16px, calc(26 * var(--u))); line-height: 1.15; background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0) 30px); }
+    .jr__r { font-size: max(18px, calc(30 * var(--u))); line-height: 1.15; }
     .floor { position: absolute; left: calc(60 * var(--u)); right: calc(60 * var(--u)); top: calc(4155 * var(--u)); }
   }
   @media (prefers-reduced-motion: reduce) { .reel :global(img:first-child) { opacity: 1 !important; } }
@@ -257,10 +275,11 @@ const quotes = [
     .mf figcaption { flex-direction: column; gap: 2px; padding-top: 8px; font-size: 12px; letter-spacing: 0.06em; }
     .mf figcaption a { padding: 6px 0; }
     .crl .mono { padding-bottom: 0; }
-    .cr { grid-template-columns: 1fr 24px; grid-template-rows: auto auto; column-gap: 12px; row-gap: 5px; padding: 14px 0; }
-    .cr i { grid-row: 1; grid-column: 1; justify-self: start; text-align: left; font: 400 12px/1.3 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; }
-    .cr b { grid-row: 2; grid-column: 1; font-size: 20px; font-weight: 500; }
-    .pl { grid-row: 1 / 3; grid-column: 2; }
+    .chairs { grid-template-columns: 1fr 1fr; gap: 30px 22px; padding: 6px 4px 0; }
+    .chair__back { font-size: 12px; letter-spacing: 0.04em; }
+    .chair p { margin-top: 10px; }
+    .chair p i { font-size: 17px; }
+    .chair p span { font-size: 12px; letter-spacing: 0.08em; }
     .keys { grid-template-columns: repeat(4, 1fr); gap: 8px; rotate: none; }
     .key { height: 62px; border-radius: 10px; padding: 7px 9px; box-shadow: 0 4px 0 #8f8e88; }
     .key b { font-size: 20px; }
@@ -271,7 +290,8 @@ const quotes = [
     .quote { rotate: -1.2deg; padding: 16px 18px; }
     .quote p { font-size: 25px; line-height: 1.22; }
     .jr { flex-direction: column; }
-    .jr__l :global(img) { aspect-ratio: 4 / 3; }
+    .jr__ph :global(img) { aspect-ratio: 4 / 5; }
+    .jr__r small { font-size: 11px; letter-spacing: 0.1em; }
     .jr__r { font-size: 24px; line-height: 30px; }
     .snow { width: 60%; rotate: 1.6deg; }
     .floor { padding-top: 16px; }
