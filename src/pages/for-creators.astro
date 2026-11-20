@@ -12,6 +12,7 @@ const bySlug = Object.fromEntries(projects.map((project) => [project.slug, proje
 
 // ---------- WORDS for the edit bay: change the text between the quotes and save ----------
 const says = {
+  campaign: ['LAXMI SUNRISE · CAMPAIGN', 'A controlled scam test. 1,837 people pressed Pay on a fake Tihar offer. Cut wide for YouTube and tall for phones.'],
   reel: ['LANGTANG · REEL', 'From my Langtang trek. I filmed and edited them.'],
   set: ['ON SET', 'Behind the cameras on shoot days.'],
   motion: ['IDEAPRENEUR NEPAL', 'Animated charts, so a video full of numbers is still easy to follow.'],
@@ -33,8 +34,12 @@ const videos = [
 
 // THE TIMELINE. It plays by itself, one clip after another, and a click jumps to a clip.
 // To add a clip to the EDIT track: put a short silent .mp4 and a .jpg of the same name in src/assets/day/w/
-// and add one line to "edits" below. "tall: true" is for upright phone footage.
+// and add one line to "edits" below. "tall: true" is for upright phone footage. "phone" names an upright version that phones play instead.
 const edits = [
+  { file: 'w/lxs_open', phone: 'w/lxs_open_t', say: 'campaign', name: 'Laxmi Sunrise campaign: the opening' },
+  { file: 'w/lxs_report', phone: 'w/lxs_report_t', say: 'campaign', name: 'Laxmi Sunrise campaign: the count' },
+  { file: 'w/lxs_tall', tall: true, say: 'campaign', name: 'Laxmi Sunrise campaign, cut tall for phones' },
+  { file: 'w/lxs_parents', phone: 'w/lxs_parents_t', say: 'campaign', name: 'Laxmi Sunrise campaign: send it to your parents' },
   { file: 'best/loop_waterfall', poster: 'best/v_waterfall_flags.jpg', tall: true, say: 'reel', name: 'Langtang reel: flags over a waterfall' },
   { file: 'w/set_wide', say: 'set', name: 'a podcast set, wide' },
   { file: 'w/multicam', say: 'set', name: 'the multicam monitor' },
@@ -49,12 +54,13 @@ const W = 1294; // the timeline's width in the design
 const pct = (n) => `${((n / W) * 100).toFixed(3)}%`;
 const editWidth = (W - (edits.length - 1) * 6) / edits.length;
 const clips = [
-  ...edits.map((item, index) => ({ id: `e${index + 1}`, track: 'EDIT', kind: 'video', src: clip(`${item.file}.mp4`), frames: [item.poster ?? `${item.file}.jpg`], tall: item.tall, say: item.say, name: item.name, left: index * (editWidth + 6), width: editWidth })),
+  ...edits.map((item, index) => ({ id: `e${index + 1}`, track: 'EDIT', kind: 'video', src: clip(`${item.file}.mp4`), phoneSrc: item.phone && clip(`${item.phone}.mp4`), frames: [item.poster ?? `${item.file}.jpg`], tall: item.tall, say: item.say, name: item.name, left: index * (editWidth + 6), width: editWidth })),
+  { id: 'm0', track: 'MOTION', kind: 'video', src: clip('w/lxs_chart.mp4'), phoneSrc: clip('w/lxs_chart_t.mp4'), frames: ['w/lxs_chart.jpg'], say: 'campaign', name: 'Laxmi Sunrise chart: who pressed Pay, by age', left: 0, width: 374 },
   { id: 'm1', track: 'MOTION', kind: 'still', frames: ['u/mg-donut.jpg', 'u/mg-donut.jpg'], say: 'motion', name: 'animated chart', alt: 'An animated chart.', left: 380, width: 240 },
   { id: 'm2', track: 'MOTION', kind: 'still', frames: ['u/mg-world.jpg', 'u/mg-world.jpg'], say: 'motion', name: 'bar chart', alt: 'A bar chart rising.', left: 626, width: 240 },
   { id: 'm3', track: 'MOTION', kind: 'still', frames: ['u/mg-seven.jpg', 'u/mg-seven.jpg'], say: 'motion', name: 'explainer frame', alt: 'An animated explainer frame.', left: 872, width: 240 },
   { id: 'm4', track: 'MOTION', kind: 'still', frames: ['u/mg-xirr.jpg', 'u/mg-xirr.jpg'], say: 'motion', name: 'explainer frame', alt: 'An animated explainer frame.', left: 1118, width: 176 },
-  { id: 't1', track: 'THUMBNAILS', kind: 'thumbs', frames: ['u/th-yeti.jpg', 'u/th-chaudhary.jpg', 'u/th-engine.jpg', 'u/th-sorry.jpg', 'u/th-sip.jpg'], say: 'thumbs', name: 'thumbnails', left: 380, width: 914 },
+  { id: 't1', track: 'THUMBNAILS', kind: 'thumbs', frames: ['u/th-1837.jpg', 'u/th-yeti.jpg', 'u/th-chaudhary.jpg', 'u/th-engine.jpg', 'u/th-sorry.jpg', 'u/th-sip.jpg'], say: 'thumbs', name: 'thumbnails', left: 380, width: 914 },
   { id: 's1', track: 'STRATEGY', kind: 'count', frames: [], say: 'strategy', name: 'strategy', left: 0, width: 1294 },
 ];
 // How far each clip flies when someone presses the red button.
@@ -120,7 +126,7 @@ const groups = page.groups
       ))}
       <video class="film" data-bay-video muted playsinline preload="none" aria-label="Silent clips from my shoots and edits, playing one after another."></video>
       <span class="pgm d-only">PGM</span>
-      <div class="m-say m-only"><span data-bay-kicker>Langtang · reel</span><b data-bay-line>{says.reel[1]}</b></div>
+      <div class="m-say m-only"><span data-bay-kicker>{says.campaign[0]}</span><b data-bay-line>{says.campaign[1]}</b></div>
     </div>
 
     <!-- What I did, one line for each kind of clip -->
@@ -142,7 +148,7 @@ const groups = page.groups
           {clips.filter((item) => item.track === track).map((item) => {
             const fly = chaos[clips.indexOf(item) % chaos.length];
             return (
-              <button type="button" class:list={['clip', { on: item.id === 'e1' }]} data-clip={item.id} data-kind={item.kind} data-src={item.src} data-say={item.say} data-at={pct(item.left + Math.min(item.width / 2, 90))} aria-label={`Play: ${item.name}`} style={`--x:${fly[0]}px;--y:${fly[1]}px;--r:${fly[2]}deg;left:${pct(item.left)};width:${pct(item.width)}`}>
+              <button type="button" class:list={['clip', { on: item.id === 'e1' }]} data-clip={item.id} data-kind={item.kind} data-src={item.src} data-tall={item.tall ? '1' : undefined} data-phone-src={item.phoneSrc} data-say={item.say} data-at={pct(item.left + Math.min(item.width / 2, 90))} aria-label={`Play: ${item.name}`} style={`--x:${fly[0]}px;--y:${fly[1]}px;--r:${fly[2]}deg;left:${pct(item.left)};width:${pct(item.width)}`}>
                 {item.frames.map((frame) => <Picture image={day(frame)} alt="" widths={[160]} sizes="90px" />)}
               </button>
             );
@@ -224,6 +230,7 @@ const groups = page.groups
   .v--thumbs.on { pointer-events: auto; }
   .film { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 0.35s; pointer-events: none; }
   .film:global(.is-playing) { opacity: 1; }
+  .film:global(.is-tall) { object-fit: contain !important; background: #0b0b0a; }
 
   @media (min-width: 900px) {
     .bay { height: calc(900 * var(--u)); overflow: hidden; }
@@ -300,7 +307,8 @@ const groups = page.groups
     .viewer { height: min(640px, 78svh); }
     .v :global(.tall), .v :global(.fill) { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; opacity: 0.92; }
     .film { object-fit: cover; }
-    .m-say { position: absolute; left: 22px; right: 22px; bottom: 26px; display: flex; flex-direction: column; gap: 8px; color: #fff; text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6); }
+    .viewer::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.55) 35%, rgba(0, 0, 0, 0.85)); z-index: 2; pointer-events: none; }
+    .m-say { position: absolute; z-index: 3; left: 22px; right: 22px; bottom: 26px; display: flex; flex-direction: column; gap: 8px; color: #fff; text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6); }
     .m-say span { font: 400 9px/1 var(--font-mono); letter-spacing: 0.18em; text-transform: uppercase; color: var(--night-ink); }
     .m-say b { font: 400 30px/1.1 var(--font-serif); }
     .mtl { position: relative; display: flex; flex-direction: column; gap: 6px; padding: 12px 0 14px 84px; overflow: hidden; background: var(--paper); }

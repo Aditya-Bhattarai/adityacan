@@ -19,7 +19,9 @@ if (bay) {
   const HOLD = { still: 3.5, thumbs: 7, count: 4.5 };
 
   // The order the timeline plays in. Phones only show the monitor, so they play the video clips.
-  const order = buttons.filter((button) => !phone || button.dataset.kind === 'video');
+  // The EDIT track plays first (it starts on the first clip), then motion, thumbnails and strategy.
+  const edit = (button) => (button.dataset.clip.startsWith('e') ? 0 : 1);
+  const order = buttons.filter((button) => !phone || button.dataset.kind === 'video').sort((a, b) => edit(a) - edit(b));
   let at = 0;
   let timer = 0;
   let visible = false;
@@ -40,7 +42,10 @@ if (bay) {
     video.pause();
     if (!play) return;
     if (button.dataset.kind === 'video' && !saving) {
-      video.src = button.dataset.src;
+      // Phones play the upright version of a clip when there is one.
+      const upright = phone && button.dataset.phoneSrc;
+      video.src = upright || button.dataset.src;
+      video.classList.toggle('is-tall', Boolean(upright) || button.dataset.tall === '1');
       video.play().then(() => video.classList.add('is-playing')).catch(() => { timer = setTimeout(next, 4000); });
     } else if (!calm) {
       timer = setTimeout(next, (HOLD[button.dataset.kind] ?? 4) * 1000);

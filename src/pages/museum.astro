@@ -33,7 +33,7 @@ const chairs = [
 ];
 // Room 3. The phone flips through covers I made. "fit" shows a wide YouTube cover with black above and below.
 const covers = [
-  ['u/ph-fonepay-mac.jpg'], ['u/ph-gold.jpg', 'fit'], ['u/ph-fonepay-rules.jpg'], ['u/ph-coffee.jpg'], ['u/ph-engine.jpg'], ['u/ph-nada.jpg'],
+  ['u/ph-1837.jpg'], ['u/ph-fonepay-mac.jpg'], ['u/ph-gold.jpg', 'fit'], ['u/ph-fonepay-rules.jpg'], ['u/ph-coffee.jpg'], ['u/ph-engine.jpg'], ['u/ph-nada.jpg'],
 ];
 // Room 3. The toolkit, as keys. "wide" keys carry a whole word.
 const keys = [
@@ -122,7 +122,7 @@ const quotes = [
           {covers.map(([img, fit], index) => <Picture image={day(img)} alt="" widths={fit ? [400, 800] : [200, 400]} sizes="196px" class={fit ? 'fit' : undefined} style={`animation-delay:${(index - covers.length) * 1.2}s`} />)}
         </div>
       </div>
-      <div class="plq at d-only" style={at(1200, 3455, 220)}><b>Covers I made</b><span>Fonepay, Siddhartha, Satik Kura</span></div>
+      <div class="plq at d-only" style={at(1200, 3455, 220)}><b>Covers I made</b><span>Laxmi Sunrise, Fonepay, Siddhartha, Satik Kura</span></div>
 
       {quotes.map((quote) => <blockquote class="quote at" style={quote.pos}><p>{quote.text}</p><cite>{quote.by}</cite></blockquote>)}
 
@@ -251,8 +251,8 @@ const quotes = [
     .reel { position: relative; width: 100%; height: 100%; border-radius: calc(18 * var(--u)); overflow: hidden; background: #000; }
     .reel :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; animation: cut 2s steps(1) infinite; }
     .reel :global(img.fit) { object-fit: contain; }
-    .reel :global(img) { animation-duration: 7.2s; }
-    @keyframes cut { 0%, 16.6% { opacity: 1; } 16.7%, 100% { opacity: 0; } }
+    .reel :global(img) { animation-duration: 8.4s; }
+    @keyframes cut { 0%, 14.2% { opacity: 1; } 14.3%, 100% { opacity: 0; } }
     .quote p { font-size: max(18px, calc(30 * var(--u))); }
     .jr { height: calc(360 * var(--u)); }
     .jr__r { font-size: max(18px, calc(30 * var(--u))); line-height: 1.15; }
